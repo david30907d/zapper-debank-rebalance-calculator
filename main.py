@@ -1,5 +1,6 @@
 import json
 from collections import defaultdict
+
 ADDRESS_2_CATEGORY = {
     "0x8ec22ec81e740e0f9310e7318d03c494e62a70cd": {
         "categories": ["cash"],
@@ -93,23 +94,28 @@ def _categorize_positions(positions) -> dict:
                     result[category]["sum"] += weighted_balanceUSD
     return result
 
+
 def _get_rebalancing_strategy(strategy_name) -> callable:
     def _permenant_portfolio(_, portfolio, net_worth):
         target_sum = net_worth * 0.25
         diffrence = target_sum - portfolio["sum"]
-        for symbol, balanceUSD in portfolio['portfolio'].items():
-            print(f"Suggestion: {symbol}, modify this amount of USD: {diffrence * balanceUSD / portfolio['sum']:.2f}")
-            
+        for symbol, balanceUSD in portfolio["portfolio"].items():
+            print(
+                f"Suggestion: {symbol}, modify this amount of USD: {diffrence * balanceUSD / portfolio['sum']:.2f}"
+            )
+
     if strategy_name == "permanent_portfolio":
         return _permenant_portfolio
     raise NotImplementedError
+
 
 def _output_rebalancing_suggestions(categorized_positions, strategy_fn):
     net_worth = sum(portfolio["sum"] for portfolio in categorized_positions.values())
     for category, portfolio in categorized_positions.items():
         print(f"Current {category}: {portfolio['sum']:.2f}")
         strategy_fn(category, portfolio, net_worth)
-        print('====================')
+        print("====================")
+
 
 if __name__ == "__main__":
     main()
