@@ -1,5 +1,5 @@
 import json
-
+from collections import defaultdict
 ADDRESS_2_CATEGORY = {
     "0x8ec22ec81e740e0f9310e7318d03c494e62a70cd": {
         "categories": ["cash"],
@@ -72,10 +72,10 @@ def _categorize_positions(positions) -> dict:
     user need to label your positions with category type
     """
     result = {
-        "gold": {"sum": 0, "portfolio": []},
-        "cash": {"sum": 0, "portfolio": []},
-        "stock": {"sum": 0, "portfolio": []},
-        "bond": {"sum": 0, "portfolio": []},
+        "gold": {"sum": 0, "portfolio": defaultdict(int)},
+        "cash": {"sum": 0, "portfolio": defaultdict(int)},
+        "stock": {"sum": 0, "portfolio": defaultdict(int)},
+        "bond": {"sum": 0, "portfolio": defaultdict(int)},
     }
     for position in positions:
         if position["balanceUSD"] < 200:
@@ -89,9 +89,7 @@ def _categorize_positions(positions) -> dict:
                 symbol = ADDRESS_2_CATEGORY.get(asset["address"], {}).get("symbol", "")
                 for category in categories:
                     weighted_balanceUSD = asset["balanceUSD"] / length_of_categories
-                    result[category]["portfolio"].append(
-                        {"symbol": symbol, "balanceUSD": weighted_balanceUSD}
-                    )
+                    result[category]["portfolio"][symbol] += weighted_balanceUSD
                     result[category]["sum"] += weighted_balanceUSD
     return result
 
@@ -99,9 +97,8 @@ def _get_rebalancing_strategy(strategy_name) -> callable:
     def _permenant_portfolio(_, portfolio, net_worth):
         target_sum = net_worth * 0.25
         diffrence = target_sum - portfolio["sum"]
-        sum_of_the_portfolio = sum(position["balanceUSD"] for position in portfolio["portfolio"])
-        for position in portfolio['portfolio']:
-            print(f"Suggestion: {position['symbol']}, modify this amount of USD: {diffrence * position['balanceUSD'] / sum_of_the_portfolio:.2f}")
+        for symbol, balanceUSD in portfolio['portfolio'].items():
+            print(f"Suggestion: {symbol}, modify this amount of USD: {diffrence * balanceUSD / portfolio['sum']:.2f}")
             
     if strategy_name == "permanent_portfolio":
         return _permenant_portfolio
