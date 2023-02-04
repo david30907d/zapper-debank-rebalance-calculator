@@ -11,7 +11,7 @@ ZAPPER_ADDRESS = {
         },
         "0xa14dbce13c22c97fd99daa0de3b1b480c7c3fdf6": {
             "categories": ["stock"],
-            "symbol": "trader-joe-v2",
+            "symbol": "trader-joe-dpx-weth",
         },
         "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3": {
             "categories": ["stock"],
@@ -184,11 +184,11 @@ def _debank_handler(positions, result):
 def _get_rebalancing_strategy(strategy_name) -> callable:
     def _permenant_portfolio(category, portfolio, net_worth):
         target_sum = net_worth * 0.25
-        print(f"Current {category}: {portfolio['sum']:.2f}", f"Target Sum: {target_sum:.2f}")
+        print(f"Current {category}: {portfolio['sum']:.2f}", f"Target Sum: {target_sum:.2f}", f"Investment Shit: {(portfolio['sum']-target_sum)/net_worth:.2f}, should be lower than 0.05")
         diffrence = target_sum - portfolio["sum"]
         for symbol, balanceUSD in sorted(portfolio["portfolio"].items(), key=lambda x: -x[1]):
             print(
-                f"Suggestion: {symbol}, modify this amount of USD: {diffrence * balanceUSD / portfolio['sum']:.2f}"
+                f"Suggestion: modify this amount of USD: {diffrence * balanceUSD / portfolio['sum']:.2f} for position {symbol}, current worth: {balanceUSD:.2f}"
             )
 
     if strategy_name == "permanent_portfolio":
@@ -201,6 +201,7 @@ def _output_rebalancing_suggestions(categorized_positions, strategy_fn):
     for category, portfolio in categorized_positions.items():
         strategy_fn(category, portfolio, net_worth)
         print("====================")
+    print(f"Current Net Worth: ${net_worth:.2f}")
 
 
 if __name__ == "__main__":
