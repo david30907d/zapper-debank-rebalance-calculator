@@ -7,7 +7,7 @@ ZAPPER_ADDRESS = {
         },
         "0xd2d1162512f927a7e282ef43a362659e4f2a728f": {
             "categories": ["gold"],
-            "symbol": "glp-avalanche",
+            "symbol": "glp-avax",
         },
         "0xa14dbce13c22c97fd99daa0de3b1b480c7c3fdf6": {
             "categories": ["stock"],
@@ -61,7 +61,7 @@ DEBANK_ADDRESS = {
         },
         "0xb5352a39c11a81fe6748993d586ec448a01f08b5": {
             "categories": ["cash", "stock", "gold"],
-            "symbol": "traderjoe-v2-avax-usdc"
+            "symbol": "avax-usdc-TJ-avax"
         },
         "0xc963ef7d977ecb0ab71d835c4cb1bf737f28d010": {
             "categories": ["stock"],
@@ -73,19 +73,19 @@ DEBANK_ADDRESS = {
         },
         "0x7ec3717f70894f6d9ba0be00774610394ce006ee": {
             "categories": ["stock", "gold", "cash"],
-            "symbol": "weth-usdc-traderjoe-LP"
+            "symbol": "weth-usdc-TJ-LP"
         },
         "0x5fbbef48ce0850e5a73bc3f4a6e903458b3c0af4": {
             "categories": ["stock", "gold"],
-            "symbol": "weth-gmx-traderjoe-LP-arb"
+            "symbol": "weth-gmx-TJ-LP-arb"
         },
         "0x42be75636374dfa0e57eb96fa7f68fe7fcdad8a3": {
             "categories": ["stock"],
-            "symbol": "weth-avax-traderjoe-LP-avalanche"
+            "symbol": "weth-avax-TJ-LP-avax"
         },
         "0xdf3e481a05f58c387af16867e9f5db7f931113c9": {
             "categories": ["stock", "cash", "gold"],
-            "symbol": "weth-usdt-traderjoe-LP-avalanche"
+            "symbol": "weth-usdt-TJ-LP-avax"
         },
         "0x104f1459a2ffea528121759b238bb609034c2f01" : {
             "categories": ["stock", "cash", "gold"],
@@ -94,6 +94,10 @@ DEBANK_ADDRESS = {
         "0x3d9819210a31b4961b30ef54be2aed79b9c9cd3b": {
             "categories": ["cash"],
             "symbol": "compound USDT"
+        },
+        "0x5851e2d6396bcc26fb9eee21effbf99e0d2b2148": {
+            "categories": ["stock", "cash", "gold"],
+            "symbol": "weth-usdc-TJ-LP-avax"
         }
     }
 
