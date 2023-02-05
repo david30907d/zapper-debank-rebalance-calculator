@@ -188,7 +188,7 @@ def _debank_handler(positions, result):
 def _get_rebalancing_strategy(strategy_name) -> callable:
     def _permenant_portfolio(category, portfolio, net_worth):
         target_sum = net_worth * 0.25
-        print(f"Current {category}: {portfolio['sum']:.2f}", f"Target Sum: {target_sum:.2f}", f"Investment Shit: {(portfolio['sum']-target_sum)/net_worth:.2f}, should be lower than 0.05")
+        print(f"Current {category}: {portfolio['sum']:.2f}", f"Target Sum: {target_sum:.2f}", f"Investment Shift: {(portfolio['sum']-target_sum)/net_worth:.2f}, should be lower than 0.05")
         diffrence = target_sum - portfolio["sum"]
         for symbol, balanceUSD in sorted(portfolio["portfolio"].items(), key=lambda x: -x[1]):
             print(
