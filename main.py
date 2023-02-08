@@ -52,6 +52,23 @@ ZAPPER_ADDRESS = {
         "0xf650c3d88d12db855b8bf7d11be6c55a4e07dcc9": {
             "categories": ["cash"],
             "symbol": "compund USDT",
+        },
+        "0x8d9ba570d6cb60c7e3e0f31343efe75ab8e65fb1": {
+            "categories": ["bond"],
+            "symbol": "gohm-arb"
+        },
+        "0x0ab87046fbb341d058f17cbc4c1133f25a20a52f": {
+            "categories": ["bond"],
+            "symbol": "gohm"
+        },
+        "0x1f80c96ca521d7247a818a09b0b15c38e3e58a28": {
+            # TODO: david to figure out weather dpx is stock or gold
+            "categories": ["stock"],
+            "symbol": "sushi-dpx-weth-LP"
+        },
+        "0x1701a7e5034ed1e35c52245ab7c07dbdaf353de7": {
+            "categories": ["stock"],
+            "symbol": "kyber-avax-eth-LP"
         }
 }
 DEBANK_ADDRESS = {
@@ -143,12 +160,13 @@ def _zapper_handler(positions, result):
             continue
         for product in position["products"]:
             for asset in product["assets"]:
-                categories = ADDRESS_2_CATEGORY.get(asset["address"], {}).get(
+                asset_address = asset["address"] if not asset.get("dataProps", {}).get("poolAddress") else asset.get("dataProps", {}).get("poolAddress")
+                categories = ADDRESS_2_CATEGORY.get(asset_address, {}).get(
                     "categories", []
                 )
                 # my sentry logic
                 if asset["balanceUSD"] > 200 and not categories:
-                    print(asset)
+                    print(json.dumps(asset))
                     raise Exception("no category, need to update your ADDRESS_2_CATEGORY")
                 length_of_categories = len(categories)
                 symbol = ADDRESS_2_CATEGORY.get(asset["address"], {}).get("symbol", "")
@@ -174,7 +192,7 @@ def _debank_handler(positions, result):
             )
             # my sentry logic
             if portfolio['stats']["net_usd_value"] > 200 and not categories:
-                print(portfolio)
+                print(json.dumps(portfolio))
                 raise Exception("no category, need to update your ADDRESS_2_CATEGORY")
             length_of_categories = len(categories)
             symbol = ADDRESS_2_CATEGORY.get(addr, {}).get("symbol", "")
