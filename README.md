@@ -16,29 +16,38 @@
 ## Demo
 
 ```
-Current gold: 88105.64
-Suggestion: glp-avalanche, modify this amount of USD: -25379.90
-Suggestion: glp-arbitrum, modify this amount of USD: -25474.36
-Suggestion: cvxOHMFRAXBP-f, modify this amount of USD: -813.00
-Suggestion: FraxSwapOHM, modify this amount of USD: -802.20
+Current gold: xxx.51 Target Sum: xxx.06 Investment Shift: 0.06, should be lower than 0.05
+Suggestion: modify this amount of USD: -4910.76 for position glp-avax, current worth: 27167.43
+Suggestion: modify this amount of USD: -1922.44 for position glp-arbitrum, current worth: 10635.40
+Suggestion: modify this amount of USD: -249.40 for position cvxOHMFRAXBP-f, current worth: 1379.74
+Suggestion: modify this amount of USD: -244.12 for position FraxSwapOHM, current worth: 1350.54
+Suggestion: modify this amount of USD: -12.73 for position balancer-usdt-eth-btc-arb, current worth: 70.40
 ====================
-Current cash: 15839.56
-Suggestion: crvEURSUSD, modify this amount of USD: 1863.78
-Suggestion: VSTFRAX-f, modify this amount of USD: 13557.79
-Suggestion: cvxOHMFRAXBP-f, modify this amount of USD: 1706.21
-Suggestion: FraxSwapOHM, modify this amount of USD: 1683.56
-Suggestion: compund USDT, modify this amount of USD: 985.29
+Current cash: xxx.43 Target Sum: xxx.06 Investment Shift: -0.13, should be lower than 0.05
+Suggestion: modify this amount of USD: 11787.16 for position VSTFRAX-f, current worth: 10947.07
+Suggestion: modify this amount of USD: 1593.96 for position crvEURSUSD, current worth: 1480.36
+Suggestion: modify this amount of USD: 1485.62 for position cvxOHMFRAXBP-f, current worth: 1379.74
+Suggestion: modify this amount of USD: 1454.18 for position FraxSwapOHM, current worth: 1350.54
+Suggestion: modify this amount of USD: 849.19 for position compund USDT, current worth: 788.67
+Suggestion: modify this amount of USD: 75.80 for position balancer-usdt-eth-btc-arb, current worth: 70.40
+Suggestion: modify this amount of USD: 0.71 for position compound USDT, current worth: 0.66
 ====================
-Current stock: 6286.76
-Suggestion: trader-joe-v2, modify this amount of USD: 2398.69
-Suggestion: magic, modify this amount of USD: 1516.92
-Suggestion: CVX, modify this amount of USD: 1578.80
-Suggestion: cvxCRV, modify this amount of USD: 11911.37
-Suggestion: Yeti-JLP, modify this amount of USD: 11943.65
+Current stock: xxx.80 Target Sum: xxx.06 Investment Shift: 0.08, should be lower than 0.05
+Suggestion: modify this amount of USD: -3496.62 for position , current worth: 14715.22
+Suggestion: modify this amount of USD: -2803.99 for position radiant-eth-LP, current worth: 11800.36
+Suggestion: modify this amount of USD: -2373.13 for position sushi-dpx-weth-LP, current worth: 9987.11
+Suggestion: modify this amount of USD: -639.87 for position Yeti-JLP, current worth: 2692.85
+Suggestion: modify this amount of USD: -639.60 for position cvxCRV, current worth: 2691.72
+Suggestion: modify this amount of USD: -324.65 for position magic-weth-sushi-LP, current worth: 1366.26
+Suggestion: modify this amount of USD: -73.15 for position CVX, current worth: 307.87
+Suggestion: modify this amount of USD: -16.73 for position balancer-usdt-eth-btc-arb, current worth: 70.40
 ====================
-Current bond: 32312.81
-Suggestion: vesta-finance, modify this amount of USD: 3044.43
-Suggestion: cvxOHMFRAXBP-f, modify this amount of USD: 140.41
-Suggestion: FraxSwapOHM, modify this amount of USD: 138.54
+Current bond: xxx.48 Target Sum: xxx.06 Investment Shift: -0.00, should be lower than 0.05
+Suggestion: modify this amount of USD: 212.81 for position vesta-finance, current worth: 15156.69
+Suggestion: modify this amount of USD: 209.44 for position gohm, current worth: 14916.50
+Suggestion: modify this amount of USD: 19.37 for position cvxOHMFRAXBP-f, current worth: 1379.74
+Suggestion: modify this amount of USD: 18.96 for position FraxSwapOHM, current worth: 1350.54
 ====================
+Current Net Worth: $xxx.22
+Your Annual Interest Rate would be $xxx.15, Monthly return in NT$: xxx
 ```
