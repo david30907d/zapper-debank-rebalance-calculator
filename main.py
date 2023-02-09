@@ -87,7 +87,7 @@ ZAPPER_ADDRESS = {
     "0x1701a7e5034ed1e35c52245ab7c07dbdaf353de7": {
         "categories": ["stock"],
         "symbol": "kyber-avax-eth-LP",
-        "APR": 0.15,
+        "APR": 0.4,
     },
 }
 DEBANK_ADDRESS = {
