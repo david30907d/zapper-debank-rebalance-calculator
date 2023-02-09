@@ -157,8 +157,10 @@ def main(defi_portfolio_service_name):
     positions = load_raw_positions(defi_portfolio_service_name)
     categorized_positions = categorize_positions(defi_portfolio_service_name, positions)
     strategy_fn = get_rebalancing_strategy("permanent_portfolio")
-    output_rebalancing_suggestions(categorized_positions, strategy_fn)
-    calculate_interest_per_month(categorized_positions)
+    net_worth = output_rebalancing_suggestions(categorized_positions, strategy_fn)
+    total_interest = calculate_interest(categorized_positions)
+    print(f"Portfolio's APR: {100*total_interest/net_worth:.2f}%")
+    print(f"Portfolio's ROI: Unknown")
 
 
 def load_raw_positions(data_format: str) -> list[dict]:
@@ -290,9 +292,10 @@ def output_rebalancing_suggestions(categorized_positions, strategy_fn):
         strategy_fn(category, portfolio, net_worth)
         print("====================")
     print(f"Current Net Worth: ${net_worth:.2f}")
+    return net_worth
 
 
-def calculate_interest_per_month(categorized_positions):
+def calculate_interest(categorized_positions):
     total_interest = 0
     for portfolio in categorized_positions.values():
         for position_obj in portfolio["portfolio"].values():
@@ -301,6 +304,7 @@ def calculate_interest_per_month(categorized_positions):
     print(
         f"Your Annual Interest Rate would be ${total_interest:.2f}, Monthly return in NT$: {total_interest/12*exrate:.0f}"
     )
+    return total_interest
 
 
 def _get_exrate(currency_code_name) -> float:

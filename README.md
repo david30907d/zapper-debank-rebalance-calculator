@@ -1,7 +1,7 @@
 
 ## Run
 
-`python main.py`
+`python main.py -d <zapper/debank>`
 
 ## Install
 
