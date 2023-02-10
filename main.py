@@ -148,6 +148,11 @@ DEBANK_ADDRESS = {
         "symbol": "weth-usdc-TJ-LP-avax",
         "APR": 0,
     },
+    "0xbdec4a045446f583dc564c0a227ffd475b329bf0": {
+        "categories": ["stock"],
+        "symbol": "kyber-avax-eth-LP",
+        "APR": 0.4,
+    }
 }
 
 ADDRESS_2_CATEGORY = {**ZAPPER_ADDRESS, **DEBANK_ADDRESS}
@@ -248,7 +253,7 @@ def _debank_handler(positions, result):
                     portfolio["stats"]["net_usd_value"] / length_of_categories
                 )
                 result[category]["portfolio"][symbol]["worth"] += weighted_balanceUSD
-                result[category]["portfolio"][symbol]["apr"] = apr
+                result[category]["portfolio"][symbol]["APR"] = apr
                 result[category]["sum"] += weighted_balanceUSD
     return result
 
