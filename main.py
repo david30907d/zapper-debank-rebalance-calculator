@@ -41,7 +41,7 @@ ZAPPER_ADDRESS = {
     "0x27a8c58e3de84280826d615d80ddb33930383fe9": {
         "categories": ["cash", "bond", "gold"],
         "symbol": "cvxOHMFRAXBP-f",
-        "APR": 0.45,
+        "APR": 0.3,
     },
     "0x72a19342e8f1838460ebfccef09f6585e32db86e": {
         "categories": ["stock"],
