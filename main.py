@@ -11,7 +11,7 @@ ZAPPER_ADDRESS = {
     "0xd2d1162512f927a7e282ef43a362659e4f2a728f": {
         "categories": ["gold"],
         "symbol": "glp-avax",
-        "APR": 0.21,
+        "APR": 0.19,
     },
     "0xa14dbce13c22c97fd99daa0de3b1b480c7c3fdf6": {
         "categories": ["stock"],
@@ -26,7 +26,7 @@ ZAPPER_ADDRESS = {
     "0x4e971a87900b931ff39d1aad67697f49835400b6": {
         "categories": ["gold"],
         "symbol": "glp-arbitrum",
-        "APR": 0.21,
+        "APR": 0.19,
     },
     "0x100ec08129e0fd59959df93a8b914944a3bbd5df": {
         "categories": ["bond"],
@@ -285,6 +285,8 @@ def get_rebalancing_strategy(strategy_name) -> callable:
             print(
                 f"Suggestion: modify this amount of USD: {diffrence * balanceUSD / portfolio['sum']:.2f} for position {symbol}, current worth: {balanceUSD:.2f}"
             )
+            if portfolio['portfolio'][symbol]['APR'] > 0.15:
+                print(f"  - Current APR: {portfolio['portfolio'][symbol]['APR']:.2f}, might need to regularly check")
 
     if strategy_name == "permanent_portfolio":
         return _permenant_portfolio
