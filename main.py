@@ -41,7 +41,7 @@ ZAPPER_ADDRESS = {
     "0x27a8c58e3de84280826d615d80ddb33930383fe9": {
         "categories": ["cash", "bond", "gold"],
         "symbol": "cvxOHMFRAXBP-f",
-        "APR": 0.3,
+        "APR": 0.27,
     },
     "0x72a19342e8f1838460ebfccef09f6585e32db86e": {
         "categories": ["stock"],
@@ -61,7 +61,7 @@ ZAPPER_ADDRESS = {
     "0xf562b2f33b3c90d5d273f88cdf0ced866e17092e": {
         "categories": ["bond", "cash", "gold"],
         "symbol": "FraxSwapOHM",
-        "APR": 0.19,
+        "APR": 0.08,
     },
     "0xf650c3d88d12db855b8bf7d11be6c55a4e07dcc9": {
         "categories": ["cash"],
@@ -87,7 +87,7 @@ ZAPPER_ADDRESS = {
     "0x1701a7e5034ed1e35c52245ab7c07dbdaf353de7": {
         "categories": ["stock"],
         "symbol": "kyber-avax-eth-LP",
-        "APR": 0.4,
+        "APR": 0.39,
     },
 }
 DEBANK_ADDRESS = {
@@ -157,7 +157,6 @@ DEBANK_ADDRESS = {
 
 ADDRESS_2_CATEGORY = {**ZAPPER_ADDRESS, **DEBANK_ADDRESS}
 
-
 def main(defi_portfolio_service_name):
     positions = load_raw_positions(defi_portfolio_service_name)
     categorized_positions = categorize_positions(defi_portfolio_service_name, positions)
@@ -214,7 +213,7 @@ def _zapper_handler(positions, result):
                     asset_address, asset, asset["balanceUSD"], categories, apr
                 )
                 length_of_categories = len(categories)
-                symbol = ADDRESS_2_CATEGORY.get(asset["address"], {}).get("symbol", "")
+                symbol = ADDRESS_2_CATEGORY.get(asset_address, {}).get("symbol", "")
                 for category in categories:
                     weighted_balanceUSD = asset["balanceUSD"] / length_of_categories
                     result[category]["portfolio"][symbol][
