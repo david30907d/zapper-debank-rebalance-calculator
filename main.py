@@ -1,9 +1,8 @@
 import json
 from collections import defaultdict
-import requests
-import random
+from utils.exchange_rate import get_exrate
+from apr_calculator import get_latest_apr
 from handlers import get_data_source_handler
-from portfolio_config import ADDRESS_2_CATEGORY
 def main(defi_portfolio_service_name):
     positions = load_raw_positions(defi_portfolio_service_name)
     categorized_positions = categorize_positions(defi_portfolio_service_name, positions)
@@ -70,48 +69,13 @@ def calculate_interest(categorized_positions):
     total_interest = 0
     for portfolio in categorized_positions.values():
         for symbol, position_obj in portfolio["portfolio"].items():
-            apr = _get_latest_apr(symbol)
+            apr = get_latest_apr(symbol)
             total_interest += position_obj["worth"] * apr
-    exrate = _get_exrate("USDTWD")
+    exrate = get_exrate("USDTWD")
     print(
         f"Your Annual Interest Rate would be ${total_interest:.2f}, Monthly return in NT$: {total_interest/12*exrate:.0f}"
     )
     return total_interest
-
-def _get_latest_apr(symbol, provider='defillama'):
-    if provider == 'defillama':
-        defillama_pool_uuid = _get_metadata_by_symbol(symbol).get('defillama-APY-pool-id', None)
-        if not defillama_pool_uuid:
-            return 0
-        res_json = json.load(open('yield-llama.json', 'r'))
-        if random.randint(0, 10) == 10:
-            res = requests.get('https://yields.llama.fi/pools')
-            res_json = res.json()
-            json.dump(res_json, open('yield-llama.json', 'w'))
-        for pool_metadata in res_json['data']:
-            if pool_metadata['pool'] == defillama_pool_uuid:
-                # turn APY back to APR
-                return ((pool_metadata['apy']/100+1)**(1/365)-1)*365
-        raise FileNotFoundError(f"Cannot find {defillama_pool_uuid} in defillama's API")
-    else:
-        raise NotImplementedError(f"Unknown provider: {provider}")
-
-def _get_metadata_by_symbol(symbol: str) -> dict:
-    for metadata in ADDRESS_2_CATEGORY.values():
-        if metadata['symbol'] == symbol:
-            return metadata
-    raise Exception(f"Cannot find {symbol} in your address mapping table")
-
-
-
-def _get_exrate(currency_code_name) -> float:
-    # credit to https://tw.rter.info/howto_currencyapi.php
-    # thanks a lot
-    return 30.4
-    resp = requests.get("https://tw.rter.info/capi.php")
-    currency = resp.json()
-    return currency[currency_code_name]["Exrate"]
-
 
 if __name__ == "__main__":
     import argparse
