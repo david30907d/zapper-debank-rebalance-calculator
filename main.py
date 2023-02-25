@@ -1,17 +1,19 @@
 import json
 from collections import defaultdict
 import requests
-
+import random
 ZAPPER_ADDRESS = {
     "0x8ec22ec81e740e0f9310e7318d03c494e62a70cd": {
         "categories": ["cash"],
         "symbol": "crvEURSUSD",
         "APR": 0.002,
+        "defillama-APY-pool-id": "9cf3f9d1-bc48-4436-8ef9-5ecf786c7a9b"
     },
     "0xd2d1162512f927a7e282ef43a362659e4f2a728f": {
         "categories": ["gold"],
         "symbol": "glp-avax",
-        "APR": 0.19,
+        "APR": 0.16,
+        "defillama-APY-pool-id": "6a3ddb91-0638-4454-97c1-86dc6d59f32c"
     },
     "0xa14dbce13c22c97fd99daa0de3b1b480c7c3fdf6": {
         "categories": ["stock"],
@@ -27,6 +29,7 @@ ZAPPER_ADDRESS = {
         "categories": ["gold"],
         "symbol": "glp-arbitrum",
         "APR": 0.19,
+        "defillama-APY-pool-id": "825688c0-c694-4a6b-8497-177e425b7348"
     },
     "0x100ec08129e0fd59959df93a8b914944a3bbd5df": {
         "categories": ["bond"],
@@ -36,22 +39,33 @@ ZAPPER_ADDRESS = {
     "0x127963a74c07f72d862f2bdc225226c3251bd117": {
         "categories": ["cash"],
         "symbol": "VSTFRAX-f",
-        "APR": 0.1,
+        "APR": 0.06,
+        "defillama-APY-pool-id": "ca8b6649-b825-41c7-8955-47b955b37bb0"
     },
     "0x27a8c58e3de84280826d615d80ddb33930383fe9": {
         "categories": ["cash", "bond", "gold"],
         "symbol": "cvxOHMFRAXBP-f",
         "APR": 0.27,
+        "defillama-APY-pool-id": "4f000353-5bb0-4e8c-ad03-194f0662680d"
+    },
+    "0xc96e1a26264d965078bd01eaceb129a65c09ffe7": {
+        "categories": ["cash", "bond", "gold"],
+        "symbol": "stkcvxOHMFRAXBP-f-frax",
+        "APR": 0.27,
+        "defillama-APY-pool-id": "4f000353-5bb0-4e8c-ad03-194f0662680d"
+
     },
     "0x72a19342e8f1838460ebfccef09f6585e32db86e": {
         "categories": ["stock"],
         "symbol": "CVX",
         "APR": 0.02,
+        "defillama-APY-pool-id": "777032e6-e815-4f44-90b4-abb98f0f9632"
     },
     "0xaa0c3f5f7dfd688c6e646f66cd2a6b66acdbe434": {
         "categories": ["stock"],
         "symbol": "cvxCRV",
-        "APR": 0.2,
+        "APR": 0.15,
+        "defillama-APY-pool-id": "f1b831a9-7763-4bad-a64e-cafc86fdb7ec"
     },
     "0x188bed1968b795d5c9022f6a0bb5931ac4c18f00": {
         "categories": ["stock"],
@@ -61,7 +75,7 @@ ZAPPER_ADDRESS = {
     "0xf562b2f33b3c90d5d273f88cdf0ced866e17092e": {
         "categories": ["bond", "cash", "gold"],
         "symbol": "FraxSwapOHM",
-        "APR": 0.08,
+        "APR": 0.05,
     },
     "0xf650c3d88d12db855b8bf7d11be6c55a4e07dcc9": {
         "categories": ["cash"],
@@ -83,11 +97,13 @@ ZAPPER_ADDRESS = {
         "categories": ["stock"],
         "symbol": "sushi-dpx-weth-LP",
         "APR": 0.25,
+        "defillama-APY-pool-id": "97cb382d-8dc4-4e17-b0f6-b6b51994dbeb"
     },
     "0x1701a7e5034ed1e35c52245ab7c07dbdaf353de7": {
         "categories": ["stock"],
         "symbol": "kyber-avax-eth-LP",
         "APR": 0.39,
+        "defillama-APY-pool-id": "ca1058be-6d4b-4dc2-97f9-cf09dae2a10e"
     },
 }
 DEBANK_ADDRESS = {
@@ -107,11 +123,13 @@ DEBANK_ADDRESS = {
         "categories": ["stock"],
         "symbol": "radiant-eth-LP",
         "APR": 0.65,
+        "defillama-APY-pool-id": "118281c6-3a4a-4324-b804-5664617df77d"
     },
     "0xb7e50106a5bd3cf21af210a755f9c8740890a8c9": {
         "categories": ["stock"],
         "symbol": "magic-weth-sushi-LP",
         "APR": 0.6,
+        "defillama-APY-pool-id": "5f98842f-72cb-4579-807f-403ca2dfb993"
     },
     "0x7ec3717f70894f6d9ba0be00774610394ce006ee": {
         "categories": ["stock", "gold", "cash"],
@@ -152,6 +170,7 @@ DEBANK_ADDRESS = {
         "categories": ["stock"],
         "symbol": "kyber-avax-eth-LP",
         "APR": 0.4,
+        "defillama-APY-pool-id": "ca1058be-6d4b-4dc2-97f9-cf09dae2a10e"
     }
 }
 
@@ -304,13 +323,39 @@ def output_rebalancing_suggestions(categorized_positions, strategy_fn):
 def calculate_interest(categorized_positions):
     total_interest = 0
     for portfolio in categorized_positions.values():
-        for position_obj in portfolio["portfolio"].values():
-            total_interest += position_obj["worth"] * position_obj["APR"]
+        for symbol, position_obj in portfolio["portfolio"].items():
+            apr = _get_latest_apr(symbol)
+            total_interest += position_obj["worth"] * apr
     exrate = _get_exrate("USDTWD")
     print(
         f"Your Annual Interest Rate would be ${total_interest:.2f}, Monthly return in NT$: {total_interest/12*exrate:.0f}"
     )
     return total_interest
+
+def _get_latest_apr(symbol, provider='defillama'):
+    if provider == 'defillama':
+        defillama_pool_uuid = _get_metadata_by_symbol(symbol).get('defillama-APY-pool-id', None)
+        if not defillama_pool_uuid:
+            return 0
+        res_json = json.load(open('yield-llama.json', 'r'))
+        if random.randint(0, 10) == 10:
+            res = requests.get('https://yields.llama.fi/pools')
+            res_json = res.json()
+            json.dump(res_json, open('yield-llama.json', 'w'))
+        for pool_metadata in res_json['data']:
+            if pool_metadata['pool'] == defillama_pool_uuid:
+                # turn APY back to APR
+                return ((pool_metadata['apy']/100+1)**(1/365)-1)*365
+        raise FileNotFoundError(f"Cannot find {defillama_pool_uuid} in defillama's API")
+    else:
+        raise NotImplementedError(f"Unknown provider: {provider}")
+
+def _get_metadata_by_symbol(symbol: str) -> dict:
+    for metadata in ADDRESS_2_CATEGORY.values():
+        if metadata['symbol'] == symbol:
+            return metadata
+    raise Exception(f"Cannot find {symbol} in your address mapping table")
+
 
 
 def _get_exrate(currency_code_name) -> float:
