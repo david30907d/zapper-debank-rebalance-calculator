@@ -2,3 +2,4 @@ venv
 debank.json
 zapper.json
 .DS_Store
+yield-llama.json

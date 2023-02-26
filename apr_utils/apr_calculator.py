@@ -1,19 +1,26 @@
 import json, random, requests
 from apr_utils.utils import get_metadata_by_symbol, convert_apy_to_apr
+from portfolio_config import DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL
 def get_latest_apr(symbol, provider='defillama'):
     if provider == 'defillama':
         defillama_pool_uuid = get_metadata_by_symbol(symbol).get('defillama-APY-pool-id', None)
         if not defillama_pool_uuid:
-            return 0
+            default_apr = _get_default_apr(symbol)
+            if default_apr:
+                return default_apr
+            raise Exception(f"{symbol}'s APR is 0, are you sure you want to continue?")
         res_json = json.load(open('yield-llama.json', 'r'))
-        # if random.randint(0, 10) == 10:
-        #     res = requests.get('https://yields.llama.fi/pools')
-        #     res_json = res.json()
-        #     json.dump(res_json, open('yield-llama.json', 'w'))
+        if random.randint(0, DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL) == 0:
+            res = requests.get('https://yields.llama.fi/pools')
+            res_json = res.json()
+            json.dump(res_json, open('yield-llama.json', 'w'))
         for pool_metadata in res_json['data']:
             if pool_metadata['pool'] == defillama_pool_uuid:
                 # turn APY back to APR
-                return convert_apy_to_apr(pool_metadata['apy']/100)
+                return convert_apy_to_apr(pool_metadata['apyMean30d']/100)
         raise FileNotFoundError(f"Cannot find {defillama_pool_uuid} in defillama's API")
     else:
         raise NotImplementedError(f"Unknown provider: {provider}")
+
+def _get_default_apr(symbol: str):
+    return get_metadata_by_symbol(symbol).get('DEFAULT_APR', 0)

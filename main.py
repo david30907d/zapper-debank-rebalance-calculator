@@ -4,6 +4,7 @@ from utils.exchange_rate import get_exrate
 from apr_utils.apr_calculator import get_latest_apr
 from apr_utils.apr_pool_optimizer import search_top_n_pool_consist_of_same_lp_token
 from handlers import get_data_source_handler
+from portfolio_config import MIN_REBALANCE_POSITION_THRESHOLD
 def main(defi_portfolio_service_name):
     positions = load_raw_positions(defi_portfolio_service_name)
     categorized_positions = categorize_positions(defi_portfolio_service_name, positions)
@@ -47,12 +48,11 @@ def get_rebalancing_strategy(strategy_name) -> callable:
             portfolio["portfolio"].items(), key=lambda x: -x[1]["worth"]
         ):
             balanceUSD = position_obj["worth"]
+            if balanceUSD < MIN_REBALANCE_POSITION_THRESHOLD:
+                continue
             print(
                 f"Suggestion: modify this amount of USD: {diffrence * balanceUSD / portfolio['sum']:.2f} for position {symbol}, current worth: {balanceUSD:.2f}"
             )
-            if portfolio['portfolio'][symbol]['APR'] > 0.15:
-                print(f"  - Current APR: {portfolio['portfolio'][symbol]['APR']:.2f}, might need to regularly check")
-
     if strategy_name == "permanent_portfolio":
         return _permenant_portfolio
     raise NotImplementedError

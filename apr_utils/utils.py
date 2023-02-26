@@ -2,7 +2,7 @@ from portfolio_config import ADDRESS_2_CATEGORY
 
 def get_metadata_by_symbol(symbol: str) -> dict:
     for metadata in ADDRESS_2_CATEGORY.values():
-        if metadata['symbol'] == symbol:
+        if metadata['symbol'].lower() == symbol.lower():
             return metadata
     raise Exception(f"Cannot find {symbol} in your address mapping table")
 
