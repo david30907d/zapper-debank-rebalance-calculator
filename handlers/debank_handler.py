@@ -1,5 +1,4 @@
 from portfolio_config import ADDRESS_2_CATEGORY
-from handlers.utils import mapping_table_checking_logic
 from apr_utils.apr_calculator import get_latest_apr
 
 def _debank_handler(positions, result):

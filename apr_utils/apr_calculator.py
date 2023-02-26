@@ -9,11 +9,12 @@ def get_latest_apr(symbol, provider='defillama'):
             if default_apr:
                 return default_apr
             raise Exception(f"{symbol}'s APR is 0, are you sure you want to continue?")
-        res_json = json.load(open('yield-llama.json', 'r'))
+        try:
+            res_json = json.load(open('yield-llama.json', 'r'))
+        except FileNotFoundError:
+            res_json = _get_data_from_defillama()
         if random.randint(0, DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL) == 0:
-            res = requests.get('https://yields.llama.fi/pools')
-            res_json = res.json()
-            json.dump(res_json, open('yield-llama.json', 'w'))
+            res_json = _get_data_from_defillama()
         for pool_metadata in res_json['data']:
             if pool_metadata['pool'] == defillama_pool_uuid:
                 # turn APY back to APR
@@ -22,5 +23,12 @@ def get_latest_apr(symbol, provider='defillama'):
     else:
         raise NotImplementedError(f"Unknown provider: {provider}")
 
+def _get_data_from_defillama():
+    res = requests.get('https://yields.llama.fi/pools')
+    json.dump(res_json, open('yield-llama.json', 'w'))
+    return res.json()
+
+
 def _get_default_apr(symbol: str):
     return get_metadata_by_symbol(symbol).get('DEFAULT_APR', 0)
+

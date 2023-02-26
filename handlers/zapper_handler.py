@@ -1,7 +1,5 @@
 from portfolio_config import ADDRESS_2_CATEGORY
-from handlers.utils import mapping_table_checking_logic
 from apr_utils.apr_calculator import get_latest_apr
-import json
 def _zapper_handler(positions, result):
     for position in positions:
         if position["balanceUSD"] < 200:
