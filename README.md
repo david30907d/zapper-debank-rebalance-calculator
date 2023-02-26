@@ -5,7 +5,8 @@
 
 ## Install
 
-`poetry install`
+1. `poetry install`
+2. `npm install`
 
 ## Data Source
 
