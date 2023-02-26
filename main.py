@@ -1,7 +1,8 @@
 import json
 from collections import defaultdict
 from utils.exchange_rate import get_exrate
-from apr_calculator import get_latest_apr
+from apr_utils.apr_calculator import get_latest_apr
+from apr_utils.apr_pool_optimizer import search_top_n_pool_consist_of_same_lp_token
 from handlers import get_data_source_handler
 def main(defi_portfolio_service_name):
     positions = load_raw_positions(defi_portfolio_service_name)
@@ -9,6 +10,7 @@ def main(defi_portfolio_service_name):
     strategy_fn = get_rebalancing_strategy("permanent_portfolio")
     net_worth = output_rebalancing_suggestions(categorized_positions, strategy_fn)
     total_interest = calculate_interest(categorized_positions)
+    search_top_n_pool_consist_of_same_lp_token(categorized_positions)
     print(f"Portfolio's APR: {100*total_interest/net_worth:.2f}%")
     print(f"Portfolio's ROI: Unknown")
 

@@ -29,7 +29,7 @@ ZAPPER_ADDRESS = {
     },
     "0x100ec08129e0fd59959df93a8b914944a3bbd5df": {
         "categories": ["bond"],
-        "symbol": "vesta-finance",
+        "symbol": "gohm",
         "APR": 0.07,
     },
     "0x127963a74c07f72d862f2bdc225226c3251bd117": {
@@ -75,7 +75,7 @@ ZAPPER_ADDRESS = {
     },
     "0xf650c3d88d12db855b8bf7d11be6c55a4e07dcc9": {
         "categories": ["cash"],
-        "symbol": "compund USDT",
+        "symbol": "compound USDT",
         "APR": 0.02,
     },
     "0x8d9ba570d6cb60c7e3e0f31343efe75ab8e65fb1": {
@@ -151,11 +151,6 @@ DEBANK_ADDRESS = {
         "categories": ["stock", "cash", "gold"],
         "symbol": "balancer-usdt-eth-btc-arb",
         "APR": 0.15,
-    },
-    "0x3d9819210a31b4961b30ef54be2aed79b9c9cd3b": {
-        "categories": ["cash"],
-        "symbol": "compound USDT",
-        "APR": 0.02,
     },
     "0x5851e2d6396bcc26fb9eee21effbf99e0d2b2148": {
         "categories": ["stock", "cash", "gold"],

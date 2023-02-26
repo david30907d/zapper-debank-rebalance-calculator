@@ -108,6 +108,18 @@ files = [
 ]
 
 [[package]]
+name = "ngram"
+version = "4.0.3"
+description = "A `set` subclass providing fuzzy search based on N-grams."
+category = "main"
+optional = false
+python-versions = ">=3.0"
+files = [
+    {file = "ngram-4.0.3-py3-none-any.whl", hash = "sha256:7562c74bf4fb658d8368fb6e87116640f90502884920531a5afb6ba42105eb02"},
+    {file = "ngram-4.0.3.tar.gz", hash = "sha256:06d1809ee2fedddced6065dcd19826c61318787d47bf4f10b1c011783d419aa6"},
+]
+
+[[package]]
 name = "packaging"
 version = "23.0"
 description = "Core utilities for Python packages"
@@ -174,4 +186,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "59f70a9db17d87a78921af6673c562f726bd6242dc128c64a310b31cbb101097"
+content-hash = "1782be41c310fc6d93b9dc4464c6ef4f48c358f5fdc3f956dc477ff76c8e2d03"
