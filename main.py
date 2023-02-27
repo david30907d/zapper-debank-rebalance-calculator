@@ -20,19 +20,11 @@ def main(defi_portfolio_service_name: str, optimize_apr_mode: str):
     print("Portfolio's ROI: Unknown\n")
     print(
         "Portfolio's Sharpe Ratio: ",
-        calculate_portfolio_sharpe_ratio(
-            {
-                "governance-ohm": 10,
-            }
-        ),
+        calculate_portfolio_sharpe_ratio(categorized_positions),
     )
     print(
         "Portfolio's Max Drawdown: ",
-        calculate_max_drawdown(
-            {
-                "governance-ohm": 10,
-            }
-        ),
+        calculate_max_drawdown(categorized_positions),
     )
     if optimize_apr_mode:
         search_top_n_pool_consist_of_same_lp_token(

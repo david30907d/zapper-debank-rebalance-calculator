@@ -3,7 +3,7 @@ import json
 import ngram
 
 from apr_utils.apr_calculator import get_latest_apr
-from apr_utils.utils import convert_apy_to_apr, get_metadata_by_symbol
+from apr_utils.utils import convert_apy_to_apr
 from utils.position import skip_rebalance_if_position_too_small
 
 
@@ -29,9 +29,7 @@ def search_top_n_pool_consist_of_same_lp_token(
                     continue
                 if (
                     search_handler(symbol, pool_metadata["symbol"])
-                    and get_metadata_by_symbol(symbol).get(
-                        "defillama-APY-pool-id", None
-                    )
+                    and metadata["metadata"]["defillama-APY-pool-id"]
                     != pool_metadata["pool"]
                     and current_apr
                     < convert_apy_to_apr(pool_metadata["apyMean30d"] / 100)
