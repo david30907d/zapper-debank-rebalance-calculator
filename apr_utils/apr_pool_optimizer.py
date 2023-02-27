@@ -8,11 +8,13 @@ from utils.position import skip_rebalance_if_position_too_small
 
 
 def search_top_n_pool_consist_of_same_lp_token(
-    categorized_positions: dict,
+    categorized_positions: dict, optimize_apr_mode: str
 ) -> list[dict]:
     print("=======Search top n pools consist of same lp token=======")
     res_json = json.load(open("yield-llama.json", "r"))
-    search_handler = _get_search_handler("ngram")
+    search_handler = _get_search_handler(
+        optimize_apr_mode=optimize_apr_mode, searching_algorithm="ngram"
+    )
     symbol_set = set()
     for portfolio in categorized_positions.values():
         for symbol, metadata in portfolio["portfolio"].items():
@@ -39,19 +41,21 @@ def search_top_n_pool_consist_of_same_lp_token(
     return top_n
 
 
-def _get_search_handler(searching_algorithm):
-    if searching_algorithm == "ngram":
-        threashold = 0.2
-        return (
-            lambda symbol, compared_symbol: ngram.NGram.compare(
-                symbol.lower(), compared_symbol.lower()
+def _get_search_handler(optimize_apr_mode: str, searching_algorithm: str):
+    if optimize_apr_mode == "new_pool":
+        if searching_algorithm == "ngram":
+            threashold = 0.2
+            return (
+                lambda symbol, compared_symbol: ngram.NGram.compare(
+                    symbol.lower(), compared_symbol.lower()
+                )
+                > threashold
             )
-            > threashold
-        )
-    else:
         raise NotImplementedError(
             f"search algorithm {searching_algorithm} not implemented"
         )
+    elif optimize_apr_mode == "new_combination":
+        raise NotImplementedError("Not implemented yet")
 
 
 def _print_out_topn_candidate_pool(

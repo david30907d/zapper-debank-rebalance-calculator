@@ -8,7 +8,7 @@ from utils.exchange_rate import get_exrate
 from utils.position import skip_rebalance_if_position_too_small
 
 
-def main(defi_portfolio_service_name):
+def main(defi_portfolio_service_name: str, optimize_apr_mode: str):
     positions = load_raw_positions(defi_portfolio_service_name)
     categorized_positions = categorize_positions(defi_portfolio_service_name, positions)
     strategy_fn = get_rebalancing_strategy("permanent_portfolio")
@@ -16,7 +16,10 @@ def main(defi_portfolio_service_name):
     total_interest = calculate_interest(categorized_positions)
     print(f"Portfolio's APR: {100*total_interest/net_worth:.2f}%")
     print("Portfolio's ROI: Unknown\n")
-    search_top_n_pool_consist_of_same_lp_token(categorized_positions)
+    if optimize_apr_mode:
+        search_top_n_pool_consist_of_same_lp_token(
+            categorized_positions, optimize_apr_mode
+        )
 
 
 def load_raw_positions(data_format: str) -> list[dict]:
@@ -94,8 +97,15 @@ if __name__ == "__main__":
         choices=["zapper", "debank"],
         help="which defi portfolio to load positions from",
     )
+    parser.add_argument(
+        "-op",
+        "--optimize_apr_mode",
+        type=str,
+        choices=["new_pool", "new_combination"],
+        help="which defi portfolio to load positions from",
+    )
     args = parser.parse_args()
-    main(args.defi_portfolio_service_name)
+    main(args.defi_portfolio_service_name, args.optimize_apr_mode)
 
 # # basic
 # 1. use the same symbol to search in llama response (can use regex to do fozzy search)

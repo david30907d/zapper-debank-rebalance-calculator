@@ -1,7 +1,8 @@
 
 ## Run
 
-`python main.py -d <zapper/debank>`
+`python main.py -h`
+`python main.py -d <zapper/debank> -op <new_pool/new_combination>`
 
 ## Install
 
