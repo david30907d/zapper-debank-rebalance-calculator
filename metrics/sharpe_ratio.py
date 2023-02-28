@@ -19,7 +19,7 @@ def calculate_portfolio_sharpe_ratio(
     Returns:
         float: The Sharpe ratio of the portfolio.
     """
-    adapter = get_networh_to_balance_adapter("coingecko")
+    adapter = get_networh_to_balance_adapter(adapter="coingecko")
     categorized_positions_with_token_balenace = adapter(categorized_positions)
     daily_return_percentages = _get_daily_return_percentage_array(
         categorized_positions_with_token_balenace

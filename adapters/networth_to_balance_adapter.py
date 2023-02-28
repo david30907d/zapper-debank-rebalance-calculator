@@ -1,14 +1,13 @@
-# import json
 from collections import defaultdict
 
 
 def get_networh_to_balance_adapter(adapter: str) -> callable:
     if adapter == "coingecko":
-        return coingecko_price_2_balance_adapter
+        return coingecko_net_worth_2_balance_adapter
     raise NotImplementedError(f"adapter {adapter} not implemented")
 
 
-def coingecko_price_2_balance_adapter(categorized_positions: dict) -> float:
+def coingecko_net_worth_2_balance_adapter(categorized_positions: dict) -> float:
     dedupe_symbol_set = set()
     result = defaultdict(list)
     for category_obj in categorized_positions.values():
@@ -23,8 +22,7 @@ def coingecko_price_2_balance_adapter(categorized_positions: dict) -> float:
                 else:
                     _get_basic_token_in_backtracking_way(token_array, tokens["tokens"])
                     result[symbol] += token_array
-    # coingecko = json.load(open("coingecko.json", "r"))
-    # current_price = coingecko[symbol]["usd"]
+    return result
 
 
 def _get_basic_token_in_backtracking_way(
