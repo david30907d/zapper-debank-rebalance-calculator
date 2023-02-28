@@ -24,6 +24,24 @@ def _zapper_handler(positions, result):
                     continue
                 apr = get_latest_apr(symbol)
                 metadata = get_metadata_by_symbol(symbol)
+                tokens_metadata = [
+                    {
+                        k: v
+                        for k, v in token.items()
+                        if k
+                        not in [
+                            "supply",
+                            "dataProps",
+                            "displayProps",
+                            "pricePerShare",
+                            "key",
+                            "balanceRaw",
+                            "groupId",
+                        ]
+                    }
+                    for token in asset["tokens"]
+                    if token.get("metaType") == "supplied"
+                ]
                 length_of_categories = len(categories)
                 for category in categories:
                     weighted_balanceUSD = asset["balanceUSD"] / length_of_categories
@@ -33,4 +51,7 @@ def _zapper_handler(positions, result):
                     result[category]["portfolio"][symbol]["APR"] = apr
                     result[category]["sum"] += weighted_balanceUSD
                     result[category]["portfolio"][symbol]["metadata"] = metadata
+                    result[category]["portfolio"][symbol][
+                        "tokens_metadata"
+                    ] = tokens_metadata
     return result

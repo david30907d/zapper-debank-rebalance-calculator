@@ -29,7 +29,8 @@ def get_token_historical_price(symbol: str) -> pd.Series:
     )
     if res.status_code == 200:
         json.dump(res.json(), open(f"{symbol}.json", "w"))
-    price = np.array(res.json()["prices"])[:, 1]
-    res = json.load(open(f"{symbol}.json", "r"))
-    price = np.array(res["prices"])[:, 1]
+        res_json = res.json()
+    else:
+        res_json = json.load(open(f"{symbol}.json", "r"))
+    price = np.array(res_json["prices"])[:, 1]
     return pd.Series(price)
