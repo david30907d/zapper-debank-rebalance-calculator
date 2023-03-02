@@ -1,5 +1,5 @@
 MIN_REBALANCE_POSITION_THRESHOLD = 500
-DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 40
+DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 100
 ZAPPER_ADDRESS = {
     "0x8ec22ec81e740e0f9310e7318d03c494e62a70cd": {
         "categories": ["cash"],
@@ -193,4 +193,27 @@ TOKEN_CATEGORIES = {
     "gold": ["glp"],
 }
 
-ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {"EURS": "stasis-eurs"}
+ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
+    "EURS": "stasis-eurs",
+    "OHM": "olympus",
+    "FRAX": "frax",
+    "USDC": "usd-coin",
+    "USDC.e": "usd-coin",
+    "WBTC": "bitcoin",
+    "WBTC.e": "bitcoin",
+    "BTC.b": "bitcoin",
+    "WETH": "ethereum",
+    "WETH.e": "ethereum",
+    "WAVAX": "avalanche-2",
+    "WAVAX": "avalanche-2",
+    "LINK": "chainlink",
+    "UNI": "uniswap",
+    "USDT": "tether",
+    "DAI": "dai",
+    "VST": "vesta-stable",
+    "MAGIC": "magic",
+    "RDNT": "radiant-capital",
+    "DPX": "dopex",
+    "CVX": "convex-finance",
+    "cvxCRV": "convex-crv",
+}

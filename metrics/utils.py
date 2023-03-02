@@ -1,9 +1,4 @@
 import datetime
-import json
-
-import numpy as np
-import pandas as pd
-import requests
 
 # TODO: once data is enough,
 DAY_TIMEDELTA = 365 * 4
@@ -21,16 +16,3 @@ def get_required_unix_timestamp():
 
 
 FOUR_YEARS_AGO_UNIX_TIMESTAMP, TODAY_UNIX_TIMESTAMP = get_required_unix_timestamp()
-
-
-def get_token_historical_price(symbol: str) -> pd.Series:
-    res = requests.get(
-        f"https://api.coingecko.com/api/v3/coins/{symbol}/market_chart/range?vs_currency=usd&from={FOUR_YEARS_AGO_UNIX_TIMESTAMP}&to={TODAY_UNIX_TIMESTAMP})"
-    )
-    if res.status_code == 200:
-        json.dump(res.json(), open(f"{symbol}.json", "w"))
-        res_json = res.json()
-    else:
-        res_json = json.load(open(f"{symbol}.json", "r"))
-    price = np.array(res_json["prices"])[:, 1]
-    return pd.Series(price)

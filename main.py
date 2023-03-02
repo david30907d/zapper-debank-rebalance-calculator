@@ -4,7 +4,8 @@ from collections import defaultdict
 from apr_utils.apr_calculator import get_latest_apr
 from apr_utils.apr_pool_optimizer import search_top_n_pool_consist_of_same_lp_token
 from handlers import get_data_source_handler
-from metrics.max_drawdown import calculate_max_drawdown
+
+# from metrics.max_drawdown import calculate_max_drawdown
 from metrics.sharpe_ratio import calculate_portfolio_sharpe_ratio
 from utils.exchange_rate import get_exrate
 from utils.position import skip_rebalance_if_position_too_small
@@ -22,10 +23,10 @@ def main(defi_portfolio_service_name: str, optimize_apr_mode: str):
         "Portfolio's Sharpe Ratio: ",
         calculate_portfolio_sharpe_ratio(categorized_positions),
     )
-    print(
-        "Portfolio's Max Drawdown: ",
-        calculate_max_drawdown(categorized_positions),
-    )
+    # print(
+    #     "Portfolio's Max Drawdown: ",
+    #     calculate_max_drawdown(categorized_positions),
+    # )
     if optimize_apr_mode:
         search_top_n_pool_consist_of_same_lp_token(
             categorized_positions, optimize_apr_mode
