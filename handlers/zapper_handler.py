@@ -1,11 +1,11 @@
 from apr_utils.apr_calculator import get_latest_apr
 from apr_utils.utils import get_metadata_by_symbol
-from portfolio_config import ADDRESS_2_CATEGORY
+from portfolio_config import ADDRESS_2_CATEGORY, MIN_REBALANCE_POSITION_THRESHOLD
 
 
 def _zapper_handler(positions, result):
     for position in positions:
-        if position["balanceUSD"] < 200:
+        if position["balanceUSD"] < MIN_REBALANCE_POSITION_THRESHOLD:
             continue
         for product in position["products"]:
             for asset in product["assets"]:
@@ -20,7 +20,15 @@ def _zapper_handler(positions, result):
                 symbol = (
                     ADDRESS_2_CATEGORY.get(asset_address, {}).get("symbol", "").lower()
                 )
-                if not categories and not symbol:
+                # sanity check
+                if (
+                    asset["balanceUSD"] > MIN_REBALANCE_POSITION_THRESHOLD
+                    and not categories
+                ):
+                    raise Exception(
+                        f"Address {asset_address} no category, need to update your ADDRESS_2_CATEGORY, or update its APR"
+                    )
+                elif not symbol and not categories:
                     continue
                 apr = get_latest_apr(symbol)
                 metadata = get_metadata_by_symbol(symbol)

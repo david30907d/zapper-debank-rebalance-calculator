@@ -1,5 +1,5 @@
-MIN_REBALANCE_POSITION_THRESHOLD = 2000
-DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 1000
+MIN_REBALANCE_POSITION_THRESHOLD = 500
+DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 40
 ZAPPER_ADDRESS = {
     "0x8ec22ec81e740e0f9310e7318d03c494e62a70cd": {
         "categories": ["cash"],
@@ -91,6 +91,26 @@ ZAPPER_ADDRESS = {
         "categories": ["stock"],
         "symbol": "kyber-avax-eth-LP",
         "defillama-APY-pool-id": "ca1058be-6d4b-4dc2-97f9-cf09dae2a10e",
+    },
+    "0xb5c88537d8f5f356e43ec94e20f7eb26bd1ac967": {
+        "categories": ["stock"],
+        "symbol": "DPX-WETH",
+        "defillama-APY-pool-id": "ce53d880-7ebf-40c5-9d97-e4c0fa0bc127",
+    },
+    "0xd85e038593d7a098614721eae955ec2022b9b91b": {
+        "categories": ["cash"],
+        "symbol": "gDAI",
+        "defillama-APY-pool-id": "15c3e528-2825-4ca4-804b-406e8b8e2ebd",
+    },
+    "0x80789d252a288e93b01d82373d767d71a75d9f16": {
+        "categories": ["stock"],
+        "symbol": "veDPX",
+        "DEFAULT_APR": 0.13,
+    },
+    "0xc8418af6358ffdda74e09ca9cc3fe03ca6adc5b0": {
+        "categories": ["stock"],
+        "symbol": "veFXS",
+        "DEFAULT_APR": 0.01,
     },
 }
 DEBANK_ADDRESS = {
