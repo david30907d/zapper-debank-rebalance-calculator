@@ -32,5 +32,5 @@ def calculate_historical_price_of_lp_token(
         if len(series) == 0:
             series = price_pd * tokenBalance
         else:
-            series = series.add(price_pd * tokenBalance)
+            series = series.add(price_pd * tokenBalance).dropna()
     return series

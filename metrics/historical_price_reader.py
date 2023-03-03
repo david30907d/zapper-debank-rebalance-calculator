@@ -27,7 +27,7 @@ class CoinGeckoHistoricalPriceReader:
     ) -> pd.Series:
         if (
             random.randint(0, DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL) == 0
-            or not pathlib.Path(f"{symbol}.json").exists()
+            or not pathlib.Path(f"./coingecko/{symbol}.json").exists()
         ):
             res = requests.get(
                 f"https://api.coingecko.com/api/v3/coins/{symbol}/market_chart/range?vs_currency=usd&from={FOUR_YEARS_AGO_UNIX_TIMESTAMP}&to={TODAY_UNIX_TIMESTAMP})"

@@ -36,17 +36,20 @@ def _get_daily_return_percentage_array(
 ) -> pd.Series:
     series = pd.Series(dtype=float)
     historical_price_reader = get_historical_price_reader(source="coingecko")
-    for lp_token in categorized_positions_with_token_balance.values():
+    # print(categorized_positions_with_token_balance)
+    for key, lp_token in categorized_positions_with_token_balance.items():
         daily_return_per_lp_token: pd.Series = calculate_daily_return_per_lp_token(
             lp_token, historical_price_reader
         )
+        print(key, len(daily_return_per_lp_token))
         daily_return_percentages_per_lp_token = (
             _calculate_daily_return_percentages_per_lp_token(daily_return_per_lp_token)
         )
         if series.empty:
             series = daily_return_percentages_per_lp_token
         else:
-            series = series.add(daily_return_percentages_per_lp_token)
+            series = series.add(daily_return_percentages_per_lp_token).dropna()
+    print(len(series))
     return series
 
 
