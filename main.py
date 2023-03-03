@@ -67,7 +67,7 @@ def get_rebalancing_strategy(strategy_name) -> callable:
             if skip_rebalance_if_position_too_small(balanceUSD):
                 continue
             print(
-                f"Suggestion: modify this amount of USD: {diffrence * balanceUSD / portfolio['sum']:.2f} for position {symbol}, current worth: {balanceUSD:.2f}"
+                f"Suggestion: modify this amount of USD: {diffrence * balanceUSD / portfolio['sum']:.2f} for position {symbol}, current worth: {balanceUSD:.2f}, percentage: {balanceUSD/net_worth:.2f}"
             )
 
     if strategy_name == "permanent_portfolio":
