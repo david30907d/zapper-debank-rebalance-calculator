@@ -3,7 +3,7 @@ import pandas as pd
 
 from adapters.networth_to_balance_adapter import get_networh_to_balance_adapter
 from metrics.historical_price_reader import get_historical_price_reader
-from metrics.lp_token import calculate_historical_price_of_lp_token
+from metrics.lp_token import calculate_daily_return_per_lp_token
 from metrics.utils import DAY_TIMEDELTA
 
 
@@ -40,13 +40,11 @@ def _get_daily_return_percentage_array(
     series = pd.Series(dtype=float)
     historical_price_reader = get_historical_price_reader(source="coingecko")
     for lp_token in categorized_positions_with_token_balance.values():
-        # TODO: too hard to implement, wait for next sprint
-        # V0 would only focus on base-token's historical price
-        price_pd_of_lp_token: pd.Series = calculate_historical_price_of_lp_token(
+        daily_return_per_lp_token: pd.Series = calculate_daily_return_per_lp_token(
             lp_token, historical_price_reader
         )
         daily_return_percentages_per_lp_token = (
-            _calculate_daily_return_percentages_per_lp_token(price_pd_of_lp_token)
+            _calculate_daily_return_percentages_per_lp_token(daily_return_per_lp_token)
         )
         if len(series) == 0:
             series = daily_return_percentages_per_lp_token
