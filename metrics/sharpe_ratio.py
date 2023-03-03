@@ -1,14 +1,13 @@
 import numpy as np
 import pandas as pd
 
-from adapters.networth_to_balance_adapter import get_networh_to_balance_adapter
 from metrics.historical_price_reader import get_historical_price_reader
 from metrics.lp_token import calculate_daily_return_per_lp_token
 from metrics.utils import DAY_TIMEDELTA
 
 
 def calculate_portfolio_sharpe_ratio(
-    categorized_positions: dict, risk_free_rate: float = 0.0
+    categorized_positions_with_token_balance: dict, risk_free_rate: float = 0.0
 ) -> float:
     """Calculate the Sharpe ratio of a portfolio.
 
@@ -21,8 +20,6 @@ def calculate_portfolio_sharpe_ratio(
     Returns:
         float: The Sharpe ratio of the portfolio.
     """
-    adapter = get_networh_to_balance_adapter(adapter="coingecko")
-    categorized_positions_with_token_balance = adapter(categorized_positions)
     daily_return_percentages = _get_daily_return_percentage_array(
         categorized_positions_with_token_balance
     )
@@ -46,7 +43,7 @@ def _get_daily_return_percentage_array(
         daily_return_percentages_per_lp_token = (
             _calculate_daily_return_percentages_per_lp_token(daily_return_per_lp_token)
         )
-        if len(series) == 0:
+        if series.empty:
             series = daily_return_percentages_per_lp_token
         else:
             series = series.add(daily_return_percentages_per_lp_token)

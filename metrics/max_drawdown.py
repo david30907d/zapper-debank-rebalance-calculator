@@ -1,25 +1,27 @@
 import pandas as pd
 
-from metrics.utils import get_token_historical_price
+from metrics.historical_price_reader import get_historical_price_reader
+from metrics.lp_token import calculate_historical_price_of_lp_token
 
 
-def calculate_max_drawdown(positions: dict):
+def calculate_max_drawdown(categorized_positions_with_token_balance: dict):
     """Calculate the maximum drawdown of a portfolio.
 
     Args:
-        positions (dict): A dictionary of positions in the portfolio. The keys are
+        categorized_positions_with_token_balance (dict): A dictionary of categorized_positions_with_token_balance in the portfolio. The keys are
             the ticker symbols and the values are the token balance.
 
     Returns:
         float: The maximum drawdown of the portfolio.
     """
-    net_worth = pd.DataFrame()
-    for symbol, tokenBalance in positions.items():
-        price_pd = get_token_historical_price(symbol)
-        if "net_worth" not in net_worth:
-            net_worth["net_worth"] = price_pd * tokenBalance
+    net_worth_series = pd.Series(dtype=float)
+    historical_price_reader = get_historical_price_reader(source="coingecko")
+    for lp_token in categorized_positions_with_token_balance.values():
+        historical_price_per_lp_token: pd.Series = (
+            calculate_historical_price_of_lp_token(lp_token, historical_price_reader)
+        )
+        if net_worth_series.empty:
+            net_worth_series = historical_price_per_lp_token
         else:
-            net_worth["net_worth"].add(price_pd * tokenBalance)
-    return (net_worth["net_worth"].max() - net_worth["net_worth"].min()) / net_worth[
-        "net_worth"
-    ].max()
+            net_worth_series = net_worth_series.add(historical_price_per_lp_token)
+    return (net_worth_series.max() - net_worth_series.min()) / net_worth_series.max()

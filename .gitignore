@@ -1,6 +1,7 @@
 venv
-debank.json
-zapper.json
 .DS_Store
 yield-llama.json
 node_modules/
+.vscode/
+coingecko/*.json
+dashboard
