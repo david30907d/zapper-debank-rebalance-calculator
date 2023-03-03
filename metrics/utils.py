@@ -1,8 +1,6 @@
 import datetime
 
-# TODO: once data is enough,
 DAY_TIMEDELTA = 365 * 4
-# DAY_TIMEDELTA = 100
 
 
 def get_required_unix_timestamp():

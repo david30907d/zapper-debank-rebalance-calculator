@@ -18,12 +18,13 @@ def main(defi_portfolio_service_name: str, optimize_apr_mode: str):
     net_worth = output_rebalancing_suggestions(categorized_positions, strategy_fn)
     total_interest = calculate_interest(categorized_positions)
     print(f"Portfolio's APR: {100*total_interest/net_worth:.2f}%")
-    print("Portfolio's ROI: Unknown\n")
 
     adapter = get_networh_to_balance_adapter(adapter="coingecko")
     categorized_positions_with_token_balance = adapter(categorized_positions)
+
+    # since some alpha tokens only have few data points, making the data very less. In other words, sharpe ratio is not reliable at this point until those alpha tokens has a few years worth of data
     print(
-        "Portfolio's Sharpe Ratio: ",
+        "Portfolio's Sharpe Ratio (Useless until we have enough data points): ",
         calculate_portfolio_sharpe_ratio(categorized_positions_with_token_balance),
     )
     print(
@@ -88,15 +89,20 @@ def output_rebalancing_suggestions(categorized_positions, strategy_fn):
 
 
 def calculate_interest(categorized_positions):
+    interest_rank_list = defaultdict(float)
     total_interest = 0
     for portfolio in categorized_positions.values():
         for symbol, position_obj in portfolio["portfolio"].items():
             apr = get_latest_apr(symbol)
+            interest_rank_list[symbol] += position_obj["worth"] * apr
             total_interest += position_obj["worth"] * apr
     exrate = get_exrate("USDTWD")
     print(
         f"Your Annual Interest Rate would be ${total_interest:.2f}, Monthly return in NT$: {total_interest/12*exrate:.0f}"
     )
+    print("\nTop 5 Revenue Farm this Month:")
+    for pool, interest in sorted(interest_rank_list.items(), key=lambda x: -x[1])[:5]:
+        print(f"{pool}: ${interest/12:.2f}")
     return total_interest
 
 

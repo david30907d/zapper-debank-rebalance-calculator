@@ -20,6 +20,8 @@ def calculate_historical_price_of_lp_token(
     Returns:
         pd.Series: The historical price of the LP token.
     """
+    # TODO(david): need to implement these 2
+    # calculate_historical_IL_of_lp_token
     series = pd.Series(dtype=float)
     for base_token in lp_token:
         tokenBalance = base_token["balance"]
@@ -33,4 +35,6 @@ def calculate_historical_price_of_lp_token(
             series = price_pd * tokenBalance
         else:
             series = series.add(price_pd * tokenBalance).dropna()
-    return series
+    # reverse the price series
+    # Why: because the price series is in timestamp descending order, but every financial metrics need to be calculated in ascending order
+    return series[::-1]
