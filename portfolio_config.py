@@ -175,6 +175,7 @@ DEBANK_ADDRESS = {
 
 ADDRESS_2_CATEGORY = {**ZAPPER_ADDRESS, **DEBANK_ADDRESS}
 
+# TODO(david): use this one to implement advanced search algorithm. Search for new compositions.
 TOKEN_CATEGORIES = {
     "bond": ["gohm", "ohm"],
     "cash": ["usdt", "usdc", "dai", "frax", "vst"],
@@ -217,3 +218,5 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "CVX": "convex-finance",
     "cvxCRV": "convex-crv",
 }
+
+LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {"uniswap-v3": 0.5}

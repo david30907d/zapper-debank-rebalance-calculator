@@ -4,7 +4,10 @@ import random
 import requests
 
 from apr_utils.utils import convert_apy_to_apr, get_metadata_by_symbol
-from portfolio_config import DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL
+from portfolio_config import (
+    DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL,
+    LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR,
+)
 
 
 def get_latest_apr(symbol, provider="defillama"):
@@ -29,14 +32,11 @@ def get_latest_apr(symbol, provider="defillama"):
             res_json = _get_data_from_defillama()
         for pool_metadata in res_json["data"]:
             if pool_metadata["pool"] == defillama_pool_uuid:
-                # use the lowest APY to calculate my revenue in case I spent too much money this month
-                lowest_apy = (
-                    pool_metadata["apyMean30d"]
-                    if pool_metadata["apyMean30d"] < pool_metadata["apy"]
-                    else pool_metadata["apy"]
+                lowest_apy = _get_lowest_apy(pool_metadata)
+                protocol_apy = _lower_the_apy_if_protocol_uses_liquidity_book(
+                    pool_metadata["project"], lowest_apy
                 )
-                # turn APY back to APR
-                return convert_apy_to_apr(lowest_apy / 100)
+                return convert_apy_to_apr(protocol_apy / 100)
         raise FileNotFoundError(f"Cannot find {defillama_pool_uuid} in defillama's API")
     else:
         raise NotImplementedError(f"Unknown provider: {provider}")
@@ -51,3 +51,16 @@ def _get_data_from_defillama():
 
 def _get_default_apr(symbol: str):
     return get_metadata_by_symbol(symbol).get("DEFAULT_APR", 0)
+
+
+def _get_lowest_apy(pool_metadata):
+    # use the lowest APY to calculate my revenue in case I spent too much money this month
+    return (
+        pool_metadata["apyMean30d"]
+        if pool_metadata["apyMean30d"] < pool_metadata["apy"]
+        else pool_metadata["apy"]
+    )
+
+
+def _lower_the_apy_if_protocol_uses_liquidity_book(project_name: str, apy: float):
+    return apy * LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR.get(project_name, 1)
