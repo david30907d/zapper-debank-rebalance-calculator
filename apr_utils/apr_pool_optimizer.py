@@ -16,7 +16,7 @@ def search_better_stable_coin_pools(categorized_positions: dict):
         for obj in defillama["data"]
         if obj["stablecoin"] is True and obj["apyBase"]
     }
-    max_base_apr = _get_max_base_apr(
+    max_base_apr = _get_max_base_apy(
         categorized_positions, defillama_APY_pool_id_to_apy_base
     )
     topn = _get_topn_base_apr_pool(defillama, max_base_apr)
@@ -87,7 +87,7 @@ def _print_out_topn_candidate_pool(
         )
 
 
-def _get_max_base_apr(
+def _get_max_base_apy(
     categorized_positions: dict, defillama_APY_pool_id_to_apy_base: dict
 ):
     max_base_apr = 0
@@ -110,6 +110,7 @@ def _get_topn_base_apr_pool(defillama: dict, max_base_apr: float):
             pool["stablecoin"] is True
             and pool["apyBase"] is not None
             and pool["apyBase"] > max_base_apr
+            and pool["apyMean30d"] > max_base_apr
         ):
             topn.append(pool)
     return topn
