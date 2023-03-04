@@ -3,7 +3,10 @@ from collections import defaultdict
 
 from adapters.networth_to_balance_adapter import get_networh_to_balance_adapter
 from apr_utils.apr_calculator import get_latest_apr
-from apr_utils.apr_pool_optimizer import search_top_n_pool_consist_of_same_lp_token
+from apr_utils.apr_pool_optimizer import (
+    search_better_stable_coin_pools,
+    search_top_n_pool_consist_of_same_lp_token,
+)
 from handlers import get_data_source_handler
 from metrics.max_drawdown import calculate_max_drawdown
 from metrics.sharpe_ratio import calculate_portfolio_sharpe_ratio
@@ -24,17 +27,16 @@ def main(defi_portfolio_service_name: str, optimize_apr_mode: str):
 
     # since some alpha tokens only have few data points, making the data very less. In other words, sharpe ratio is not reliable at this point until those alpha tokens has a few years worth of data
     print(
-        "Portfolio's Sharpe Ratio (Useless until we have enough data points): ",
-        calculate_portfolio_sharpe_ratio(categorized_positions_with_token_balance),
+        f"Portfolio's Sharpe Ratio (Useless until we have enough data points): {calculate_portfolio_sharpe_ratio(categorized_positions_with_token_balance):.2f}"
     )
     print(
-        "Portfolio's Max Drawdown: ",
-        calculate_max_drawdown(categorized_positions_with_token_balance),
+        f"Portfolio's Max Drawdown: {calculate_max_drawdown(categorized_positions_with_token_balance):.2f}"
     )
     if optimize_apr_mode:
         search_top_n_pool_consist_of_same_lp_token(
             categorized_positions, optimize_apr_mode
         )
+        search_better_stable_coin_pools(categorized_positions)
 
 
 def load_raw_positions(data_format: str) -> list[dict]:
