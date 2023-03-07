@@ -1,9 +1,10 @@
 import json
 
-import ngram
-
 from apr_utils.apr_calculator import get_latest_apr
 from apr_utils.utils import convert_apy_to_apr
+from search_handlers import SearchBase
+from search_handlers.jaccard_similarity_handler import JaccardSimilarityHandler
+from search_handlers.ngram_handler import NgramSimilarityHandler
 from utils.position import skip_rebalance_if_position_too_small
 
 MILLION = 10**6
@@ -29,29 +30,29 @@ def search_top_n_pool_consist_of_same_lp_token(
     print("\n\n=======Search top n pools consist of same lp token=======")
     res_json = json.load(open("yield-llama.json", "r"))
     search_handler = _get_search_handler(
-        optimize_apr_mode=optimize_apr_mode, searching_algorithm="ngram"
+        optimize_apr_mode=optimize_apr_mode, searching_algorithm="jaccard_similarity"
     )
     symbol_set = set()
+    pool_ids_of_current_portfolio = set(
+        metadata["metadata"].get("defillama-APY-pool-id")
+        for portfolio in categorized_positions.values()
+        for metadata in portfolio["portfolio"].values()
+    )
     for portfolio in categorized_positions.values():
         for symbol, metadata in portfolio["portfolio"].items():
             if symbol in symbol_set:
+                # since each token might have several properties, it might exists in different portfolio
+                # but we only need to search once
                 continue
             symbol_set.add(symbol)
-            worth = metadata["worth"]
-            top_n = []
             current_apr = get_latest_apr(symbol)
-            for pool_metadata in res_json["data"]:
-                if skip_rebalance_if_position_too_small(worth):
-                    continue
-                if (
-                    search_handler(symbol, pool_metadata["symbol"])
-                    and metadata["metadata"].get("defillama-APY-pool-id")
-                    != pool_metadata["pool"]
-                    and current_apr
-                    < convert_apy_to_apr(pool_metadata["apyMean30d"] / 100)
-                    and pool_metadata["tvlUsd"] > MILLION
-                ):
-                    top_n.append(pool_metadata)
+            top_n = _get_topn_candidate_pool(
+                current_apr,
+                metadata,
+                res_json,
+                search_handler,
+                pool_ids_of_current_portfolio,
+            )
             _print_out_topn_candidate_pool(symbol, top_n, current_apr)
     print("\n")
     return top_n
@@ -60,18 +61,35 @@ def search_top_n_pool_consist_of_same_lp_token(
 def _get_search_handler(optimize_apr_mode: str, searching_algorithm: str):
     if optimize_apr_mode == "new_pool":
         if searching_algorithm == "ngram":
+            # sucks
             threashold = 0.2
-            return (
-                lambda symbol, compared_symbol: ngram.NGram.compare(
-                    symbol.lower(), compared_symbol.lower()
-                )
-                > threashold
-            )
-        raise NotImplementedError(
-            f"search algorithm {searching_algorithm} not implemented"
-        )
+            return NgramSimilarityHandler(similarity_threshold=threashold)
+        elif searching_algorithm == "jaccard_similarity":
+            return JaccardSimilarityHandler(similarity_threshold=0.5)
     elif optimize_apr_mode == "new_combination":
         raise NotImplementedError("Not implemented yet")
+
+
+def _get_topn_candidate_pool(
+    current_apr: float,
+    metadata: dict,
+    res_json: dict,
+    search_handler: SearchBase,
+    pool_ids_of_current_portfolio: set,
+) -> list:
+    worth = metadata["worth"]
+    top_n = []
+    for pool_metadata in res_json["data"]:
+        if skip_rebalance_if_position_too_small(worth):
+            continue
+        if (
+            search_handler.check_similarity(metadata, pool_metadata["symbol"].lower())
+            and pool_metadata["pool"] not in pool_ids_of_current_portfolio
+            and current_apr < convert_apy_to_apr(pool_metadata["apyMean30d"] / 100)
+            and pool_metadata["tvlUsd"] > MILLION
+        ):
+            top_n.append(pool_metadata)
+    return top_n
 
 
 def _print_out_topn_candidate_pool(
