@@ -147,6 +147,12 @@ ZAPPER_ADDRESS = {
         "DEFAULT_APR": 0.1,
         "tags": ["vst"],
     },
+    "0x59d72ddb29da32847a4665d08ffc8464a7185fae": {
+        "categories": ["stock"],
+        "symbol": "magic-weth-uniswap-v3",
+        "defillama-APY-pool-id": "afb71713-9c2e-4717-a8a3-9f959b966e49",
+        "tags": ["magic", "eth"],
+    },
 }
 DEBANK_ADDRESS = {
     "0xfffffffffff5d3627294fec5081ce5c5d7fa6451": {
