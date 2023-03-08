@@ -102,7 +102,7 @@ def _print_out_topn_candidate_pool(
     )
     for metadata in sorted(top_n, key=lambda x: -x["apyMean30d"])[:n]:
         print(
-            f" - Chain: {metadata['chain']}, Protocol: {metadata['project']}, Token: {metadata['symbol']}, APR: {((metadata['apyMean30d']/100+1)**(1/365)-1)*365:.2f}"
+            f" - Chain: {metadata['chain']}, Protocol: {metadata['project']+'-'+metadata['poolMeta'] if metadata['poolMeta'] else metadata['project']}, Token: {metadata['symbol']}, APR: {((metadata['apyMean30d']/100+1)**(1/365)-1)*365:.2f}"
         )
 
 

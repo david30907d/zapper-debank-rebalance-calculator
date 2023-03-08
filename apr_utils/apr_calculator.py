@@ -15,7 +15,6 @@ def get_latest_apr(symbol, provider="defillama"):
         defillama_pool_uuid = get_metadata_by_symbol(symbol).get(
             "defillama-APY-pool-id", None
         )
-
         if not defillama_pool_uuid:
             default_apr = _get_default_apr(symbol)
             if default_apr:

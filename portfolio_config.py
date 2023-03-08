@@ -22,7 +22,7 @@ ZAPPER_ADDRESS = {
     "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3": {
         "categories": ["stock"],
         "symbol": "magic-weth-sushi-LP",
-        "defillama-APY-pool-id": "5f98842f-72cb-4579-807f-403ca2dfb993",
+        "defillama-APY-pool-id": "afb71713-9c2e-4717-a8a3-9f959b966e49",
         "tags": ["magic", "eth"],
     },
     "0x4e971a87900b931ff39d1aad67697f49835400b6": {
@@ -178,7 +178,7 @@ DEBANK_ADDRESS = {
     "0xb7e50106a5bd3cf21af210a755f9c8740890a8c9": {
         "categories": ["stock"],
         "symbol": "magic-weth-sushi-LP",
-        "defillama-APY-pool-id": "5f98842f-72cb-4579-807f-403ca2dfb993",
+        "defillama-APY-pool-id": "afb71713-9c2e-4717-a8a3-9f959b966e49",
         "tags": ["magic", "eth"],
     },
     "0x7ec3717f70894f6d9ba0be00774610394ce006ee": {
