@@ -142,5 +142,5 @@ def _show_topn(topn: list):
         if pool["tvlUsd"] < MILLION:
             continue
         print(
-            f"- Chain: {pool['chain']}, Pool: {pool['project']}, Coin: {pool['symbol']}, TVL: {pool['tvlUsd']/MILLION:.2f}M, Base APY: {pool['apyBase']:.2f}%,%"
+            f"- Chain: {pool['chain']}, Pool: {pool['project']}, Coin: {pool['symbol']}, TVL: {pool['tvlUsd']/MILLION:.2f}M, Base APY: {pool['apyBase']:.2f}%"
         )
