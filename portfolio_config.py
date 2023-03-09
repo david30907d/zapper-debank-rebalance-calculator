@@ -101,7 +101,7 @@ ZAPPER_ADDRESS = {
     "0x1f80c96ca521d7247a818a09b0b15c38e3e58a28": {
         # TODO: david to figure out weather dpx is stock or gold
         "categories": ["stock"],
-        "symbol": "sushi-dpx-weth-LP",
+        "symbol": "dopex-dpx-weth-LP",
         "defillama-APY-pool-id": "97cb382d-8dc4-4e17-b0f6-b6b51994dbeb",
         "tags": ["dpx", "eth"],
     },

@@ -8,6 +8,7 @@ from search_handlers.ngram_handler import NgramSimilarityHandler
 from utils.position import skip_rebalance_if_position_too_small
 
 MILLION = 10**6
+HUNDRED_GRAND = 100000
 
 
 def search_better_stable_coin_pools(categorized_positions: dict):
@@ -86,7 +87,7 @@ def _get_topn_candidate_pool(
             search_handler.check_similarity(metadata, pool_metadata["symbol"].lower())
             and pool_metadata["pool"] not in pool_ids_of_current_portfolio
             and current_apr < convert_apy_to_apr(pool_metadata["apyMean30d"] / 100)
-            and pool_metadata["tvlUsd"] > MILLION
+            and pool_metadata["tvlUsd"] > HUNDRED_GRAND
         ):
             top_n.append(pool_metadata)
     return top_n
