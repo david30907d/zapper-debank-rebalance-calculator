@@ -1,4 +1,4 @@
-from apr_utils.apr_calculator import get_latest_apr
+from apr_utils.apr_calculator import get_lowest_or_default_apr
 from apr_utils.utils import get_metadata_by_symbol
 from portfolio_config import ADDRESS_2_CATEGORY
 
@@ -10,7 +10,7 @@ def _debank_handler(positions, result):
             categories = ADDRESS_2_CATEGORY.get(addr, {}).get("categories", [])
             length_of_categories = len(categories)
             symbol = ADDRESS_2_CATEGORY.get(addr, {}).get("symbol", "")
-            apr = get_latest_apr(symbol)
+            apr = get_lowest_or_default_apr(symbol)
             metadata = get_metadata_by_symbol(symbol)
             for category in categories:
                 weighted_balanceUSD = (

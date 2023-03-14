@@ -10,7 +10,7 @@ from portfolio_config import (
 )
 
 
-def get_latest_apr(symbol, provider="defillama"):
+def get_lowest_or_default_apr(symbol, provider="defillama"):
     if provider == "defillama":
         defillama_pool_uuid = get_metadata_by_symbol(symbol).get(
             "defillama-APY-pool-id", None
@@ -31,11 +31,8 @@ def get_latest_apr(symbol, provider="defillama"):
             res_json = _get_data_from_defillama()
         for pool_metadata in res_json["data"]:
             if pool_metadata["pool"] == defillama_pool_uuid:
-                lowest_apy = _get_lowest_apy(pool_metadata)
-                protocol_apy = _lower_the_apy_if_protocol_uses_liquidity_book(
-                    pool_metadata["project"], lowest_apy
-                )
-                return convert_apy_to_apr(protocol_apy / 100)
+                protocol_apy = get_lowest_apy(pool_metadata)
+                return convert_apy_to_apr(protocol_apy)
         raise FileNotFoundError(f"Cannot find {defillama_pool_uuid} in defillama's API")
     else:
         raise NotImplementedError(f"Unknown provider: {provider}")
@@ -52,12 +49,15 @@ def _get_default_apr(symbol: str):
     return get_metadata_by_symbol(symbol).get("DEFAULT_APR", 0)
 
 
-def _get_lowest_apy(pool_metadata):
+def get_lowest_apy(pool_metadata):
     # use the lowest APY to calculate my revenue in case I spent too much money this month
-    return (
-        pool_metadata["apyMean30d"]
+    lowest_apy = (
+        pool_metadata["apyMean30d"] / 100
         if pool_metadata["apyMean30d"] < pool_metadata["apy"]
-        else pool_metadata["apy"]
+        else pool_metadata["apy"] / 100
+    )
+    return _lower_the_apy_if_protocol_uses_liquidity_book(
+        pool_metadata["project"], lowest_apy
     )
 
 

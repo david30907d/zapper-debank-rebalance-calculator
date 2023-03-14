@@ -2,7 +2,7 @@ import json
 from collections import defaultdict
 
 from adapters.networth_to_balance_adapter import get_networh_to_balance_adapter
-from apr_utils.apr_calculator import get_latest_apr
+from apr_utils.apr_calculator import get_lowest_or_default_apr
 from apr_utils.apr_pool_optimizer import (
     search_better_stable_coin_pools,
     search_top_n_pool_consist_of_same_lp_token,
@@ -95,7 +95,7 @@ def calculate_interest(categorized_positions):
     total_interest = 0
     for portfolio in categorized_positions.values():
         for symbol, position_obj in portfolio["portfolio"].items():
-            apr = get_latest_apr(symbol)
+            apr = get_lowest_or_default_apr(symbol)
             interest_rank_list[symbol] += position_obj["worth"] * apr
             total_interest += position_obj["worth"] * apr
     exrate = get_exrate("USDTWD")

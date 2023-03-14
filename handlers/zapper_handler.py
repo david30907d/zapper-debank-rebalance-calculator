@@ -1,4 +1,4 @@
-from apr_utils.apr_calculator import get_latest_apr
+from apr_utils.apr_calculator import get_lowest_or_default_apr
 from apr_utils.utils import get_metadata_by_symbol
 from portfolio_config import ADDRESS_2_CATEGORY, MIN_REBALANCE_POSITION_THRESHOLD
 
@@ -30,7 +30,7 @@ def _zapper_handler(positions, result):
                     )
                 elif not symbol and not categories:
                     continue
-                apr = get_latest_apr(symbol)
+                apr = get_lowest_or_default_apr(symbol)
                 metadata = get_metadata_by_symbol(symbol)
                 tokens_metadata = [
                     {

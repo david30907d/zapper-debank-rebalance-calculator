@@ -1,6 +1,6 @@
 import json
 
-from apr_utils.apr_calculator import get_latest_apr
+from apr_utils.apr_calculator import get_lowest_apy, get_lowest_or_default_apr
 from apr_utils.utils import convert_apy_to_apr
 from search_handlers import SearchBase
 from search_handlers.jaccard_similarity_handler import JaccardSimilarityHandler
@@ -8,7 +8,6 @@ from search_handlers.ngram_handler import NgramSimilarityHandler
 from utils.position import skip_rebalance_if_position_too_small
 
 MILLION = 10**6
-HUNDRED_GRAND = 100000
 
 
 def search_better_stable_coin_pools(categorized_positions: dict):
@@ -46,15 +45,15 @@ def search_top_n_pool_consist_of_same_lp_token(
                 # but we only need to search once
                 continue
             symbol_set.add(symbol)
-            current_apr = get_latest_apr(symbol)
+            apr = get_lowest_or_default_apr(symbol)
             top_n = _get_topn_candidate_pool(
-                current_apr,
+                apr,
                 metadata,
                 res_json,
                 search_handler,
                 pool_ids_of_current_portfolio,
             )
-            _print_out_topn_candidate_pool(symbol, top_n, current_apr)
+            _print_out_topn_candidate_pool(symbol, top_n, apr)
     print("\n")
     return top_n
 
@@ -86,8 +85,8 @@ def _get_topn_candidate_pool(
         if (
             search_handler.check_similarity(metadata, pool_metadata["symbol"].lower())
             and pool_metadata["pool"] not in pool_ids_of_current_portfolio
-            and current_apr < convert_apy_to_apr(pool_metadata["apyMean30d"] / 100)
-            and pool_metadata["tvlUsd"] > HUNDRED_GRAND
+            and current_apr < convert_apy_to_apr(get_lowest_apy(pool_metadata))
+            and pool_metadata["tvlUsd"] > MILLION
         ):
             top_n.append(pool_metadata)
     return top_n
@@ -99,11 +98,11 @@ def _print_out_topn_candidate_pool(
     if not top_n:
         return
     print(
-        f"{symbol}'s possible better protocol to deposit (Current apyMean30d {current_apr:.2f}):"
+        f"{symbol}'s possible better protocol to deposit (lowest or default apr {current_apr:.2f}):"
     )
     for metadata in sorted(top_n, key=lambda x: -x["apyMean30d"])[:n]:
         print(
-            f" - Chain: {metadata['chain']}, Protocol: {metadata['project']+'-'+metadata['poolMeta'] if metadata['poolMeta'] else metadata['project']}, Token: {metadata['symbol']}, APR: {((metadata['apyMean30d']/100+1)**(1/365)-1)*365:.2f}"
+            f" - Chain: {metadata['chain']}, Protocol: {metadata['project']+'-'+metadata['poolMeta'] if metadata['poolMeta'] else metadata['project']}, Token: {metadata['symbol']}, lowest or default APR: {convert_apy_to_apr(get_lowest_apy(metadata)):.2f}"
         )
 
 
@@ -143,5 +142,5 @@ def _show_topn(topn: list):
         if pool["tvlUsd"] < MILLION:
             continue
         print(
-            f"- Chain: {pool['chain']}, Pool: {pool['project']}, Coin: {pool['symbol']}, TVL: {pool['tvlUsd']/MILLION:.2f}M, Base APY: {pool['apyBase']:.2f}%"
+            f"- Chain: {pool['chain']}, Pool: {pool['project']}, Coin: {pool['symbol']}, TVL: {pool['tvlUsd']/MILLION:.2f}M, Base APR: {convert_apy_to_apr(pool['apyBase']/100)*100:.2f}%"
         )

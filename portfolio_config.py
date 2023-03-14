@@ -1,5 +1,5 @@
 MIN_REBALANCE_POSITION_THRESHOLD = 500
-DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 100
+DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 20
 ZAPPER_ADDRESS = {
     "0x8ec22ec81e740e0f9310e7318d03c494e62a70cd": {
         "categories": ["cash"],
@@ -20,10 +20,11 @@ ZAPPER_ADDRESS = {
         "tags": ["dpx", "eth"],
     },
     "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3": {
-        "categories": ["stock"],
-        "symbol": "magic-weth-sushi-LP",
-        "defillama-APY-pool-id": "afb71713-9c2e-4717-a8a3-9f959b966e49",
-        "tags": ["magic", "eth"],
+        # BUG, 0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3 is actually sushi-swap address not sushi LP's address
+        "categories": ["stock", "gold", "cash"],
+        "symbol": "usdt-weth-sushi-LP",
+        "defillama-APY-pool-id": "abe3c385-bde7-4350-9f35-2f574ad592d6",
+        "tags": ["usdt", "eth"],
     },
     "0x4e971a87900b931ff39d1aad67697f49835400b6": {
         "categories": ["gold"],
@@ -106,7 +107,7 @@ ZAPPER_ADDRESS = {
         "tags": ["dpx", "eth"],
     },
     "0x1701a7e5034ed1e35c52245ab7c07dbdaf353de7": {
-        "categories": ["stock"],
+        "categories": ["stock", "gold"],
         "symbol": "kyber-avax-eth-LP",
         "defillama-APY-pool-id": "ca1058be-6d4b-4dc2-97f9-cf09dae2a10e",
         "tags": ["avax", "eth"],
