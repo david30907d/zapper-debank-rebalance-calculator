@@ -33,14 +33,17 @@ def _zapper_handler(positions, result):
                         k: v
                         for k, v in token.items()
                         if k
-                        not in [
-                            "supply",
-                            "dataProps",
-                            "displayProps",
-                            "pricePerShare",
-                            "key",
-                            "balanceRaw",
-                            "groupId",
+                        in [
+                            "metaType",
+                            "type",
+                            "appId",
+                            "price",
+                            "symbol",
+                            "tokens",
+                            "address",
+                            "network",
+                            "balance",
+                            "balanceUSD",
                         ]
                     }
                     for token in asset["tokens"]

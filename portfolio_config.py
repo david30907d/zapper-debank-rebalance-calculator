@@ -1,5 +1,5 @@
 MIN_REBALANCE_POSITION_THRESHOLD = 500
-DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 20
+DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 30
 ZAPPER_ADDRESS = {
     "0x8ec22ec81e740e0f9310e7318d03c494e62a70cd": {
         "categories": ["cash"],
@@ -229,6 +229,54 @@ DEBANK_ADDRESS = {
         "defillama-APY-pool-id": "ca1058be-6d4b-4dc2-97f9-cf09dae2a10e",
         "tags": ["eth", "avax"],
     },
+    "0x127963a74c07f72d862f2bdc225226c3251bd117": {
+        "categories": ["cash"],
+        "symbol": "Vesta-frax",
+        "defillama-APY-pool-id": "ca8b6649-b825-41c7-8955-47b955b37bb0",
+        "tags": ["vst", "avax"],
+    },
+    "0x673cf5ab7b44caac43c80de5b99a37ed5b3e4cc6": {
+        "categories": ["cash"],
+        "symbol": "gDAI",
+        "defillama-APY-pool-id": "15c3e528-2825-4ca4-804b-406e8b8e2ebd",
+        "tags": ["gdai"],
+    },
+    "0x4e971a87900b931ff39d1aad67697f49835400b6": {
+        "categories": ["gold"],
+        "symbol": "glp-arbitrum",
+        "defillama-APY-pool-id": "825688c0-c694-4a6b-8497-177e425b7348",
+        "tags": ["glp"],
+    },
+    "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3": {
+        "categories": ["stock", "gold", "cash"],
+        "symbol": "usdt-weth-sushi-LP",
+        "defillama-APY-pool-id": "abe3c385-bde7-4350-9f35-2f574ad592d6",
+        "tags": ["usdt", "eth"],
+    },
+    "0x3d9819210a31b4961b30ef54be2aed79b9c9cd3b": {
+        "categories": ["cash"],
+        "symbol": "compound USDT",
+        "DEFAULT_APR": 0.02,
+        "tags": ["cusdt"],
+    },
+    "0x41a5881c17185383e19df6fa4ec158a6f4851a69": {
+        "categories": ["cash", "bond", "gold"],
+        "symbol": "cvxOHMFRAXBP-f",
+        "defillama-APY-pool-id": "4f000353-5bb0-4e8c-ad03-194f0662680d",
+        "tags": ["ohm", "frax", "usdc"],
+    },
+    "0xf562b2f33b3c90d5d273f88cdf0ced866e17092e": {
+        "categories": ["bond", "cash", "gold"],
+        "symbol": "FraxSwapOHM",
+        "defillama-APY-pool-id": "41e4d018-b7df-422d-93af-d7d4ff94b300",
+        "tags": ["frax", "ohm"],
+    },
+    "0x4804357ace69330524ceb18f2a647c3c162e1f95": {
+        "categories": ["stock"],
+        "symbol": "Mare-Kava-lending",
+        "defillama-APY-pool-id": "d09a22df-779c-4917-b66f-9e57b2f379f6",
+        "tags": ["kava"],
+    },
 }
 
 ADDRESS_2_CATEGORY = {**ZAPPER_ADDRESS, **DEBANK_ADDRESS}
@@ -244,6 +292,7 @@ TOKEN_CATEGORIES = {
 ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "EURS": "stasis-eurs",
     "OHM": "olympus",
+    "gOHM": "governance-ohm",
     "FRAX": "frax",
     "USDC": "usd-coin",
     "USDC.e": "usd-coin",
@@ -264,6 +313,8 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "DPX": "dopex",
     "CVX": "convex-finance",
     "cvxCRV": "convex-crv",
+    "MIM": "magic-internet-money",
+    "WKAVA": "kava",
 }
 
 LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {"uniswap-v3": 0.5}

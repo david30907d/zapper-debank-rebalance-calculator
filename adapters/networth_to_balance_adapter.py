@@ -8,6 +8,34 @@ def get_networh_to_balance_adapter(adapter: str) -> callable:
 
 
 def coingecko_net_worth_2_balance_adapter(categorized_positions: dict) -> float:
+    """
+    {
+        "usdt-weth-sushi-lp": [
+            {
+                "type": "base-token",
+                "price": 1786.07,
+                "symbol": "WETH",
+                "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+                "network": "arbitrum",
+                "decimals": 18,
+                "balance": 0.3224955389130278,
+                "balanceRaw": "322495538913027792",
+                "balanceUSD": 575.9996071863915
+            },
+            {
+                "type": "base-token",
+                "price": 1.006,
+                "symbol": "USDT",
+                "address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+                "network": "arbitrum",
+                "decimals": 6,
+                "balance": 572.263828,
+                "balanceRaw": "572263828",
+                "balanceUSD": 575.697410968
+            }
+        ]
+    }
+    """
     dedupe_symbol_set = set()
     result = defaultdict(list)
     for category_obj in categorized_positions.values():
