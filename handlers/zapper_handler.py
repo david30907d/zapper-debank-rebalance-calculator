@@ -9,11 +9,7 @@ def _zapper_handler(positions, result):
             continue
         for product in position["products"]:
             for asset in product["assets"]:
-                asset_address = (
-                    asset["address"]
-                    if not asset.get("dataProps", {}).get("poolAddress")
-                    else asset.get("dataProps", {}).get("poolAddress")
-                )
+                asset_address = _get_correct_addr(asset)
                 categories = ADDRESS_2_CATEGORY.get(asset_address, {}).get(
                     "categories", []
                 )
@@ -63,3 +59,13 @@ def _zapper_handler(positions, result):
                         "tokens_metadata"
                     ] = tokens_metadata
     return result
+
+
+def _get_correct_addr(asset: dict) -> str:
+    poolAddress = asset.get("dataProps", {}).get("poolAddress")
+    if poolAddress:
+        return poolAddress
+    for token in asset["tokens"]:
+        if token.get("metaType") == "supplied" and token.get("type") == "app-token":
+            return token["address"]
+    return asset["address"]

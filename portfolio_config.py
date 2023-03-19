@@ -19,14 +19,13 @@ ZAPPER_ADDRESS = {
         "DEFAULT_APR": 0,
         "tags": ["dpx", "eth"],
     },
-    "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3": {
-        # BUG, 0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3 is actually sushi-swap address not sushi LP's address
+    "0xcb0e5bfa72bbb4d16ab5aa0c60601c438f04b4ad": {
         "categories": ["stock", "gold", "cash"],
         "symbol": "usdt-weth-sushi-LP",
         "defillama-APY-pool-id": "abe3c385-bde7-4350-9f35-2f574ad592d6",
         "tags": ["usdt", "eth"],
     },
-    "0x4e971a87900b931ff39d1aad67697f49835400b6": {
+    "0x4277f8f2c384827b5273592ff7cebd9f2c1ac258": {
         "categories": ["gold"],
         "symbol": "glp-arbitrum",
         "defillama-APY-pool-id": "825688c0-c694-4a6b-8497-177e425b7348",
@@ -38,13 +37,13 @@ ZAPPER_ADDRESS = {
         "DEFAULT_APR": 0.07,
         "tags": ["gohm"],
     },
-    "0x127963a74c07f72d862f2bdc225226c3251bd117": {
+    "0x59bf0545fca0e5ad48e13da269facd2e8c886ba4": {
         "categories": ["cash"],
         "symbol": "VSTFRAX-f",
         "defillama-APY-pool-id": "ca8b6649-b825-41c7-8955-47b955b37bb0",
         "tags": ["vst", "frax"],
     },
-    "0x27a8c58e3de84280826d615d80ddb33930383fe9": {
+    "0x81b0dcda53482a2ea9eb496342dc787643323e95": {
         "categories": ["cash", "bond", "gold"],
         "symbol": "cvxOHMFRAXBP-f",
         "defillama-APY-pool-id": "4f000353-5bb0-4e8c-ad03-194f0662680d",
@@ -75,7 +74,7 @@ ZAPPER_ADDRESS = {
         "symbol": "Yeti-JLP",
         "DEFAULT_APR": 0.8,
     },
-    "0xf562b2f33b3c90d5d273f88cdf0ced866e17092e": {
+    "0x5769071665eb8db80e7e9226f92336bb2897dcfa": {
         "categories": ["bond", "cash", "gold"],
         "symbol": "FraxSwapOHM",
         "defillama-APY-pool-id": "41e4d018-b7df-422d-93af-d7d4ff94b300",
@@ -154,6 +153,12 @@ ZAPPER_ADDRESS = {
         "defillama-APY-pool-id": "afb71713-9c2e-4717-a8a3-9f959b966e49",
         "tags": ["magic", "eth"],
     },
+    "0xc2054a8c33bfce28de8af4af548c48915c455c13": {
+        "categories": ["stock"],
+        "symbol": "RDNT-platform-fee",
+        "DEFAULT_APR": 0.5,
+        "tags": ["rdnt"],
+    },
 }
 DEBANK_ADDRESS = {
     "0xfffffffffff5d3627294fec5081ce5c5d7fa6451": {
@@ -170,7 +175,7 @@ DEBANK_ADDRESS = {
         "DEFAULT_APR": 0,
         "tags": ["avax", "usdc"],
     },
-    "0xc963ef7d977ecb0ab71d835c4cb1bf737f28d010": {
+    "0x24704aff49645d32655a76df6d407e02d146dafc": {
         "categories": ["stock"],
         "symbol": "radiant-eth-LP",
         "defillama-APY-pool-id": "118281c6-3a4a-4324-b804-5664617df77d",
@@ -230,20 +235,9 @@ ADDRESS_2_CATEGORY = {**ZAPPER_ADDRESS, **DEBANK_ADDRESS}
 
 # TODO(david): use this one to implement advanced search algorithm. Search for new compositions.
 TOKEN_CATEGORIES = {
-    "bond": ["gohm", "ohm"],
-    "cash": ["usdt", "usdc", "dai", "frax", "vst"],
-    "stock": [
-        "eth",
-        "weth",
-        "avax",
-        "wavax",
-        "atom",
-        "rdnt",
-        "cvx",
-        "crv",
-        "cvxcrv",
-        "dpx",
-    ],
+    "bond": ["eth", "weth"],
+    "cash": ["gohm", "ohm"],
+    "stock": ["eth", "weth", "atom", "rdnt", "cvx", "crv", "cvxcrv", "dpx", "kava"],
     "gold": ["glp"],
 }
 
