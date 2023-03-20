@@ -278,8 +278,16 @@ DEBANK_ADDRESS = {
         "tags": ["kava"],
     },
 }
+BINANCE_ADDRESS = {
+    "0x0fa70bd9b892c7b6d2a9ea8dd1ce446e52f86935": {
+        "categories": ["stock"],
+        "symbol": "FIL-stake",
+        "DEFAULT_APR": 0.05,
+        "tags": ["fil"],
+    }
+}
 
-ADDRESS_2_CATEGORY = {**ZAPPER_ADDRESS, **DEBANK_ADDRESS}
+ADDRESS_2_CATEGORY = {**ZAPPER_ADDRESS, **DEBANK_ADDRESS, **BINANCE_ADDRESS}
 
 # TODO(david): use this one to implement advanced search algorithm. Search for new compositions.
 TOKEN_CATEGORIES = {
@@ -315,6 +323,7 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "cvxCRV": "convex-crv",
     "MIM": "magic-internet-money",
     "WKAVA": "kava",
+    "FIL": "filecoin",
 }
 
 LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {"uniswap-v3": 0.5}

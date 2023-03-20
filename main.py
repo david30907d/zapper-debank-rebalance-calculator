@@ -16,7 +16,24 @@ from utils.position import skip_rebalance_if_position_too_small
 
 def main(defi_portfolio_service_name: str, optimize_apr_mode: str):
     positions = load_raw_positions(defi_portfolio_service_name)
-    categorized_positions = categorize_positions(defi_portfolio_service_name, positions)
+    evm_categorized_positions = categorize_positions(
+        defi_portfolio_service_name, positions
+    )
+    # CEX & cosmos posistions
+    # 1. Binance
+    # 2. Nansen
+    # because some of my sizes are located in Binance, and Nansen(cosmos ecosystem), which is not included in either debank or zapper
+    # therefore, these 2 data sources need to be loaded everytime (ps. they're all manually updated in debank data format)
+
+    # no_evm_posistions = _load_no_evm_posistions(data_sources=['binance', 'nansen'])
+    no_evm_posistions = _load_no_evm_posistions(data_sources=["binance"])
+    no_evm_categorized_positions_array = _categorize_no_evm_categorized_positions_array(
+        no_evm_posistions
+    )
+    categorized_positions = _merge_categorized_positions(
+        evm_categorized_positions, no_evm_categorized_positions_array
+    )
+
     strategy_fn = get_rebalancing_strategy("permanent_portfolio")
     net_worth = output_rebalancing_suggestions(categorized_positions, strategy_fn)
     total_interest = calculate_interest(categorized_positions)
@@ -108,6 +125,39 @@ def calculate_interest(categorized_positions):
     return total_interest
 
 
+def _load_no_evm_posistions(data_sources: list[str]) -> list[dict]:
+    result = []
+    for data_source in data_sources:
+        result.append(load_raw_positions(data_source))
+    return result
+
+
+def _categorize_no_evm_categorized_positions_array(
+    no_evm_posistions: list[dict],
+) -> list[dict]:
+    no_evm_categorized_positions_array = []
+    for idx, no_evm_posistion in enumerate(no_evm_posistions):
+        no_evm_categorized_position = categorize_positions(
+            defi_portfolio_service_name="debank", positions=no_evm_posistion
+        )
+        no_evm_categorized_positions_array.append(no_evm_categorized_position)
+    return no_evm_categorized_positions_array
+
+
+def _merge_categorized_positions(
+    evm_categorized_positions: dict, no_evm_categorized_positions_array: list[dict]
+) -> dict:
+    result = evm_categorized_positions
+    for no_evm_categorized_positions in no_evm_categorized_positions_array:
+        for category, portfolio_metadata in no_evm_categorized_positions.items():
+            result[category]["sum"] += portfolio_metadata["sum"]
+            result[category]["portfolio"] = {
+                **evm_categorized_positions[category]["portfolio"],
+                **portfolio_metadata["portfolio"],
+            }
+    return result
+
+
 if __name__ == "__main__":
     import argparse
 
@@ -128,13 +178,3 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     main(args.defi_portfolio_service_name, args.optimize_apr_mode)
-
-# # basic
-# 1. use the same symbol to search in llama response (can use regex to do fozzy search)
-# 2. get the max APY
-# 3. prompt out for human to check if this protocol is realiable to deposit
-# # # advace
-# # 1. search other composibilities with higer APY
-# # 2. get the max APY
-# # 3. prompt out for human to check if this protocol is realiable to deposit
-# # 其實這就是在做一個 liquidity pool 的 router, 幫你找到有最佳 APR 的 pool
