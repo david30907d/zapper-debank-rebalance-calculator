@@ -286,8 +286,39 @@ BINANCE_ADDRESS = {
         "tags": ["fil"],
     }
 }
+NANSEN_ADDRESS = {
+    "EA1D43981D5C9A1C4AAEA9C23BB1D4FA126BA9BC7020A25E0AE4AA841EA25DC5": {
+        "categories": ["stock"],
+        "symbol": "OSMO/WETH",
+        "defillama-APY-pool-id": "5fe464d2-3575-4b70-bc69-cc52d2857e4a",
+        "tags": ["osmo", "eth"],
+    },
+    "57AA1A70A4BC9769C525EBF6386F7A21536E04A79D62E1981EFCEF9428EBB205": {
+        "categories": ["stock"],
+        "symbol": "OSMO/KAVA",
+        "defillama-APY-pool-id": "f6efb5eb-b6fc-4ada-8fe2-05702f38d606",
+        "tags": ["osmo", "kava"],
+    },
+    "27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2": {
+        "categories": ["stock"],
+        "symbol": "OSMO/ATOM",
+        "defillama-APY-pool-id": "4ced8c2d-67c4-4555-b025-be49c110ca58",
+        "tags": ["osmo", "atom"],
+    },
+    "DEC41A02E47658D40FC71E5A35A9C807111F5A6662A3FB5DA84C4E6F53E616B3": {
+        "categories": ["stock"],
+        "symbol": "ATOM-stake",
+        "DEFAULT_APR": 0.2,
+        "tags": ["osmo", "atom"],
+    },
+}
 
-ADDRESS_2_CATEGORY = {**ZAPPER_ADDRESS, **DEBANK_ADDRESS, **BINANCE_ADDRESS}
+ADDRESS_2_CATEGORY = {
+    **ZAPPER_ADDRESS,
+    **DEBANK_ADDRESS,
+    **BINANCE_ADDRESS,
+    **NANSEN_ADDRESS,
+}
 
 # TODO(david): use this one to implement advanced search algorithm. Search for new compositions.
 TOKEN_CATEGORIES = {
@@ -323,7 +354,10 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "cvxCRV": "convex-crv",
     "MIM": "magic-internet-money",
     "WKAVA": "kava",
+    "KAVA": "kava",
     "FIL": "filecoin",
+    "OSMO": "osmosis",
+    "ATOM": "cosmos",
 }
 
 LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {"uniswap-v3": 0.5}

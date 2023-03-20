@@ -24,9 +24,13 @@ def main(defi_portfolio_service_name: str, optimize_apr_mode: str):
     # 2. Nansen
     # because some of my sizes are located in Binance, and Nansen(cosmos ecosystem), which is not included in either debank or zapper
     # therefore, these 2 data sources need to be loaded everytime (ps. they're all manually updated in debank data format)
-
-    # no_evm_posistions = _load_no_evm_posistions(data_sources=['binance', 'nansen'])
-    no_evm_posistions = _load_no_evm_posistions(data_sources=["binance"])
+    no_evm_posistions = _load_no_evm_posistions(
+        data_sources={
+            "binance": "debank",
+            "nansen-cosmos": "nansen",
+            "nansen-osmo": "nansen",
+        }
+    )
     no_evm_categorized_positions_array = _categorize_no_evm_categorized_positions_array(
         no_evm_posistions
     )
@@ -125,10 +129,10 @@ def calculate_interest(categorized_positions):
     return total_interest
 
 
-def _load_no_evm_posistions(data_sources: list[str]) -> list[dict]:
+def _load_no_evm_posistions(data_sources: dict) -> list[dict]:
     result = []
-    for data_source in data_sources:
-        result.append(load_raw_positions(data_source))
+    for data_source, handler in data_sources.items():
+        result.append((load_raw_positions(data_source), handler))
     return result
 
 
@@ -136,9 +140,9 @@ def _categorize_no_evm_categorized_positions_array(
     no_evm_posistions: list[dict],
 ) -> list[dict]:
     no_evm_categorized_positions_array = []
-    for idx, no_evm_posistion in enumerate(no_evm_posistions):
+    for no_evm_posistion, handler in no_evm_posistions:
         no_evm_categorized_position = categorize_positions(
-            defi_portfolio_service_name="debank", positions=no_evm_posistion
+            defi_portfolio_service_name=handler, positions=no_evm_posistion
         )
         no_evm_categorized_positions_array.append(no_evm_categorized_position)
     return no_evm_categorized_positions_array

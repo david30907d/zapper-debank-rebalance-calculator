@@ -36,7 +36,9 @@ class CoinGeckoHistoricalPriceReader:
             if res.status_code == 200:
                 json.dump(res.json(), open(f"./coingecko/{symbol}.json", "w"))
                 res_json = res.json()
-            res_json = json.load(open(f"./coingecko/{symbol}.json", "r"))
+            else:
+                print(res.json())
+                res_json = json.load(open(f"./coingecko/{symbol}.json", "r"))
         else:
             res_json = json.load(open(f"./coingecko/{symbol}.json", "r"))
         # use reverse to make the array' date in descending order
