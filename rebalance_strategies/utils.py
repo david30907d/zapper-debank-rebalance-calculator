@@ -7,6 +7,7 @@ def show_rebalance_suggestions(category, portfolio, net_worth, target_asset_allo
         f"Current {category}: {portfolio['sum']:.2f}",
         f"Target Sum: {target_sum_of_this_category:.2f}",
         f"Investment Shift: {(portfolio['sum']-target_sum_of_this_category)/net_worth:.2f}, should be lower than 0.05",
+        f"Percentage: {portfolio['sum']/net_worth:.2f}",
     )
     diffrence = target_sum_of_this_category - portfolio["sum"]
     for symbol, position_obj in sorted(
