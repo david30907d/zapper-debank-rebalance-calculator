@@ -1,9 +1,10 @@
 from apr_utils.apr_calculator import get_lowest_or_default_apr
 from apr_utils.utils import get_metadata_by_symbol
+from handlers.utils import place_value_into_categorized_portfolio_dict
 from portfolio_config import ADDRESS_2_CATEGORY, MIN_REBALANCE_POSITION_THRESHOLD
 
 
-def _zapper_handler(positions, result):
+def zapper_handler(positions, result):
     for position in positions:
         if position["balanceUSD"] < MIN_REBALANCE_POSITION_THRESHOLD:
             continue
@@ -50,17 +51,17 @@ def _zapper_handler(positions, result):
                     if token.get("metaType") == "supplied"
                 ]
                 length_of_categories = len(categories)
-                for category in categories:
-                    weighted_balanceUSD = asset["balanceUSD"] / length_of_categories
-                    result[category]["portfolio"][symbol][
-                        "worth"
-                    ] += weighted_balanceUSD
-                    result[category]["portfolio"][symbol]["APR"] = apr
-                    result[category]["sum"] += weighted_balanceUSD
-                    result[category]["portfolio"][symbol]["metadata"] = metadata
-                    result[category]["portfolio"][symbol][
-                        "tokens_metadata"
-                    ] = tokens_metadata
+                net_usd_value = asset["balanceUSD"]
+                result = place_value_into_categorized_portfolio_dict(
+                    categories,
+                    net_usd_value,
+                    length_of_categories,
+                    symbol,
+                    apr,
+                    metadata,
+                    tokens_metadata,
+                    result,
+                )
     return result
 
 

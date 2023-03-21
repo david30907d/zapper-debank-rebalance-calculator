@@ -4,7 +4,7 @@ from handlers.utils import place_value_into_categorized_portfolio_dict
 from portfolio_config import ADDRESS_2_CATEGORY, MIN_REBALANCE_POSITION_THRESHOLD
 
 
-def _nansen_handler(positions, result):
+def nansen_handler(positions, result):
     if "farms" in positions:
         return _nansen_farm_handler(positions, result)
     elif "delegation" in positions:
@@ -14,9 +14,9 @@ def _nansen_handler(positions, result):
 def _nansen_farm_handler(positions, result):
     for farm in positions["farms"]:
         addr = _get_correct_addr(farm, address_column="tokens")
-        net_usd_valud = _calculate_net_usd_valud(farm)
+        net_usd_value = _calculate_net_usd_valud(farm)
         # sanity check
-        if net_usd_valud < MIN_REBALANCE_POSITION_THRESHOLD:
+        if net_usd_value < MIN_REBALANCE_POSITION_THRESHOLD:
             continue
         categories = ADDRESS_2_CATEGORY[addr]["categories"]
         symbol = ADDRESS_2_CATEGORY[addr]["symbol"].lower()
@@ -27,7 +27,7 @@ def _nansen_farm_handler(positions, result):
         tokens_metadata = _get_token_metadata(farm)
         result = place_value_into_categorized_portfolio_dict(
             categories,
-            net_usd_valud,
+            net_usd_value,
             length_of_categories,
             symbol,
             apr,
@@ -41,7 +41,7 @@ def _nansen_farm_handler(positions, result):
 def _nansen_stake_handler(positions, result):
     for farm in positions["delegation"]:
         addr = _get_correct_addr(farm, address_column="rewards")
-        net_usd_valud = _calculate_net_usd_valud(farm)
+        net_usd_value = _calculate_net_usd_valud(farm)
         categories = ADDRESS_2_CATEGORY[addr]["categories"]
         symbol = ADDRESS_2_CATEGORY[addr]["symbol"].lower()
 
@@ -51,7 +51,7 @@ def _nansen_stake_handler(positions, result):
         tokens_metadata = _get_token_metadata(farm)
         result = place_value_into_categorized_portfolio_dict(
             categories,
-            net_usd_valud,
+            net_usd_value,
             length_of_categories,
             symbol,
             apr,

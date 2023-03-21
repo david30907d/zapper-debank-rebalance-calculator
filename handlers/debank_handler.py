@@ -1,9 +1,10 @@
 from apr_utils.apr_calculator import get_lowest_or_default_apr
 from apr_utils.utils import get_metadata_by_symbol
+from handlers.utils import place_value_into_categorized_portfolio_dict
 from portfolio_config import ADDRESS_2_CATEGORY, MIN_REBALANCE_POSITION_THRESHOLD
 
 
-def _debank_handler(positions, result):
+def debank_handler(positions, result):
     for pool in positions["data"]["result"]["data"]:
         for portfolio in pool["portfolio_item_list"]:
             net_usd_valud = portfolio["stats"]["net_usd_value"]
@@ -20,15 +21,16 @@ def _debank_handler(positions, result):
             apr = get_lowest_or_default_apr(symbol)
             metadata = get_metadata_by_symbol(symbol)
             tokens_metadata = _get_token_metadata(portfolio)
-            for category in categories:
-                weighted_balanceUSD = net_usd_valud / length_of_categories
-                result[category]["portfolio"][symbol]["worth"] += weighted_balanceUSD
-                result[category]["portfolio"][symbol]["APR"] = apr
-                result[category]["portfolio"][symbol]["metadata"] = metadata
-                result[category]["portfolio"][symbol][
-                    "tokens_metadata"
-                ] = tokens_metadata
-                result[category]["sum"] += weighted_balanceUSD
+            result = place_value_into_categorized_portfolio_dict(
+                categories,
+                net_usd_valud,
+                length_of_categories,
+                symbol,
+                apr,
+                metadata,
+                tokens_metadata,
+                result,
+            )
     return result
 
 

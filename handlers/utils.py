@@ -9,10 +9,30 @@ def place_value_into_categorized_portfolio_dict(
     result: dict,
 ):
     for category in categories:
-        weighted_balanceUSD = net_usd_valud / length_of_categories
+        weighted_balanceUSD = get_weighted_balanceUSD(
+            net_usd_valud, category, metadata, length_of_categories
+        )
+        # weighted_balanceUSD = net_usd_valud / length_of_categories
         result[category]["portfolio"][symbol]["worth"] += weighted_balanceUSD
         result[category]["portfolio"][symbol]["APR"] = apr
         result[category]["portfolio"][symbol]["metadata"] = metadata
         result[category]["portfolio"][symbol]["tokens_metadata"] = tokens_metadata
         result[category]["sum"] += weighted_balanceUSD
     return result
+
+
+def get_weighted_balanceUSD(
+    net_usd_valud: float, category: str, metadata: dict, length_of_categories: int
+):
+    if length_of_categories == 1:
+        return net_usd_valud
+    elif "eth" in metadata["composition"]:
+        if category == "long_term_bond":
+            return net_usd_valud * metadata["composition"]["eth"]
+        else:
+            return (
+                net_usd_valud
+                * (1 - metadata["composition"]["eth"])
+                / (length_of_categories - 1)
+            )
+    return net_usd_valud / length_of_categories
