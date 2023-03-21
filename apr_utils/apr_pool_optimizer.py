@@ -109,8 +109,13 @@ def _print_out_topn_candidate_pool(
 def _get_max_base_apy(
     categorized_positions: dict, defillama_APY_pool_id_to_apy_base: dict
 ):
+    """
+    think of cash as intermediate_term_bond, since stable usd coin is actually a bond issued by US government
+    """
     max_base_apr = 0
-    for portfolio in categorized_positions["cash"]["portfolio"].values():
+    for portfolio in categorized_positions["intermediate_term_bond"][
+        "portfolio"
+    ].values():
         defillama_APY_pool_id = portfolio["metadata"].get("defillama-APY-pool-id")
         if not defillama_APY_pool_id:
             continue

@@ -10,11 +10,11 @@ from apr_utils.apr_pool_optimizer import (
 from handlers import get_data_source_handler
 from metrics.max_drawdown import calculate_max_drawdown
 from metrics.sharpe_ratio import calculate_portfolio_sharpe_ratio
+from rebalance_strategies import output_rebalancing_suggestions
 from utils.exchange_rate import get_exrate
-from utils.position import skip_rebalance_if_position_too_small
 
 
-def main(defi_portfolio_service_name: str, optimize_apr_mode: str):
+def main(defi_portfolio_service_name: str, optimize_apr_mode: str, strategy_name: str):
     positions = load_raw_positions(defi_portfolio_service_name)
     evm_categorized_positions = categorize_positions(
         defi_portfolio_service_name, positions
@@ -38,8 +38,7 @@ def main(defi_portfolio_service_name: str, optimize_apr_mode: str):
         evm_categorized_positions, no_evm_categorized_positions_array
     )
 
-    strategy_fn = get_rebalancing_strategy("permanent_portfolio")
-    net_worth = output_rebalancing_suggestions(categorized_positions, strategy_fn)
+    net_worth = output_rebalancing_suggestions(categorized_positions, strategy_name)
     total_interest = calculate_interest(categorized_positions)
     print(f"Portfolio's APR: {100*total_interest/net_worth:.2f}%")
 
@@ -69,46 +68,35 @@ def categorize_positions(defi_portfolio_service_name, positions) -> dict:
     user need to label your positions with category type
     """
     result = {
+        "long_term_bond": {
+            "sum": 0,
+            "portfolio": defaultdict(lambda: defaultdict(int)),
+        },
+        "intermediate_term_bond": {
+            "sum": 0,
+            "portfolio": defaultdict(lambda: defaultdict(int)),
+        },
+        "commodities": {"sum": 0, "portfolio": defaultdict(lambda: defaultdict(int))},
         "gold": {"sum": 0, "portfolio": defaultdict(lambda: defaultdict(int))},
-        "cash": {"sum": 0, "portfolio": defaultdict(lambda: defaultdict(int))},
-        "stock": {"sum": 0, "portfolio": defaultdict(lambda: defaultdict(int))},
-        "bond": {"sum": 0, "portfolio": defaultdict(lambda: defaultdict(int))},
+        "large_cap_us_stocks": {
+            "sum": 0,
+            "portfolio": defaultdict(lambda: defaultdict(int)),
+        },
+        "small_cap_us_stocks": {
+            "sum": 0,
+            "portfolio": defaultdict(lambda: defaultdict(int)),
+        },
+        "non_us_developed_market_stocks": {
+            "sum": 0,
+            "portfolio": defaultdict(lambda: defaultdict(int)),
+        },
+        "non_us_emerging_market_stocks": {
+            "sum": 0,
+            "portfolio": defaultdict(lambda: defaultdict(int)),
+        },
     }
     handler = get_data_source_handler(defi_portfolio_service_name)
     return handler(positions, result)
-
-
-def get_rebalancing_strategy(strategy_name) -> callable:
-    def _permenant_portfolio(category, portfolio, net_worth):
-        target_sum = net_worth * 0.25
-        print(
-            f"Current {category}: {portfolio['sum']:.2f}",
-            f"Target Sum: {target_sum:.2f}",
-            f"Investment Shift: {(portfolio['sum']-target_sum)/net_worth:.2f}, should be lower than 0.05",
-        )
-        diffrence = target_sum - portfolio["sum"]
-        for symbol, position_obj in sorted(
-            portfolio["portfolio"].items(), key=lambda x: -x[1]["worth"]
-        ):
-            balanceUSD = position_obj["worth"]
-            if skip_rebalance_if_position_too_small(balanceUSD):
-                continue
-            print(
-                f"Suggestion: modify this amount of USD: {diffrence * balanceUSD / portfolio['sum']:.2f} for position {symbol}, current worth: {balanceUSD:.2f}, percentage: {balanceUSD/net_worth:.2f}"
-            )
-
-    if strategy_name == "permanent_portfolio":
-        return _permenant_portfolio
-    raise NotImplementedError
-
-
-def output_rebalancing_suggestions(categorized_positions, strategy_fn):
-    net_worth = sum(portfolio["sum"] for portfolio in categorized_positions.values())
-    for category, portfolio in categorized_positions.items():
-        strategy_fn(category, portfolio, net_worth)
-        print("====================")
-    print(f"Current Net Worth: ${net_worth:.2f}")
-    return net_worth
 
 
 def calculate_interest(categorized_positions):
@@ -180,5 +168,12 @@ if __name__ == "__main__":
         choices=["new_pool", "new_combination"],
         help="which defi portfolio to load positions from",
     )
+    parser.add_argument(
+        "-st",
+        "--strategy_name",
+        type=str,
+        choices=["permanent_portfolio", "all_weather_portfolio"],
+        help="which target asset allocation to use",
+    )
     args = parser.parse_args()
-    main(args.defi_portfolio_service_name, args.optimize_apr_mode)
+    main(args.defi_portfolio_service_name, args.optimize_apr_mode, args.strategy_name)
