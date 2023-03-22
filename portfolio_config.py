@@ -1,5 +1,8 @@
-MIN_REBALANCE_POSITION_THRESHOLD = 500
-DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 40
+# MIN_REBALANCE_POSITION_THRESHOLD = 500
+# lower the bar for eth-dai kyberswap
+# TODO(david): higer the bar once that size getting bigger
+MIN_REBALANCE_POSITION_THRESHOLD = 378
+DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 ZAPPER_ADDRESS = {
     "0x8ec22ec81e740e0f9310e7318d03c494e62a70cd": {
         "categories": ["intermediate_term_bond"],
@@ -12,6 +15,7 @@ ZAPPER_ADDRESS = {
             "large_cap_us_stocks",
             "long_term_bond",
             "intermediate_term_bond",
+            "gold",
         ],
         "symbol": "glp-avax",
         "defillama-APY-pool-id": "6a3ddb91-0638-4454-97c1-86dc6d59f32c",
@@ -44,6 +48,7 @@ ZAPPER_ADDRESS = {
             "large_cap_us_stocks",
             "long_term_bond",
             "intermediate_term_bond",
+            "gold",
         ],
         "symbol": "glp-arbitrum",
         "defillama-APY-pool-id": "825688c0-c694-4a6b-8497-177e425b7348",
@@ -293,6 +298,7 @@ DEBANK_ADDRESS = {
             "large_cap_us_stocks",
             "long_term_bond",
             "intermediate_term_bond",
+            "gold",
         ],
         "symbol": "glp-arbitrum",
         "defillama-APY-pool-id": "825688c0-c694-4a6b-8497-177e425b7348",
@@ -367,6 +373,15 @@ DEBANK_ADDRESS = {
             "kava": 1,
         },
     },
+    "0xf4b1486dd74d07706052a33d31d7c0aafd0659e1": {
+        "categories": ["long_term_bond"],
+        "symbol": "Radiant-ETH-lending",
+        "DEFAULT_APR": 0.14,
+        "tags": ["eth"],
+        "composition": {
+            "eth": 1,
+        },
+    },
 }
 BINANCE_ADDRESS = {
     "0x0fa70bd9b892c7b6d2a9ea8dd1ce446e52f86935": {
@@ -381,7 +396,11 @@ BINANCE_ADDRESS = {
 }
 NANSEN_ADDRESS = {
     "EA1D43981D5C9A1C4AAEA9C23BB1D4FA126BA9BC7020A25E0AE4AA841EA25DC5": {
-        "categories": ["non_us_emerging_market_stocks", "long_term_bond"],
+        "categories": [
+            "non_us_emerging_market_stocks",
+            "long_term_bond",
+            "commodities",
+        ],
         "symbol": "OSMO/WETH",
         "defillama-APY-pool-id": "5fe464d2-3575-4b70-bc69-cc52d2857e4a",
         "tags": ["osmo", "eth"],
@@ -394,6 +413,7 @@ NANSEN_ADDRESS = {
         "categories": [
             "non_us_emerging_market_stocks",
             "non_us_developed_market_stocks",
+            "commodities",
         ],
         "symbol": "OSMO/KAVA",
         "defillama-APY-pool-id": "f6efb5eb-b6fc-4ada-8fe2-05702f38d606",
@@ -404,7 +424,7 @@ NANSEN_ADDRESS = {
         },
     },
     "27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2": {
-        "categories": ["non_us_emerging_market_stocks"],
+        "categories": ["non_us_emerging_market_stocks", "commodities"],
         "symbol": "OSMO/ATOM",
         "defillama-APY-pool-id": "4ced8c2d-67c4-4555-b025-be49c110ca58",
         "tags": ["osmo", "atom"],
@@ -414,7 +434,7 @@ NANSEN_ADDRESS = {
         },
     },
     "DEC41A02E47658D40FC71E5A35A9C807111F5A6662A3FB5DA84C4E6F53E616B3": {
-        "categories": ["non_us_emerging_market_stocks"],
+        "categories": ["non_us_emerging_market_stocks", "commodities"],
         "symbol": "ATOM-stake",
         "DEFAULT_APR": 0.2,
         "tags": ["atom"],
@@ -474,6 +494,7 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "FIL": "filecoin",
     "OSMO": "osmosis",
     "ATOM": "cosmos",
+    "AVAX": "avalanche",
 }
 
 LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {
