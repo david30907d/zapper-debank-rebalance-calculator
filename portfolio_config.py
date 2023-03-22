@@ -1,5 +1,5 @@
 MIN_REBALANCE_POSITION_THRESHOLD = 500
-DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 30
+DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 40
 ZAPPER_ADDRESS = {
     "0x8ec22ec81e740e0f9310e7318d03c494e62a70cd": {
         "categories": ["intermediate_term_bond"],
@@ -8,7 +8,11 @@ ZAPPER_ADDRESS = {
         "tags": ["eurs", "usdt", "usdc"],
     },
     "0xd2d1162512f927a7e282ef43a362659e4f2a728f": {
-        "categories": ["large_cap_us_stocks", "long_term_bond"],
+        "categories": [
+            "large_cap_us_stocks",
+            "long_term_bond",
+            "intermediate_term_bond",
+        ],
         "symbol": "glp-avax",
         "defillama-APY-pool-id": "6a3ddb91-0638-4454-97c1-86dc6d59f32c",
         "tags": ["glp"],
@@ -29,14 +33,18 @@ ZAPPER_ADDRESS = {
         "composition": {"eth": 0.5, "dpx": 0.5},
     },
     "0xcb0e5bfa72bbb4d16ab5aa0c60601c438f04b4ad": {
-        "categories": ["gold", "long_term_bond"],
+        "categories": ["gold", "long_term_bond", "intermediate_term_bond"],
         "symbol": "usdt-weth-sushi-LP",
         "defillama-APY-pool-id": "abe3c385-bde7-4350-9f35-2f574ad592d6",
         "tags": ["usdt", "eth"],
         "composition": {"eth": 0.5, "usdt": 0.5},
     },
     "0x4277f8f2c384827b5273592ff7cebd9f2c1ac258": {
-        "categories": ["large_cap_us_stocks", "long_term_bond"],
+        "categories": [
+            "large_cap_us_stocks",
+            "long_term_bond",
+            "intermediate_term_bond",
+        ],
         "symbol": "glp-arbitrum",
         "defillama-APY-pool-id": "825688c0-c694-4a6b-8497-177e425b7348",
         "tags": ["glp"],
@@ -220,14 +228,14 @@ ZAPPER_ADDRESS = {
     },
 }
 DEBANK_ADDRESS = {
-    "0x24704aff49645d32655a76df6d407e02d146dafc": {
+    "0x76ba3ec5f5adbf1c58c91e86502232317eea72de": {
         "categories": ["large_cap_us_stocks", "long_term_bond"],
-        "symbol": "radiant-eth-LP",
+        "symbol": "radiant-eth-dLP",
         "defillama-APY-pool-id": "118281c6-3a4a-4324-b804-5664617df77d",
         "tags": ["rdnt", "eth"],
         "composition": {
-            "eth": 0.5,
-            "rdnt": 0.5,
+            "eth": 0.2,
+            "rdnt": 0.8,
         },
     },
     "0xb7e50106a5bd3cf21af210a755f9c8740890a8c9": {
@@ -251,7 +259,7 @@ DEBANK_ADDRESS = {
         },
     },
     "0xdf3e481a05f58c387af16867e9f5db7f931113c9": {
-        "categories": ["gold", "long_term_bond"],
+        "categories": ["gold", "long_term_bond", "intermediate_term_bond"],
         "symbol": "weth-usdt-TJ-LP-avax",
         "DEFAULT_APR": 0,
         "tags": ["eth", "usdt"],
@@ -281,7 +289,11 @@ DEBANK_ADDRESS = {
         },
     },
     "0x4e971a87900b931ff39d1aad67697f49835400b6": {
-        "categories": ["large_cap_us_stocks", "long_term_bond"],
+        "categories": [
+            "large_cap_us_stocks",
+            "long_term_bond",
+            "intermediate_term_bond",
+        ],
         "symbol": "glp-arbitrum",
         "defillama-APY-pool-id": "825688c0-c694-4a6b-8497-177e425b7348",
         "tags": ["glp"],
@@ -297,13 +309,23 @@ DEBANK_ADDRESS = {
         },
     },
     "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3": {
-        "categories": ["gold", "long_term_bond"],
+        "categories": ["gold", "long_term_bond", "intermediate_term_bond"],
         "symbol": "usdt-weth-sushi-LP",
         "defillama-APY-pool-id": "abe3c385-bde7-4350-9f35-2f574ad592d6",
         "tags": ["usdt", "eth"],
         "composition": {
             "eth": 0.5,
             "usdt": 0.5,
+        },
+    },
+    "0xbdec4a045446f583dc564c0a227ffd475b329bf0": {
+        "categories": ["gold", "long_term_bond", "intermediate_term_bond"],
+        "symbol": "dai-weth-kyberswap-LP",
+        "defillama-APY-pool-id": "592db49f-ac12-4072-b659-4e4a29c2b197",
+        "tags": ["dai", "eth"],
+        "composition": {
+            "eth": 0.5,
+            "dai": 0.5,
         },
     },
     "0x3d9819210a31b4961b30ef54be2aed79b9c9cd3b": {
@@ -454,4 +476,7 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "ATOM": "cosmos",
 }
 
-LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {"uniswap-v3": 0.5}
+LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {
+    "uniswap-v3": 0.5,
+    "kyberswap-elastic": 0.5,
+}
