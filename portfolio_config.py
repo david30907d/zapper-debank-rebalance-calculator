@@ -108,7 +108,7 @@ ZAPPER_ADDRESS = {
     "0xaa0c3f5f7dfd688c6e646f66cd2a6b66acdbe434": {
         "categories": ["large_cap_us_stocks", "commodities"],
         "symbol": "cvxCRV",
-        "defillama-APY-pool-id": "f1b831a9-7763-4bad-a64e-cafc86fdb7ec",
+        "defillama-APY-pool-id": "ef32dd3b-a03b-4f79-9b65-8420d7e04ad0",
         "tags": ["cvxcrv"],
         "composition": {"cvxcrv": 1},
     },
