@@ -235,7 +235,7 @@ ZAPPER_ADDRESS = {
 DEBANK_ADDRESS = {
     "0x76ba3ec5f5adbf1c58c91e86502232317eea72de": {
         "categories": ["large_cap_us_stocks", "long_term_bond"],
-        "symbol": "radiant-eth-dLP",
+        "symbol": "radiant-eth-dLP-arb",
         "defillama-APY-pool-id": "118281c6-3a4a-4324-b804-5664617df77d",
         "tags": ["rdnt", "eth"],
         "composition": {
@@ -365,7 +365,7 @@ DEBANK_ADDRESS = {
         },
     },
     "0x4804357ace69330524ceb18f2a647c3c162e1f95": {
-        "categories": ["non_us_developed_market_stocks", "commodities"],
+        "categories": ["non_us_developed_market_stocks"],
         "symbol": "Mare-Kava-lending",
         "defillama-APY-pool-id": "d09a22df-779c-4917-b66f-9e57b2f379f6",
         "tags": ["kava"],
@@ -376,6 +376,25 @@ DEBANK_ADDRESS = {
     "0xf4b1486dd74d07706052a33d31d7c0aafd0659e1": {
         "categories": ["long_term_bond"],
         "symbol": "Radiant-ETH-lending",
+        "DEFAULT_APR": 0.14,
+        "tags": ["eth"],
+        "composition": {
+            "eth": 1,
+        },
+    },
+    "0x4fd9f7c5ca0829a656561486bada018505dfcb5e": {
+        "categories": ["large_cap_us_stocks", "long_term_bond"],
+        "symbol": "radiant-eth-dLP-bnb",
+        "defillama-APY-pool-id": "118281c6-3a4a-4324-b804-5664617df77d",
+        "tags": ["rdnt", "eth"],
+        "composition": {
+            "eth": 0.2,
+            "rdnt": 0.8,
+        },
+    },
+    "0xd50cf00b6e600dd036ba8ef475677d816d6c4281": {
+        "categories": ["long_term_bond"],
+        "symbol": "Radiant-ETH-lending-bnb",
         "DEFAULT_APR": 0.14,
         "tags": ["eth"],
         "composition": {
@@ -399,7 +418,6 @@ NANSEN_ADDRESS = {
         "categories": [
             "non_us_emerging_market_stocks",
             "long_term_bond",
-            "commodities",
         ],
         "symbol": "OSMO/WETH",
         "defillama-APY-pool-id": "5fe464d2-3575-4b70-bc69-cc52d2857e4a",
@@ -413,7 +431,6 @@ NANSEN_ADDRESS = {
         "categories": [
             "non_us_emerging_market_stocks",
             "non_us_developed_market_stocks",
-            "commodities",
         ],
         "symbol": "OSMO/KAVA",
         "defillama-APY-pool-id": "f6efb5eb-b6fc-4ada-8fe2-05702f38d606",
@@ -424,7 +441,7 @@ NANSEN_ADDRESS = {
         },
     },
     "27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2": {
-        "categories": ["non_us_emerging_market_stocks", "commodities"],
+        "categories": ["non_us_emerging_market_stocks"],
         "symbol": "OSMO/ATOM",
         "defillama-APY-pool-id": "4ced8c2d-67c4-4555-b025-be49c110ca58",
         "tags": ["osmo", "atom"],
@@ -455,7 +472,7 @@ ADDRESS_2_CATEGORY = {
 TOKEN_2_CATEGORIES = {
     "long_term_bond": ["eth"],
     "intermediate_term_bond": ["ohm", "gohm", "usdc", "frax", "dai", "gdai"],
-    "commodities": ["fil", "cvxcrv", "crv", "cvx", "kava", "atom"],
+    "commodities": ["fil", "cvxcrv", "crv", "cvx", "matic"],
     "gold": [],
     "large_cap_us_stocks": [],
     "small_cap_us_stocks": [],
@@ -467,6 +484,7 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "EURS": "stasis-eurs",
     "OHM": "olympus",
     "gOHM": "governance-ohm",
+    "BNB": "binancecoin",
     "FRAX": "frax",
     "USDC": "usd-coin",
     "USDC.e": "usd-coin",
