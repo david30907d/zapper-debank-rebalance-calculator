@@ -376,29 +376,39 @@ DEBANK_ADDRESS = {
     "0xf4b1486dd74d07706052a33d31d7c0aafd0659e1": {
         "categories": ["long_term_bond"],
         "symbol": "Radiant-ETH-lending",
-        "DEFAULT_APR": 0.14,
+        "DEFAULT_APR": 0.13,
         "tags": ["eth"],
         "composition": {
             "eth": 1,
         },
     },
     "0x4fd9f7c5ca0829a656561486bada018505dfcb5e": {
-        "categories": ["large_cap_us_stocks", "long_term_bond"],
+        "categories": ["large_cap_us_stocks", "commodities"],
         "symbol": "radiant-eth-dLP-bnb",
         "defillama-APY-pool-id": "118281c6-3a4a-4324-b804-5664617df77d",
-        "tags": ["rdnt", "eth"],
+        "tags": ["rdnt", "bnb"],
         "composition": {
-            "eth": 0.2,
-            "rdnt": 0.8,
+            "bnb": 0.5,
+            "rdnt": 0.5,
         },
     },
     "0xd50cf00b6e600dd036ba8ef475677d816d6c4281": {
         "categories": ["long_term_bond"],
         "symbol": "Radiant-ETH-lending-bnb",
-        "DEFAULT_APR": 0.14,
+        "DEFAULT_APR": 0.13,
         "tags": ["eth"],
         "composition": {
             "eth": 1,
+        },
+    },
+    "0x21178dd2ba9caee9df37f2d5f89a097d69fb0a7d": {
+        "categories": ["small_cap_us_stocks", "long_term_bond"],
+        "symbol": "magic-weth-gamma-uniswap-LP",
+        "defillama-APY-pool-id": "98d1d43f-dacf-42c3-b2f9-259d34ec930d",
+        "tags": ["magic", "eth"],
+        "composition": {
+            "eth": 0.5,
+            "magic": 0.5,
         },
     },
 }
@@ -472,7 +482,7 @@ ADDRESS_2_CATEGORY = {
 TOKEN_2_CATEGORIES = {
     "long_term_bond": ["eth"],
     "intermediate_term_bond": ["ohm", "gohm", "usdc", "frax", "dai", "gdai"],
-    "commodities": ["fil", "cvxcrv", "crv", "cvx", "matic"],
+    "commodities": ["fil", "cvxcrv", "crv", "cvx", "matic", "bnb"],
     "gold": [],
     "large_cap_us_stocks": [],
     "small_cap_us_stocks": [],
