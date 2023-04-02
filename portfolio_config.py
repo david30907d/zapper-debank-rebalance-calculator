@@ -1,7 +1,7 @@
 # MIN_REBALANCE_POSITION_THRESHOLD = 500
 # lower the bar for eth-dai kyberswap
 # TODO(david): higer the bar once that size getting bigger
-MIN_REBALANCE_POSITION_THRESHOLD = 378
+MIN_REBALANCE_POSITION_THRESHOLD = 100
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 ZAPPER_ADDRESS = {
     "0x8ec22ec81e740e0f9310e7318d03c494e62a70cd": {
@@ -411,6 +411,62 @@ DEBANK_ADDRESS = {
             "magic": 0.5,
         },
     },
+    "0x9dbbbaecacedf53d5caa295b8293c1def2055adc": {
+        "categories": [
+            "large_cap_us_stocks",
+            "long_term_bond",
+            "intermediate_term_bond",
+            "gold",
+        ],
+        "symbol": "beefy-glp",
+        "defillama-APY-pool-id": "79587734-a461-4f4c-b9e2-c85c70484cf8",
+        "tags": ["glp"],
+        "composition": {
+            "eth": 0.28,
+            "wbtc": 0.2,
+            "link": 0.01,
+            "uni": 0.01,
+            "usdc": 0.41,
+            "usdt": 0.02,
+            "dai": 0.05,
+            "frax": 0.02,
+        },
+    },
+    "0x1f36f95a02c744f2b3cd196b5e44e749c153d3b9": {
+        "categories": [
+            "small_cap_us_stocks",
+        ],
+        "symbol": "velodrome-VELO-OP",
+        "defillama-APY-pool-id": "d268cba2-bf82-43c7-b4dc-1e8f2c37e150",
+        "tags": ["velo", "op"],
+        "composition": {
+            "velo": 0.5,
+            "op": 0.5,
+        },
+    },
+    "0x6b8edc43de878fd5cd5113c42747d32500db3873": {
+        "categories": ["small_cap_us_stocks", "intermediate_term_bond", "gold"],
+        "symbol": "velodrome-VELO-USDC",
+        "defillama-APY-pool-id": "6e053f06-e90d-4f16-b31b-d615d33f26f5",
+        "tags": ["velo", "usdc"],
+        "composition": {
+            "velo": 0.5,
+            "usdc": 0.5,
+        },
+    },
+    "0x9c7305eb78a432ced5c4d14cac27e8ed569a2e26": {
+        "categories": [
+            "small_cap_us_stocks",
+        ],
+        "symbol": "velodrome-lock",
+        "DEFAULT_APR": 0.0001,
+        "tags": [
+            "velo",
+        ],
+        "composition": {
+            "velo": 1,
+        },
+    },
 }
 BINANCE_ADDRESS = {
     "0x0fa70bd9b892c7b6d2a9ea8dd1ce446e52f86935": {
@@ -523,6 +579,8 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "OSMO": "osmosis",
     "ATOM": "cosmos",
     "AVAX": "avalanche",
+    "VELO": "velodrome-finance",
+    "OP": "optimism",
 }
 
 LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {
