@@ -1,7 +1,4 @@
-# MIN_REBALANCE_POSITION_THRESHOLD = 500
-# lower the bar for eth-dai kyberswap
-# TODO(david): higer the bar once that size getting bigger
-MIN_REBALANCE_POSITION_THRESHOLD = 100
+MIN_REBALANCE_POSITION_THRESHOLD = 500
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 ZAPPER_ADDRESS = {
     "0x8ec22ec81e740e0f9310e7318d03c494e62a70cd": {
@@ -98,7 +95,7 @@ ZAPPER_ADDRESS = {
     },
     "0x72a19342e8f1838460ebfccef09f6585e32db86e": {
         "categories": ["small_cap_us_stocks", "commodities"],
-        "symbol": "CVX",
+        "symbol": "vlCVX",
         "defillama-APY-pool-id": "777032e6-e815-4f44-90b4-abb98f0f9632",
         "tags": [
             "cvx",
@@ -467,6 +464,26 @@ DEBANK_ADDRESS = {
             "velo": 1,
         },
     },
+    "0x085a2054c51ea5c91dbf7f90d65e728c0f2a270f": {
+        "categories": ["long_term_bond", "commodities", "large_cap_us_stocks"],
+        "symbol": "crvCRVETH",
+        "defillama-APY-pool-id": "caad8223-bae8-4ef4-bdf3-c12cc55c94e3",
+        "tags": ["crv", "eth"],
+        "composition": {
+            "eth": 0.5,
+            "crv": 0.5,
+        },
+    },
+    "0x20ec0d06f447d550fc6edee42121bc8c1817b97d": {
+        "categories": ["long_term_bond", "commodities", "large_cap_us_stocks"],
+        "symbol": "gamma-WMATIC-WETH",
+        "defillama-APY-pool-id": "1f23a6a9-84d0-4cf9-b978-aba431703757",
+        "tags": ["matic", "eth"],
+        "composition": {
+            "eth": 0.5,
+            "matic": 0.5,
+        },
+    },
 }
 BINANCE_ADDRESS = {
     "0x0fa70bd9b892c7b6d2a9ea8dd1ce446e52f86935": {
@@ -527,11 +544,28 @@ NANSEN_ADDRESS = {
     },
 }
 
+ZK_ECOSYSTEMS = {
+    "0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4": {
+        "categories": [
+            "long_term_bond",
+            "intermediate_term_bond",
+        ],
+        "symbol": "Mute.Switch-USDC-ETH",
+        "DEFAULT_APR": 0.59,
+        "tags": ["usdc", "eth"],
+        "composition": {
+            "eth": 0.5,
+            "usdc": 0.5,
+        },
+    },
+}
+
 ADDRESS_2_CATEGORY = {
     **ZAPPER_ADDRESS,
     **DEBANK_ADDRESS,
     **BINANCE_ADDRESS,
     **NANSEN_ADDRESS,
+    **ZK_ECOSYSTEMS,
 }
 
 # TODO(david): use this one to implement advanced search algorithm. Search for new compositions.
@@ -581,6 +615,8 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "AVAX": "avalanche",
     "VELO": "velodrome-finance",
     "OP": "optimism",
+    "CRV": "curve-dao-token",
+    "MATIC": "matic-network",
 }
 
 LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {
