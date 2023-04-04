@@ -373,7 +373,7 @@ DEBANK_ADDRESS = {
     "0xf4b1486dd74d07706052a33d31d7c0aafd0659e1": {
         "categories": ["long_term_bond"],
         "symbol": "Radiant-ETH-lending",
-        "DEFAULT_APR": 0.13,
+        "DEFAULT_APR": 0.1,
         "tags": ["eth"],
         "composition": {
             "eth": 1,
@@ -484,6 +484,33 @@ DEBANK_ADDRESS = {
             "matic": 0.5,
         },
     },
+    # [TODO](david), wait for debank to fix it. one of them is wrong, 0xdfaab828f5f515e104baaba4d8d554da9096f0e4 and  0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4
+    "0xdfaab828f5f515e104baaba4d8d554da9096f0e4": {
+        "categories": [
+            "long_term_bond",
+            "intermediate_term_bond",
+        ],
+        "symbol": "Mute.Switch-USDC-ETH",
+        "DEFAULT_APR": 0.59,
+        "tags": ["usdc", "eth"],
+        "composition": {
+            "eth": 0.5,
+            "usdc": 0.5,
+        },
+    },
+    "0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4": {
+        "categories": [
+            "long_term_bond",
+            "intermediate_term_bond",
+        ],
+        "symbol": "Mute.Switch-USDC-ETH",
+        "DEFAULT_APR": 0.001,
+        "tags": ["usdc", "eth"],
+        "composition": {
+            "eth": 0.5,
+            "usdc": 0.5,
+        },
+    },
 }
 BINANCE_ADDRESS = {
     "0x0fa70bd9b892c7b6d2a9ea8dd1ce446e52f86935": {
@@ -544,28 +571,11 @@ NANSEN_ADDRESS = {
     },
 }
 
-ZK_ECOSYSTEMS = {
-    "0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4": {
-        "categories": [
-            "long_term_bond",
-            "intermediate_term_bond",
-        ],
-        "symbol": "Mute.Switch-USDC-ETH",
-        "DEFAULT_APR": 0.59,
-        "tags": ["usdc", "eth"],
-        "composition": {
-            "eth": 0.5,
-            "usdc": 0.5,
-        },
-    },
-}
-
 ADDRESS_2_CATEGORY = {
     **ZAPPER_ADDRESS,
     **DEBANK_ADDRESS,
     **BINANCE_ADDRESS,
     **NANSEN_ADDRESS,
-    **ZK_ECOSYSTEMS,
 }
 
 # TODO(david): use this one to implement advanced search algorithm. Search for new compositions.
