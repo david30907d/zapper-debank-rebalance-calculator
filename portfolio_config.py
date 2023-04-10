@@ -1,5 +1,7 @@
 MIN_REBALANCE_POSITION_THRESHOLD = 500
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
+# black list Ethereum until the gas fee is affordable
+BLACK_LIST_CHAINS = {"Ethereum", "Avalanche", "BSC", "Solana"}
 ZAPPER_ADDRESS = {
     "0x8ec22ec81e740e0f9310e7318d03c494e62a70cd": {
         "categories": ["intermediate_term_bond"],
@@ -491,7 +493,7 @@ DEBANK_ADDRESS = {
             "intermediate_term_bond",
         ],
         "symbol": "Mute.Switch-USDC-ETH",
-        "DEFAULT_APR": 0.59,
+        "DEFAULT_APR": 0.4,
         "tags": ["usdc", "eth"],
         "composition": {
             "eth": 0.5,

@@ -2,6 +2,7 @@ import json
 
 from apr_utils.apr_calculator import get_lowest_apy, get_lowest_or_default_apr
 from apr_utils.utils import convert_apy_to_apr
+from portfolio_config import BLACK_LIST_CHAINS
 from search_handlers import SearchBase
 from search_handlers.jaccard_similarity_handler import JaccardSimilarityHandler
 from search_handlers.ngram_handler import NgramSimilarityHandler
@@ -82,6 +83,8 @@ def _get_topn_candidate_pool(
     for pool_metadata in res_json["data"]:
         if skip_rebalance_if_position_too_small(worth):
             continue
+        if pool_metadata["chain"] in BLACK_LIST_CHAINS:
+            continue
         if (
             search_handler.check_similarity(metadata, pool_metadata["symbol"].lower())
             and pool_metadata["pool"] not in pool_ids_of_current_portfolio
@@ -145,6 +148,8 @@ def _show_topn(topn: list):
     print("Better stable coin:")
     for pool in sorted(topn, key=lambda x: x["apyBase"], reverse=True):
         if pool["tvlUsd"] < MILLION:
+            continue
+        if pool["chain"] in BLACK_LIST_CHAINS:
             continue
         print(
             f"- Chain: {pool['chain']}, Pool: {pool['project']}, Coin: {pool['symbol']}, TVL: {pool['tvlUsd']/MILLION:.2f}M, Base APR: {convert_apy_to_apr(pool['apyBase']/100)*100:.2f}%"
