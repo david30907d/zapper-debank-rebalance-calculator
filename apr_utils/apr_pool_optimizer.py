@@ -2,7 +2,7 @@ import json
 
 from apr_utils.apr_calculator import get_lowest_apy, get_lowest_or_default_apr
 from apr_utils.utils import convert_apy_to_apr
-from portfolio_config import BLACK_LIST_CHAINS
+from portfolio_config import BLACKLIST_CHAINS, BLACKLIST_COINS
 from search_handlers import SearchBase
 from search_handlers.jaccard_similarity_handler import JaccardSimilarityHandler
 from search_handlers.ngram_handler import NgramSimilarityHandler
@@ -83,7 +83,7 @@ def _get_topn_candidate_pool(
     for pool_metadata in res_json["data"]:
         if skip_rebalance_if_position_too_small(worth):
             continue
-        if pool_metadata["chain"] in BLACK_LIST_CHAINS:
+        if pool_metadata["chain"] in BLACKLIST_CHAINS:
             continue
         if (
             search_handler.check_similarity(metadata, pool_metadata["symbol"].lower())
@@ -146,11 +146,23 @@ def _get_topn_base_apr_pool(defillama: dict, max_base_apr: float):
 def _show_topn(topn: list):
     print("====================")
     print("Better stable coin:")
+    print("Current Blacklist Chains: ", ", ".join(BLACKLIST_CHAINS))
+    print("Current Blacklist Coins: ", ", ".join(BLACKLIST_COINS))
     for pool in sorted(topn, key=lambda x: x["apyBase"], reverse=True):
         if pool["tvlUsd"] < MILLION:
             continue
-        if pool["chain"] in BLACK_LIST_CHAINS:
+        if pool["chain"] in BLACKLIST_CHAINS:
+            continue
+
+        if _check_if_symbol_has_blacklist_coins_substring(pool["symbol"]):
             continue
         print(
             f"- Chain: {pool['chain']}, Pool: {pool['project']}, Coin: {pool['symbol']}, TVL: {pool['tvlUsd']/MILLION:.2f}M, Base APR: {convert_apy_to_apr(pool['apyBase']/100)*100:.2f}%"
         )
+
+
+def _check_if_symbol_has_blacklist_coins_substring(symbol: str):
+    for blacklist_coin in BLACKLIST_COINS:
+        if blacklist_coin in symbol:
+            return True
+    return False

@@ -1,7 +1,8 @@
 MIN_REBALANCE_POSITION_THRESHOLD = 500
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 # black list Ethereum until the gas fee is affordable
-BLACK_LIST_CHAINS = {"Ethereum", "Avalanche", "BSC", "Solana"}
+BLACKLIST_CHAINS = {"Ethereum", "Avalanche", "BSC", "Solana"}
+BLACKLIST_COINS = {"USDC", "FRAX", "USDT"}
 ZAPPER_ADDRESS = {
     "0x8ec22ec81e740e0f9310e7318d03c494e62a70cd": {
         "categories": ["intermediate_term_bond"],
@@ -513,6 +514,38 @@ DEBANK_ADDRESS = {
             "usdc": 0.5,
         },
     },
+    "0x7d49e5adc0eaad9c027857767638613253ef125f": {
+        "categories": [
+            "large_cap_us_stocks",
+            "long_term_bond",
+            "intermediate_term_bond",
+            "gold",
+        ],
+        "symbol": "glp-pendle",
+        "defillama-APY-pool-id": "24524d98-7fa5-47ca-b788-e7879319176c",
+        "tags": ["glp"],
+        "composition": {
+            "eth": 0.28,
+            "wbtc": 0.2,
+            "link": 0.01,
+            "uni": 0.01,
+            "usdc": 0.41,
+            "usdt": 0.02,
+            "dai": 0.05,
+            "frax": 0.02,
+        },
+    },
+    "0xa0192f6567f8f5dc38c53323235fd08b318d2dca": {
+        "categories": ["intermediate_term_bond", "long_term_bond"],
+        "symbol": "gDAI-pendle",
+        "defillama-APY-pool-id": "95c950d1-8479-42b3-852c-282ed30c1f6c",
+        "tags": ["gdai"],
+        "composition": {
+            # just a back of the envolope calculation
+            "eth": 0.36,
+            "usdc": 0.64,
+        },
+    },
 }
 BINANCE_ADDRESS = {
     "0x0fa70bd9b892c7b6d2a9ea8dd1ce446e52f86935": {
@@ -629,6 +662,10 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "OP": "optimism",
     "CRV": "curve-dao-token",
     "MATIC": "matic-network",
+    # there's no easy way to get the price of the GLP
+    # so use jones-glp instead
+    "PT-GLP-28MAR2024": "jones-glp",
+    "PT-gDAI-28MAR2024": "dai",
 }
 
 LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {
