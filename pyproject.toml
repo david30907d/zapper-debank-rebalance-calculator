@@ -4,7 +4,6 @@ version = "0.1.0"
 description = ""
 authors = ["davidtnfsh <davidtnfsh@gmail.com>"]
 readme = "README.md"
-packages = [{include = "zapper_rebalance_calculator"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
