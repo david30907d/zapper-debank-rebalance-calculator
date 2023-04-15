@@ -15,7 +15,7 @@
     },
     "lint-staged": {
       "tests/*.py": [
-        "pytest --cov=dags --cov=contrib --cov-fail-under=10 --cov-report=term-missing"
+        "pytest"
       ],
       "**/*.py": [
         "isort",

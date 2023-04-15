@@ -1,7 +1,7 @@
 MIN_REBALANCE_POSITION_THRESHOLD = 500
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 # black list Ethereum until the gas fee is affordable
-BLACKLIST_CHAINS = {"Ethereum", "Avalanche", "BSC", "Solana"}
+BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
 BLACKLIST_COINS = {"USDC", "FRAX", "USDT"}
 ZAPPER_ADDRESS = {
     "0x8ec22ec81e740e0f9310e7318d03c494e62a70cd": {
@@ -376,7 +376,7 @@ DEBANK_ADDRESS = {
     "0xf4b1486dd74d07706052a33d31d7c0aafd0659e1": {
         "categories": ["long_term_bond"],
         "symbol": "Radiant-ETH-lending",
-        "DEFAULT_APR": 0.1,
+        "DEFAULT_APR": 0.09,
         "tags": ["eth"],
         "composition": {
             "eth": 1,
@@ -546,6 +546,15 @@ DEBANK_ADDRESS = {
             "usdc": 0.64,
         },
     },
+    "0xfb8f489df4e04609f4f4e54f586f960818b70041": {
+        "categories": ["long_term_bond"],
+        "symbol": "sfrxETH-pendle",
+        "defillama-APY-pool-id": "2811f0f5-18cf-4b72-a9d4-55c2c7ed577c",
+        "tags": ["eth"],
+        "composition": {
+            "eth": 1,
+        },
+    },
 }
 BINANCE_ADDRESS = {
     "0x0fa70bd9b892c7b6d2a9ea8dd1ce446e52f86935": {
@@ -666,6 +675,8 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     # so use jones-glp instead
     "PT-GLP-28MAR2024": "jones-glp",
     "PT-gDAI-28MAR2024": "dai",
+    "frxETH": "frax-ether",
+    "PT-sfrxETH-26DEC2024": "frax-ether",
 }
 
 LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {

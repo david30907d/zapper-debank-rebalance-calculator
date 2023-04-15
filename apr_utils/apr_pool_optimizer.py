@@ -79,33 +79,46 @@ def _get_topn_candidate_pool(
     pool_ids_of_current_portfolio: set,
 ) -> list:
     worth = metadata["worth"]
-    top_n = []
+    top_n: list[dict] = []
     for pool_metadata in res_json["data"]:
         if skip_rebalance_if_position_too_small(worth):
             continue
         if pool_metadata["chain"] in BLACKLIST_CHAINS:
             continue
         if (
-            search_handler.check_similarity(metadata, pool_metadata["symbol"].lower())
+            pool_similarity := search_handler.get_similarity(
+                metadata, pool_metadata["symbol"].lower()
+            )
+            > search_handler.similarity_threshold
             and pool_metadata["pool"] not in pool_ids_of_current_portfolio
             and current_apr < convert_apy_to_apr(get_lowest_apy(pool_metadata))
             and pool_metadata["tvlUsd"] > MILLION
         ):
-            top_n.append(pool_metadata)
+            top_n.append(
+                {"pool_metadata": pool_metadata, "pool_similarity": pool_similarity}
+            )
     return top_n
 
 
 def _print_out_topn_candidate_pool(
-    symbol: str, top_n: list, current_apr: float, n: int = 3
+    symbol: str, top_n: list, current_apr: float, n: int = 5
 ):
     if not top_n:
         return
     print(
         f"{symbol}'s possible better protocol to deposit (lowest or default apr {current_apr:.2f}):"
     )
-    for metadata in sorted(top_n, key=lambda x: -x["apyMean30d"])[:n]:
+    for metadata_with_similarity in sorted(
+        top_n,
+        key=lambda x: (
+            -x["pool_similarity"],
+            -convert_apy_to_apr(get_lowest_apy(x["pool_metadata"])),
+        ),
+    )[:n]:
+        metadata = metadata_with_similarity["pool_metadata"]
+        similarity = metadata_with_similarity["pool_similarity"]
         print(
-            f" - Chain: {metadata['chain']}, Protocol: {metadata['project']+'-'+metadata['poolMeta'] if metadata['poolMeta'] else metadata['project']}, Token: {metadata['symbol']}, lowest or default APR: {convert_apy_to_apr(get_lowest_apy(metadata)):.2f}"
+            f" - Chain: {metadata['chain']}, Protocol: {metadata['project']+'-'+metadata['poolMeta'] if metadata['poolMeta'] else metadata['project']}, Token: {metadata['symbol']}, lowest or default APR: {convert_apy_to_apr(get_lowest_apy(metadata)):.2f}, {similarity:.2f}"
         )
 
 
