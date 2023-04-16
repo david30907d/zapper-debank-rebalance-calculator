@@ -53,5 +53,3 @@ if __name__ == "__main__":
             SearchBase.denormalize_tag({"strxeth"}, {"kepl", "eth"}.union({"strxeth"}))
         )
     )
-    # print(SearchBase.denormalize_tag({'kepl', 'eth'}).intersection(SearchBase.denormalize_tag({'strxeth'})))
-    # print(SearchBase.denormalize_tag({'kepl', 'eth'}, {'kepl', 'eth'}.union({'strxeth'})))

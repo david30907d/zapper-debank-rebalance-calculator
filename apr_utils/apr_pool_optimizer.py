@@ -116,9 +116,8 @@ def _print_out_topn_candidate_pool(
         ),
     )[:n]:
         metadata = metadata_with_similarity["pool_metadata"]
-        similarity = metadata_with_similarity["pool_similarity"]
         print(
-            f" - Chain: {metadata['chain']}, Protocol: {metadata['project']+'-'+metadata['poolMeta'] if metadata['poolMeta'] else metadata['project']}, Token: {metadata['symbol']}, lowest or default APR: {convert_apy_to_apr(get_lowest_apy(metadata)):.2f}, {similarity:.2f}"
+            f" - Chain: {metadata['chain']}, Protocol: {metadata['project']+'-'+metadata['poolMeta'] if metadata['poolMeta'] else metadata['project']}, Token: {metadata['symbol']}, lowest or default APR: {convert_apy_to_apr(get_lowest_apy(metadata)):.2f}"
         )
 
 
