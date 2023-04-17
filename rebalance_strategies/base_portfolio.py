@@ -8,7 +8,31 @@ class BasePortfolio(ABC):
         # target_asset_allocation is just a placeholder, it should be implemented in the subclass
         self.target_asset_allocation = {}
 
-    def calculate_rebalance_suggestions(
+    def calculate_rebalancing_suggestions(self, categorized_positions, net_worth):
+        suggestions = []
+        for category, single_category_in_the_portfolio in categorized_positions.items():
+            target_sum_of_this_category = (
+                net_worth * self.target_asset_allocation[category]
+            )
+            investment_shift = (
+                single_category_in_the_portfolio["sum"] - target_sum_of_this_category
+            ) / net_worth
+            suggestions.append(
+                {
+                    "category": category,
+                    "target_sum_of_this_category": target_sum_of_this_category,
+                    "investment_shift_of_this_category": investment_shift,
+                    "sum_of_this_category_in_the_portfolio": single_category_in_the_portfolio[
+                        "sum"
+                    ],
+                    "suggestions_for_positions": self._calculate_suggestions_for_positions(
+                        category, single_category_in_the_portfolio, net_worth
+                    ),
+                }
+            )
+        return suggestions
+
+    def _calculate_suggestions_for_positions(
         self, category, single_category_in_the_portfolio, net_worth
     ):
         target_sum_of_this_category = net_worth * self.target_asset_allocation[category]
