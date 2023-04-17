@@ -10,7 +10,10 @@ from apr_utils.apr_pool_optimizer import (
 from handlers import get_data_source_handler
 from metrics.max_drawdown import calculate_max_drawdown
 from metrics.sharpe_ratio import calculate_portfolio_sharpe_ratio
-from rebalance_strategies import output_rebalancing_suggestions
+from rebalance_strategies import (
+    get_rebalancing_suggestions,
+    print_rebalancing_suggestions,
+)
 from utils.exchange_rate import get_exrate
 
 
@@ -37,8 +40,12 @@ def main(defi_portfolio_service_name: str, optimize_apr_mode: str, strategy_name
     categorized_positions = _merge_categorized_positions(
         evm_categorized_positions, no_evm_categorized_positions_array
     )
-
-    net_worth = output_rebalancing_suggestions(categorized_positions, strategy_name)
+    net_worth = _get_networth(categorized_positions)
+    suggestions = get_rebalancing_suggestions(
+        categorized_positions, strategy_name, net_worth
+    )
+    print_rebalancing_suggestions(suggestions, net_worth)
+    print(f"Current Net Worth: ${net_worth:.2f}")
     total_interest = calculate_interest(categorized_positions)
     print(f"Portfolio's APR: {100*total_interest/net_worth:.2f}%")
 
@@ -134,6 +141,10 @@ def _categorize_no_evm_categorized_positions_array(
         )
         no_evm_categorized_positions_array.append(no_evm_categorized_position)
     return no_evm_categorized_positions_array
+
+
+def _get_networth(categorized_positions: dict):
+    return sum(portfolio["sum"] for portfolio in categorized_positions.values())
 
 
 def _merge_categorized_positions(
