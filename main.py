@@ -64,6 +64,7 @@ def main(defi_portfolio_service_name: str, optimize_apr_mode: str, strategy_name
             categorized_positions, optimize_apr_mode
         )
         search_better_stable_coin_pools(categorized_positions)
+    dump_data_and_will_replace_it_with_api_down_the_road(suggestions)
 
 
 def load_raw_positions(data_format: str) -> list[dict]:
@@ -122,6 +123,14 @@ def calculate_interest(categorized_positions):
     for pool, interest in sorted(interest_rank_list.items(), key=lambda x: -x[1])[:5]:
         print(f"{pool}: ${interest/12:.2f}")
     return total_interest
+
+
+def dump_data_and_will_replace_it_with_api_down_the_road(suggestions):
+    """
+    this is a temporary solution, will be replaced with api down the road
+    """
+    with open("suggestions.json", "w") as f:
+        json.dump(suggestions, f)
 
 
 def _load_no_evm_posistions(data_sources: dict) -> list[dict]:
