@@ -13,15 +13,13 @@ MILLION = 10**6
 
 def search_better_stable_coin_pools(categorized_positions: dict):
     defillama = json.load(open("yield-llama.json", "r"))
-    defillama_APY_pool_id_to_apy_base = {
-        obj["pool"]: obj["apyBase"]
+    defillama_APY_pool_id_to_apy = {
+        obj["pool"]: obj["apy"]
         for obj in defillama["data"]
-        if obj["stablecoin"] is True and obj["apyBase"]
+        if obj["stablecoin"] is True
     }
-    max_base_apr = _get_max_base_apy(
-        categorized_positions, defillama_APY_pool_id_to_apy_base
-    )
-    topn = _get_topn_base_apr_pool(defillama, max_base_apr)
+    max_apy = _get_max_apy(categorized_positions, defillama_APY_pool_id_to_apy)
+    topn = _get_topn_apy_pool(defillama, max_apy)
     _show_topn(topn)
 
 
@@ -121,13 +119,11 @@ def _print_out_topn_candidate_pool(
         )
 
 
-def _get_max_base_apy(
-    categorized_positions: dict, defillama_APY_pool_id_to_apy_base: dict
-):
+def _get_max_apy(categorized_positions: dict, defillama_APY_pool_id_to_apy: dict):
     """
     think of cash as intermediate_term_bond, since stable usd coin is actually a bond issued by US government
     """
-    max_base_apr = 0
+    max_apy = 0
     for portfolio in categorized_positions["intermediate_term_bond"][
         "portfolio"
     ].values():
@@ -135,21 +131,20 @@ def _get_max_base_apy(
         if not defillama_APY_pool_id:
             continue
         if (
-            defillama_APY_pool_id in defillama_APY_pool_id_to_apy_base
-            and defillama_APY_pool_id_to_apy_base[defillama_APY_pool_id] > max_base_apr
+            defillama_APY_pool_id in defillama_APY_pool_id_to_apy
+            and defillama_APY_pool_id_to_apy[defillama_APY_pool_id] > max_apy
         ):
-            max_base_apr = defillama_APY_pool_id_to_apy_base[defillama_APY_pool_id]
-    return max_base_apr
+            max_apy = defillama_APY_pool_id_to_apy[defillama_APY_pool_id]
+    return max_apy
 
 
-def _get_topn_base_apr_pool(defillama: dict, max_base_apr: float):
+def _get_topn_apy_pool(defillama: dict, max_apy: float):
     topn = []
     for pool in defillama["data"]:
         if (
             pool["stablecoin"] is True
-            and pool["apyBase"] is not None
-            and pool["apyBase"] > max_base_apr
-            and pool["apyMean30d"] > max_base_apr
+            and pool["apy"] > max_apy
+            and pool["apyMean30d"] > max_apy
         ):
             topn.append(pool)
     return topn
@@ -160,7 +155,7 @@ def _show_topn(topn: list):
     print("Better stable coin:")
     print("Current Blacklist Chains: ", ", ".join(BLACKLIST_CHAINS))
     print("Current Blacklist Coins: ", ", ".join(BLACKLIST_COINS))
-    for pool in sorted(topn, key=lambda x: x["apyBase"], reverse=True):
+    for pool in sorted(topn, key=lambda x: x["apy"], reverse=True):
         if pool["tvlUsd"] < MILLION:
             continue
         if pool["chain"] in BLACKLIST_CHAINS:
@@ -169,7 +164,7 @@ def _show_topn(topn: list):
         if _check_if_symbol_has_blacklist_coins_substring(pool["symbol"]):
             continue
         print(
-            f"- Chain: {pool['chain']}, Pool: {pool['project']}, Coin: {pool['symbol']}, TVL: {pool['tvlUsd']/MILLION:.2f}M, Base APR: {convert_apy_to_apr(pool['apyBase']/100)*100:.2f}%"
+            f"- Chain: {pool['chain']}, Pool: {pool['project']}, Coin: {pool['symbol']}, TVL: {pool['tvlUsd']/MILLION:.2f}M, APR: {convert_apy_to_apr(pool['apy']/100)*100:.2f}%"
         )
 
 

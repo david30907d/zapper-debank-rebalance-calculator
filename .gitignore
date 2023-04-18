@@ -5,3 +5,4 @@ node_modules/
 .vscode/
 coingecko/*.json
 dashboard
+suggestions.json
