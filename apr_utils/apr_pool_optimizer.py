@@ -12,13 +12,9 @@ MILLION = 10**6
 
 
 def search_better_stable_coin_pools(categorized_positions: dict):
-    defillama = json.load(open("yield-llama.json", "r"))
-    defillama_APY_pool_id_to_apy = {
-        obj["pool"]: obj["apy"]
-        for obj in defillama["data"]
-        if obj["stablecoin"] is True
-    }
-    max_apy = _get_max_apy(categorized_positions, defillama_APY_pool_id_to_apy)
+    with open("yield-llama.json", "r") as f:
+        defillama = json.load(f)
+    max_apy = _get_max_apy(categorized_positions, defillama)
     topn = _get_topn_apy_pool(defillama, max_apy)
     _show_topn(topn)
 
@@ -119,10 +115,16 @@ def _print_out_topn_candidate_pool(
         )
 
 
-def _get_max_apy(categorized_positions: dict, defillama_APY_pool_id_to_apy: dict):
+def _get_max_apy(categorized_positions: dict, defillama: dict):
     """
+    # Code to calculate the maximum APY for stable coin pools
     think of cash as intermediate_term_bond, since stable usd coin is actually a bond issued by US government
     """
+    defillama_APY_pool_id_to_apy = {
+        obj["pool"]: obj["apy"]
+        for obj in defillama["data"]
+        if obj["stablecoin"] is True
+    }
     max_apy = 0
     for portfolio in categorized_positions["intermediate_term_bond"][
         "portfolio"
@@ -139,6 +141,7 @@ def _get_max_apy(categorized_positions: dict, defillama_APY_pool_id_to_apy: dict
 
 
 def _get_topn_apy_pool(defillama: dict, max_apy: float):
+    # Code to retrieve top N pools with APYs greater than or equal to max_apy
     topn = []
     for pool in defillama["data"]:
         if (
@@ -151,6 +154,7 @@ def _get_topn_apy_pool(defillama: dict, max_apy: float):
 
 
 def _show_topn(topn: list):
+    # Code to display top N pools
     print("====================")
     print("Better stable coin:")
     print("Current Blacklist Chains: ", ", ".join(BLACKLIST_CHAINS))
