@@ -23,12 +23,8 @@ def print_rebalancing_suggestions(suggestions: list[tuple], net_worth: float):
         for position_obj in suggestion_obj["suggestions_for_positions"]:
             symbol = position_obj["symbol"]
             balanceUSD = position_obj["balanceUSD"]
-            diffrence = position_obj["diffrence"]
-            sum_of_this_category_in_the_portfolio = suggestion_obj[
-                "sum_of_this_category_in_the_portfolio"
-            ]
             print(
-                f"Suggestion: modify this amount of USD: {diffrence * balanceUSD / sum_of_this_category_in_the_portfolio:.2f} for position {symbol}, current worth: {balanceUSD:.2f}, percentage: {balanceUSD/net_worth:.2f}"
+                f"Suggestion: modify this amount of USD: {position_obj['diffrence']:.2f} for position {symbol}, current worth: {balanceUSD:.2f}, percentage: {balanceUSD/net_worth:.2f}"
             )
         print("====================")
 

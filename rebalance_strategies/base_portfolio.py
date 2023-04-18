@@ -51,7 +51,9 @@ class BasePortfolio(ABC):
                 {
                     "symbol": symbol,
                     "balanceUSD": balanceUSD,
-                    "diffrence": diffrence,
+                    "diffrence": diffrence
+                    * balanceUSD
+                    / single_category_in_the_portfolio["sum"],
                 }
             )
         return result
