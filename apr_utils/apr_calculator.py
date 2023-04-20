@@ -3,23 +3,24 @@ import random
 
 import requests
 
-from apr_utils.utils import convert_apy_to_apr, get_metadata_by_symbol
+from apr_utils.utils import convert_apy_to_apr, get_metadata_by_project_symbol
 from portfolio_config import (
     DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL,
     LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR,
 )
 
 
-def get_lowest_or_default_apr(symbol, provider="defillama"):
+def get_lowest_or_default_apr(
+    project_symbol: str, defillama_pool_uuid: str, provider="defillama"
+):
     if provider == "defillama":
-        defillama_pool_uuid = get_metadata_by_symbol(symbol).get(
-            "defillama-APY-pool-id", None
-        )
         if not defillama_pool_uuid:
-            default_apr = _get_default_apr(symbol)
+            default_apr = _get_default_apr(project_symbol)
             if default_apr:
                 return default_apr
-            raise Exception(f"{symbol}'s APR is 0, are you sure you want to continue?")
+            raise Exception(
+                f"{project_symbol}'s APR is 0, are you sure you want to continue?"
+            )
         try:
             res_json = json.load(open("yield-llama.json", "r"))
         except FileNotFoundError:
@@ -45,8 +46,8 @@ def _get_data_from_defillama():
     return res_json
 
 
-def _get_default_apr(symbol: str):
-    return get_metadata_by_symbol(symbol).get("DEFAULT_APR", 0)
+def _get_default_apr(project_symbol: str):
+    return get_metadata_by_project_symbol(project_symbol).get("DEFAULT_APR", 0)
 
 
 def get_lowest_apy(pool_metadata):

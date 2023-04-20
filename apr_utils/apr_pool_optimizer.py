@@ -27,20 +27,22 @@ def search_top_n_pool_consist_of_same_lp_token(
     search_handler = _get_search_handler(
         optimize_apr_mode=optimize_apr_mode, searching_algorithm="jaccard_similarity"
     )
-    symbol_set = set()
+    project_symbol_set = set()
     pool_ids_of_current_portfolio = set(
         metadata["metadata"].get("defillama-APY-pool-id")
         for portfolio in categorized_positions.values()
         for metadata in portfolio["portfolio"].values()
     )
     for portfolio in categorized_positions.values():
-        for symbol, metadata in portfolio["portfolio"].items():
-            if symbol in symbol_set:
+        for project_symbol, metadata in portfolio["portfolio"].items():
+            if project_symbol in project_symbol_set:
                 # since each token might have several properties, it might exists in different portfolio
                 # but we only need to search once
                 continue
-            symbol_set.add(symbol)
-            apr = get_lowest_or_default_apr(symbol)
+            project_symbol_set.add(project_symbol)
+            apr = get_lowest_or_default_apr(
+                project_symbol, metadata["metadata"].get("defillama-APY-pool-id")
+            )
             top_n = _get_topn_candidate_pool(
                 apr,
                 metadata,
@@ -48,7 +50,7 @@ def search_top_n_pool_consist_of_same_lp_token(
                 search_handler,
                 pool_ids_of_current_portfolio,
             )
-            _print_out_topn_candidate_pool(symbol, top_n, apr)
+            _print_out_topn_candidate_pool(project_symbol, top_n, apr)
     print("\n")
     return top_n
 
@@ -111,7 +113,7 @@ def _print_out_topn_candidate_pool(
     )[:n]:
         metadata = metadata_with_similarity["pool_metadata"]
         print(
-            f" - Chain: {metadata['chain']}, Protocol: {metadata['project']+'-'+metadata['poolMeta'] if metadata['poolMeta'] else metadata['project']}, Token: {metadata['symbol']}, lowest or default APR: {convert_apy_to_apr(get_lowest_apy(metadata)):.2f}"
+            f" - Chain: {metadata['chain']}, Protocol: {metadata['project']+':'+metadata['poolMeta'] if metadata['poolMeta'] else metadata['project']}, Token: {metadata['symbol']}, lowest or default APR: {convert_apy_to_apr(get_lowest_apy(metadata)):.2f}"
         )
 
 

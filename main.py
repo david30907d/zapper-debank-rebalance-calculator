@@ -111,9 +111,11 @@ def calculate_interest(categorized_positions):
     interest_rank_list = defaultdict(float)
     total_interest = 0
     for portfolio in categorized_positions.values():
-        for symbol, position_obj in portfolio["portfolio"].items():
-            apr = get_lowest_or_default_apr(symbol)
-            interest_rank_list[symbol] += position_obj["worth"] * apr
+        for project_symbol, position_obj in portfolio["portfolio"].items():
+            apr = get_lowest_or_default_apr(
+                project_symbol, position_obj["metadata"].get("defillama-APY-pool-id")
+            )
+            interest_rank_list[project_symbol] += position_obj["worth"] * apr
             total_interest += position_obj["worth"] * apr
     exrate = get_exrate("USDTWD")
     print(

@@ -2,6 +2,7 @@ def place_value_into_categorized_portfolio_dict(
     categories: list,
     net_usd_valud: float,
     length_of_categories: int,
+    project: str,
     symbol: str,
     apr: float,
     metadata: dict,
@@ -13,10 +14,14 @@ def place_value_into_categorized_portfolio_dict(
             net_usd_valud, category, metadata, length_of_categories
         )
         # weighted_balanceUSD = net_usd_valud / length_of_categories
-        result[category]["portfolio"][symbol]["worth"] += weighted_balanceUSD
-        result[category]["portfolio"][symbol]["APR"] = apr
-        result[category]["portfolio"][symbol]["metadata"] = metadata
-        result[category]["portfolio"][symbol]["tokens_metadata"] = tokens_metadata
+        result[category]["portfolio"][f"{project}:{symbol}"][
+            "worth"
+        ] += weighted_balanceUSD
+        result[category]["portfolio"][f"{project}:{symbol}"]["APR"] = apr
+        result[category]["portfolio"][f"{project}:{symbol}"]["metadata"] = metadata
+        result[category]["portfolio"][f"{project}:{symbol}"][
+            "tokens_metadata"
+        ] = tokens_metadata
         result[category]["sum"] += weighted_balanceUSD
     return result
 

@@ -1,5 +1,5 @@
 from apr_utils.apr_calculator import get_lowest_or_default_apr
-from apr_utils.utils import get_metadata_by_symbol
+from apr_utils.utils import get_metadata_by_project_symbol
 from handlers.utils import place_value_into_categorized_portfolio_dict
 from portfolio_config import ADDRESS_2_CATEGORY, MIN_REBALANCE_POSITION_THRESHOLD
 
@@ -19,16 +19,22 @@ def _nansen_farm_handler(positions, result):
         if net_usd_value < MIN_REBALANCE_POSITION_THRESHOLD:
             continue
         categories = ADDRESS_2_CATEGORY[addr]["categories"]
+        project = ADDRESS_2_CATEGORY[addr]["project"].lower()
         symbol = ADDRESS_2_CATEGORY[addr]["symbol"].lower()
+        project_symbol = f"{project}:{symbol}"
+        defillama_pool_uuid = ADDRESS_2_CATEGORY.get(addr, {}).get(
+            "defillama-APY-pool-id", ""
+        )
 
         length_of_categories = len(categories)
-        apr = get_lowest_or_default_apr(symbol)
-        metadata = get_metadata_by_symbol(symbol)
+        apr = get_lowest_or_default_apr(project_symbol, defillama_pool_uuid)
+        metadata = get_metadata_by_project_symbol(project_symbol)
         tokens_metadata = _get_token_metadata(farm)
         result = place_value_into_categorized_portfolio_dict(
             categories,
             net_usd_value,
             length_of_categories,
+            project,
             symbol,
             apr,
             metadata,
@@ -43,16 +49,22 @@ def _nansen_stake_handler(positions, result):
         addr = _get_correct_addr(farm, address_column="rewards")
         net_usd_value = _calculate_net_usd_valud(farm)
         categories = ADDRESS_2_CATEGORY[addr]["categories"]
+        project = ADDRESS_2_CATEGORY[addr]["project"].lower()
         symbol = ADDRESS_2_CATEGORY[addr]["symbol"].lower()
+        project_symbol = f"{project}:{symbol}"
+        defillama_pool_uuid = ADDRESS_2_CATEGORY.get(addr, {}).get(
+            "defillama-APY-pool-id", ""
+        )
 
         length_of_categories = len(categories)
-        apr = get_lowest_or_default_apr(symbol)
-        metadata = get_metadata_by_symbol(symbol)
+        apr = get_lowest_or_default_apr(project_symbol, defillama_pool_uuid)
+        metadata = get_metadata_by_project_symbol(project_symbol)
         tokens_metadata = _get_token_metadata(farm)
         result = place_value_into_categorized_portfolio_dict(
             categories,
             net_usd_value,
             length_of_categories,
+            project,
             symbol,
             apr,
             metadata,
