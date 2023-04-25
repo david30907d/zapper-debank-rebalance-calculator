@@ -6,3 +6,6 @@ node_modules/
 coingecko/*.json
 dashboard
 suggestions.json
+.env
+__pycache__
+all_complex.json

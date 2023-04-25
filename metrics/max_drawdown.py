@@ -1,7 +1,7 @@
 import pandas as pd
 
-from metrics.historical_price_reader import get_historical_price_reader
-from metrics.lp_token import calculate_historical_price_of_lp_token
+from rebalance_server.metrics.historical_price_reader import get_historical_price_reader
+from rebalance_server.metrics.lp_token import calculate_historical_price_of_lp_token
 
 
 def calculate_max_drawdown(categorized_positions_with_token_balance: dict):

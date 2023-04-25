@@ -1,4 +1,4 @@
-from portfolio_config import ADDRESS_2_CATEGORY
+from rebalance_server.portfolio_config import ADDRESS_2_CATEGORY
 
 
 def get_metadata_by_project_symbol(project_symbol: str) -> dict:

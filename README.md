@@ -103,3 +103,9 @@ Better stable coin:
 - Chain: Ethereum, Pool: sturdy, Coin: USDC, TVL: 6.66M, Base APY: 10.82%,%
 - Chain: Avalanche, Pool: deltaprime, Coin: USDC, TVL: 6.57M, Base APY: 10.69%,%
 ```
+
+## APIs
+
+1. Prerequisite API: `curl -X GET "https://pro-openapi.debank.com/v1/user/all_complex_protocol_list?id=YOUR_WALLET_ADDRESS" \
+    -H "accept: application/json" -H 'AccessKey: YOUR_KEY'`
+2. Get the rebalance suggestions: `http://127.0.0.1:5000/`

@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
 
-from metrics.historical_price_reader import get_historical_price_reader
-from metrics.lp_token import calculate_daily_return_per_lp_token
-from metrics.utils import DAY_TIMEDELTA
+from rebalance_server.metrics.historical_price_reader import get_historical_price_reader
+from rebalance_server.metrics.lp_token import calculate_daily_return_per_lp_token
+from rebalance_server.metrics.utils import DAY_TIMEDELTA
 
 
 def calculate_portfolio_sharpe_ratio(

@@ -1,6 +1,6 @@
-from handlers.debank_handler import debank_handler
-from handlers.nansen_handler import nansen_handler
-from handlers.zapper_handler import zapper_handler
+from rebalance_server.handlers.debank_handler import debank_handler
+from rebalance_server.handlers.nansen_handler import nansen_handler
+from rebalance_server.handlers.zapper_handler import zapper_handler
 
 
 def get_data_source_handler(defi_portfolio_service_name) -> callable:

@@ -1,4 +1,4 @@
-from search_handlers import SearchBase
+from rebalance_server.search_handlers import SearchBase
 
 
 class JaccardSimilarityHandler(SearchBase):

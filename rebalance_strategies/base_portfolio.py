@@ -1,6 +1,6 @@
 from abc import ABC
 
-from utils.position import skip_rebalance_if_position_too_small
+from rebalance_server.utils.position import skip_rebalance_if_position_too_small
 
 
 class BasePortfolio(ABC):

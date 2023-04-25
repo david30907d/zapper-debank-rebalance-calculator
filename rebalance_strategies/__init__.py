@@ -1,5 +1,7 @@
-from rebalance_strategies.all_weather_portfolio import AllWeatherPortfolio
-from rebalance_strategies.permanent_portfolio import PermanentPortfolio
+from rebalance_server.rebalance_strategies.all_weather_portfolio import (
+    AllWeatherPortfolio,
+)
+from rebalance_server.rebalance_strategies.permanent_portfolio import PermanentPortfolio
 
 
 def get_rebalancing_suggestions(

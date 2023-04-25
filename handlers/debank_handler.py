@@ -1,7 +1,10 @@
-from apr_utils.apr_calculator import get_lowest_or_default_apr
-from apr_utils.utils import get_metadata_by_project_symbol
-from handlers.utils import place_value_into_categorized_portfolio_dict
-from portfolio_config import ADDRESS_2_CATEGORY, MIN_REBALANCE_POSITION_THRESHOLD
+from rebalance_server.apr_utils.apr_calculator import get_lowest_or_default_apr
+from rebalance_server.apr_utils.utils import get_metadata_by_project_symbol
+from rebalance_server.handlers.utils import place_value_into_categorized_portfolio_dict
+from rebalance_server.portfolio_config import (
+    ADDRESS_2_CATEGORY,
+    MIN_REBALANCE_POSITION_THRESHOLD,
+)
 
 
 def debank_handler(positions, result):

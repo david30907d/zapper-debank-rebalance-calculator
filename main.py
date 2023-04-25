@@ -1,26 +1,31 @@
 import json
+import os
 from collections import defaultdict
 
-from adapters.networth_to_balance_adapter import get_networh_to_balance_adapter
-from apr_utils.apr_calculator import get_lowest_or_default_apr
-from apr_utils.apr_pool_optimizer import (
+import requests
+
+from rebalance_server.adapters.networth_to_balance_adapter import (
+    get_networh_to_balance_adapter,
+)
+from rebalance_server.apr_utils.apr_calculator import get_lowest_or_default_apr
+from rebalance_server.apr_utils.apr_pool_optimizer import (
     search_better_stable_coin_pools,
     search_top_n_pool_consist_of_same_lp_token,
 )
-from handlers import get_data_source_handler
-from metrics.max_drawdown import calculate_max_drawdown
-from metrics.sharpe_ratio import calculate_portfolio_sharpe_ratio
-from rebalance_strategies import (
+from rebalance_server.handlers import get_data_source_handler
+from rebalance_server.metrics.max_drawdown import calculate_max_drawdown
+from rebalance_server.metrics.sharpe_ratio import calculate_portfolio_sharpe_ratio
+from rebalance_server.rebalance_strategies import (
     get_rebalancing_suggestions,
     print_rebalancing_suggestions,
 )
-from utils.exchange_rate import get_exrate
+from rebalance_server.utils.exchange_rate import get_exrate
 
 
 def main(defi_portfolio_service_name: str, optimize_apr_mode: str, strategy_name: str):
-    positions = load_raw_positions(defi_portfolio_service_name)
+    evm_positions = load_evm_raw_positions(defi_portfolio_service_name)
     evm_categorized_positions = categorize_positions(
-        defi_portfolio_service_name, positions
+        defi_portfolio_service_name, evm_positions
     )
     # CEX & cosmos posistions
     # 1. Binance
@@ -64,11 +69,24 @@ def main(defi_portfolio_service_name: str, optimize_apr_mode: str, strategy_name
             categorized_positions, optimize_apr_mode
         )
         search_better_stable_coin_pools(categorized_positions)
-    dump_data_and_will_replace_it_with_api_down_the_road(suggestions)
+    return suggestions
 
 
-def load_raw_positions(data_format: str) -> list[dict]:
-    return json.load(open(f"./dashboard/{data_format}.json"))
+def load_raw_positions(data_format: str) -> dict:
+    return json.load(open(f"./rebalance_server/dashboard/{data_format}.json"))
+
+
+def load_evm_raw_positions(data_format: str, addresses: list[str]) -> dict:
+    if os.getenv("DEBUG"):
+        return json.load(open(f"./rebalance_server/dashboard/{data_format}.json"))
+    merged_data = []
+    for address in addresses:
+        data = requests.get(
+            f"https://pro-openapi.debank.com/v1/user/all_complex_protocol_list?id={address}",
+            headers={"AccessKey": os.getenv("ACCESSKEY")},
+        ).json()
+        merged_data += data
+    return {"data": {"result": {"data": merged_data}}}
 
 
 def categorize_positions(defi_portfolio_service_name, positions) -> dict:
@@ -125,14 +143,6 @@ def calculate_interest(categorized_positions):
     for pool, interest in sorted(interest_rank_list.items(), key=lambda x: -x[1])[:5]:
         print(f"{pool}: ${interest/12:.2f}")
     return total_interest
-
-
-def dump_data_and_will_replace_it_with_api_down_the_road(suggestions):
-    """
-    this is a temporary solution, will be replaced with api down the road
-    """
-    with open("suggestions.json", "w") as f:
-        json.dump(suggestions, f)
 
 
 def _load_no_evm_posistions(data_sources: dict) -> list[dict]:

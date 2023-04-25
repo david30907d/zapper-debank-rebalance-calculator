@@ -3,8 +3,11 @@ import random
 
 import requests
 
-from apr_utils.utils import convert_apy_to_apr, get_metadata_by_project_symbol
-from portfolio_config import (
+from rebalance_server.apr_utils.utils import (
+    convert_apy_to_apr,
+    get_metadata_by_project_symbol,
+)
+from rebalance_server.portfolio_config import (
     DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL,
     LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR,
 )

@@ -1,12 +1,17 @@
 import json
 
-from apr_utils.apr_calculator import get_lowest_apy, get_lowest_or_default_apr
-from apr_utils.utils import convert_apy_to_apr
-from portfolio_config import BLACKLIST_CHAINS, BLACKLIST_COINS
-from search_handlers import SearchBase
-from search_handlers.jaccard_similarity_handler import JaccardSimilarityHandler
-from search_handlers.ngram_handler import NgramSimilarityHandler
-from utils.position import skip_rebalance_if_position_too_small
+from rebalance_server.apr_utils.apr_calculator import (
+    get_lowest_apy,
+    get_lowest_or_default_apr,
+)
+from rebalance_server.apr_utils.utils import convert_apy_to_apr
+from rebalance_server.portfolio_config import BLACKLIST_CHAINS, BLACKLIST_COINS
+from rebalance_server.search_handlers import SearchBase
+from rebalance_server.search_handlers.jaccard_similarity_handler import (
+    JaccardSimilarityHandler,
+)
+from rebalance_server.search_handlers.ngram_handler import NgramSimilarityHandler
+from rebalance_server.utils.position import skip_rebalance_if_position_too_small
 
 MILLION = 10**6
 

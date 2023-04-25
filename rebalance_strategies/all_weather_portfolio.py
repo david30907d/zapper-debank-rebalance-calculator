@@ -1,4 +1,4 @@
-from rebalance_strategies.base_portfolio import BasePortfolio
+from rebalance_server.rebalance_strategies.base_portfolio import BasePortfolio
 
 
 class AllWeatherPortfolio(BasePortfolio):
