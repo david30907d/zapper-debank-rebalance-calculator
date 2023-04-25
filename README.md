@@ -1,6 +1,8 @@
 
 ## Run
 
+1. as API server: `flask --app rebalance_server run` (making sure you're current location is at its parent folder)
+2. standalone script:
 `python main.py -h`
 `python main.py -d <zapper/debank> -op <new_pool/new_combination>`
 

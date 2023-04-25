@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 from rebalance_server.main import main
 
@@ -11,5 +11,8 @@ def get_suggestions():
         defi_portfolio_service_name="debank",
         optimize_apr_mode="new_pool",
         strategy_name="all_weather_portfolio",
+        addresses=request.args.get("addresses").split(),
     )
-    return jsonify(response)
+    resp = jsonify(response)
+    resp.headers.add("Access-Control-Allow-Origin", "*")
+    return resp

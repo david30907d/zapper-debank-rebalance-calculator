@@ -1,8 +1,10 @@
 import json
 import os
 from collections import defaultdict
+from pathlib import Path
 
 import requests
+from dotenv import load_dotenv
 
 from rebalance_server.adapters.networth_to_balance_adapter import (
     get_networh_to_balance_adapter,
@@ -21,9 +23,17 @@ from rebalance_server.rebalance_strategies import (
 )
 from rebalance_server.utils.exchange_rate import get_exrate
 
+dotenv_path = Path("./rebalance_server/.env")
+load_dotenv(dotenv_path=dotenv_path)
 
-def main(defi_portfolio_service_name: str, optimize_apr_mode: str, strategy_name: str):
-    evm_positions = load_evm_raw_positions(defi_portfolio_service_name)
+
+def main(
+    defi_portfolio_service_name: str,
+    optimize_apr_mode: str,
+    strategy_name: str,
+    addresses: list[str],
+):
+    evm_positions = load_evm_raw_positions(defi_portfolio_service_name, addresses)
     evm_categorized_positions = categorize_positions(
         defi_portfolio_service_name, evm_positions
     )
@@ -77,7 +87,7 @@ def load_raw_positions(data_format: str) -> dict:
 
 
 def load_evm_raw_positions(data_format: str, addresses: list[str]) -> dict:
-    if os.getenv("DEBUG"):
+    if os.getenv("DEBUG", "").lower() == "true":
         return json.load(open(f"./rebalance_server/dashboard/{data_format}.json"))
     merged_data = []
     for address in addresses:
