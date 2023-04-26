@@ -110,4 +110,4 @@ Better stable coin:
 
 1. Prerequisite API: `curl -X GET "https://pro-openapi.debank.com/v1/user/all_complex_protocol_list?id=YOUR_WALLET_ADDRESS" \
     -H "accept: application/json" -H 'AccessKey: YOUR_KEY'`
-2. Get the rebalance suggestions: `http://127.0.0.1:5000/`
+2. Get the rebalance suggestions: `http://127.0.0.1:5000/?addresses=0xe4bAc3e44E8080e1491C11119197D33E396EA82B+0x43cd745Bd5FbFc8CfD79ebC855f949abc79a1E0C+0x43cd745Bd5FbFc8CfD79ebC855f949abc79a1E0C`
