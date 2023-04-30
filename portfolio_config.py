@@ -1,7 +1,7 @@
 MIN_REBALANCE_POSITION_THRESHOLD = 500
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
-BLACKLIST_COINS = {"USDC", "FRAX", "USDT", "MAI", "DOLA", "MIM"}
+BLACKLIST_COINS = {"MAI", "DOLA", "MIM", "USDR", "USD+", "LVUSD", "DEI"}
 DEBANK_ADDRESS = {
     "0x76ba3ec5f5adbf1c58c91e86502232317eea72de": {
         "categories": ["large_cap_us_stocks", "long_term_bond"],
@@ -64,14 +64,6 @@ DEBANK_ADDRESS = {
             "frax": 0.02,
         },
         "project": "gmx",
-    },
-    "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3": {
-        "categories": ["gold", "long_term_bond", "intermediate_term_bond"],
-        "symbol": "WETH-USDT",
-        "defillama-APY-pool-id": "abe3c385-bde7-4350-9f35-2f574ad592d6",
-        "tags": ["usdt", "eth"],
-        "composition": {"eth": 0.5, "usdt": 0.5},
-        "project": "sushiswap",
     },
     "0xbdec4a045446f583dc564c0a227ffd475b329bf0": {
         "categories": ["gold", "long_term_bond", "intermediate_term_bond"],
@@ -269,13 +261,13 @@ DEBANK_ADDRESS = {
         "composition": {"eth": 0.36, "usdc": 0.64},
         "project": "gains-network",
     },
-    "0xb52781c275431bd48d290a4318e338fe0df89eb9": {
+    "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3": {
         "categories": ["small_cap_us_stocks", "long_term_bond"],
         "symbol": "DPX-WETH",
-        "defillama-APY-pool-id": "ce53d880-7ebf-40c5-9d97-e4c0fa0bc127",
+        "defillama-APY-pool-id": "97cb382d-8dc4-4e17-b0f6-b6b51994dbeb",
         "tags": ["dpx", "eth"],
         "composition": {"eth": 0.5, "dpx": 0.5},
-        "project": "uniswap-v3",
+        "project": "sushiswap",
     },
     "0x72a19342e8f1838460ebfccef09f6585e32db86e": {
         "categories": ["small_cap_us_stocks", "commodities"],
