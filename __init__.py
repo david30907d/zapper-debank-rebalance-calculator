@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_caching import Cache
+from flask_cors import CORS
 
 from rebalance_server.main import main
 
@@ -12,9 +13,10 @@ app = Flask(__name__)
 # tell Flask to use the above defined config
 app.config.from_mapping(config)
 cache = Cache(app)
+CORS(app, resources={r"*": {"origins": "*", "methods": ["GET", "POST", "OPTIONS"]}})
 
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 @cache.cached(timeout=300)
 def get_suggestions():
     response = main(
@@ -24,5 +26,4 @@ def get_suggestions():
         addresses=request.args.get("addresses").split(),
     )
     resp = jsonify(response)
-    resp.headers.add("Access-Control-Allow-Origin", "*")
     return resp
