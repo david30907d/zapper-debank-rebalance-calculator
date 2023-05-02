@@ -115,7 +115,7 @@ DEBANK_ADDRESS = {
     },
     "0x4fd9f7c5ca0829a656561486bada018505dfcb5e": {
         "categories": ["large_cap_us_stocks", "commodities"],
-        "symbol": "RDNT-ETH",
+        "symbol": "RDNT-BNB",
         "defillama-APY-pool-id": "118281c6-3a4a-4324-b804-5664617df77d",
         "tags": ["rdnt", "bnb"],
         "composition": {"bnb": 0.5, "rdnt": 0.5},
@@ -245,10 +245,11 @@ DEBANK_ADDRESS = {
         "composition": {"eth": 0.36, "usdc": 0.64},
         "project": "pendle",
     },
-    "0xfb8f489df4e04609f4f4e54f586f960818b70041": {
+    "0x2ec8c498ec997ad963969a2c93bf7150a1f5b213": {
         "categories": ["long_term_bond"],
-        "symbol": "SFRXETH",
-        "defillama-APY-pool-id": "2811f0f5-18cf-4b72-a9d4-55c2c7ed577c",
+        "symbol": "RETH-WETH",
+        # "defillama-APY-pool-id": "2811f0f5-18cf-4b72-a9d4-55c2c7ed577c",
+        "DEFAULT_APR": 0.209,
         "tags": ["eth"],
         "composition": {"eth": 1},
         "project": "pendle",
@@ -359,6 +360,17 @@ NANSEN_ADDRESS = {
             "atom": 1,
         },
     },
+    "0x371d33963fb89ec9542a11ccf955b3a90391f99f": {
+        "categories": ["non_us_developed_market_stocks", "long_term_bond"],
+        "project": "Equilibre",
+        "symbol": "KAVA-WETH",
+        "DEFAULT_APR": 0.1,
+        "tags": ["kava", "eth"],
+        "composition": {
+            "kava": 0.5,
+            "eth": 0.5,
+        },
+    },
 }
 
 ADDRESS_2_CATEGORY = {
@@ -422,6 +434,7 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "PT-gDAI-28MAR2024": "dai",
     "frxETH": "frax-ether",
     "PT-sfrxETH-26DEC2024": "frax-ether",
+    "PT-rETH-WETH_BalancerLP Aura-26DEC2024": "rocket-pool-eth",
 }
 
 LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {
