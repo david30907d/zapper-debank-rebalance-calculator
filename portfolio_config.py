@@ -294,6 +294,14 @@ DEBANK_ADDRESS = {
         "composition": {"ohm": 0.5, "frax": 0.25, "usdc": 0.25},
         "project": "yearn-finance",
     },
+    "0x34101fe647ba02238256b5c5a58aeaa2e532a049": {
+        "categories": ["intermediate_term_bond"],
+        "symbol": "USDT",
+        "defillama-APY-pool-id": "30d03a2d-f857-472d-91e7-d10d6264765c",
+        "tags": ["usdt"],
+        "composition": {"usdt": 1},
+        "project": "gmd-protocol",
+    },
 }
 
 # going to deprecate
@@ -435,6 +443,8 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "frxETH": "frax-ether",
     "PT-sfrxETH-26DEC2024": "frax-ether",
     "PT-rETH-WETH_BalancerLP Aura-26DEC2024": "rocket-pool-eth",
+    "BTCB": "bitcoin",
+    "BUSD": "binance-usd",
 }
 
 LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {
