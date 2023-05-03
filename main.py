@@ -62,14 +62,18 @@ def main(
     print_rebalancing_suggestions(suggestions, net_worth)
     print(f"Current Net Worth: ${net_worth:.2f}")
     total_interest = calculate_interest(categorized_positions)
-    print(f"Portfolio's APR: {100*total_interest/net_worth:.2f}%")
+    portfolio_apr = 100 * total_interest / net_worth
+    print(f"Portfolio's APR: {portfolio_apr:.2f}%")
 
     adapter = get_networh_to_balance_adapter(adapter="coingecko")
     categorized_positions_with_token_balance = adapter(categorized_positions)
 
     # since some alpha tokens only have few data points, making the data very less. In other words, sharpe ratio is not reliable at this point until those alpha tokens has a few years worth of data
+    sharpe_ratio = calculate_portfolio_sharpe_ratio(
+        categorized_positions_with_token_balance
+    )
     print(
-        f"Portfolio's Sharpe Ratio (Useless until we have enough data points): {calculate_portfolio_sharpe_ratio(categorized_positions_with_token_balance):.2f}"
+        f"Portfolio's Sharpe Ratio (Useless until we have enough data points): {sharpe_ratio:.2f}"
     )
     print(
         f"Portfolio's Max Drawdown: {calculate_max_drawdown(categorized_positions_with_token_balance):.2f}"
@@ -79,7 +83,12 @@ def main(
             categorized_positions, optimize_apr_mode
         )
         search_better_stable_coin_pools(categorized_positions)
-    return suggestions
+    return {
+        "suggestions": suggestions,
+        "total_interest": total_interest,
+        "portfolio_apr": portfolio_apr,
+        "sharpe_ratio": sharpe_ratio,
+    }
 
 
 def load_raw_positions(data_format: str) -> dict:

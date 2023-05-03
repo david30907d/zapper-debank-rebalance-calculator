@@ -1,7 +1,7 @@
 MIN_REBALANCE_POSITION_THRESHOLD = 500
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
-BLACKLIST_COINS = {"MAI", "DOLA", "MIM", "USDR", "USD+", "LVUSD", "DEI"}
+BLACKLIST_COINS = {"MAI", "DOLA", "MIM", "USDR", "USD+", "LVUSD", "DEI", "MSUSD"}
 DEBANK_ADDRESS = {
     "0x76ba3ec5f5adbf1c58c91e86502232317eea72de": {
         "categories": ["large_cap_us_stocks", "long_term_bond"],
@@ -199,19 +199,12 @@ DEBANK_ADDRESS = {
         "composition": {"eth": 0.5, "matic": 0.5},
         "project": "gamma",
     },
-    "0xdfaab828f5f515e104baaba4d8d554da9096f0e4": {
+    # "0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4": {
+    "0xacf5a67f2fcfeda3946ccb1ad9d16d2eb65c3c96": {
         "categories": ["long_term_bond", "intermediate_term_bond"],
-        "project": "Mute.Switch",
-        "symbol": "Mute.Switch-USDC-ETH",
-        "DEFAULT_APR": 0.4,
-        "tags": ["usdc", "eth"],
-        "composition": {"eth": 0.5, "usdc": 0.5},
-    },
-    "0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4": {
-        "categories": ["long_term_bond", "intermediate_term_bond"],
-        "project": "Mute.Switch",
-        "symbol": "Mute.Switch-USDC-ETH",
-        "DEFAULT_APR": 0.001,
+        "project": "SpaceFi",
+        "symbol": "USDC-ETH",
+        "DEFAULT_APR": 0.31,
         "tags": ["usdc", "eth"],
         "composition": {"eth": 0.5, "usdc": 0.5},
     },
@@ -318,7 +311,7 @@ BINANCE_ADDRESS = {
         "categories": ["commodities"],
         "project": "binance",
         "symbol": "FIL-stake",
-        "DEFAULT_APR": 0.05,
+        "DEFAULT_APR": 0.13,
         "tags": ["fil"],
         "composition": {
             "fil": 1,
