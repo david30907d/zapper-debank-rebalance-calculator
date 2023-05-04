@@ -8,7 +8,7 @@ from rebalance_server.apr_utils.utils import convert_apy_to_apr
 from rebalance_server.portfolio_config import (
     BLACKLIST_CHAINS,
     BLACKLIST_CHAINS_FOR_STABLE_COIN,
-    BLACKLIST_STABLE_COINS,
+    STABLE_COIN_WHITELIST,
 )
 from rebalance_server.search_handlers import SearchBase
 from rebalance_server.search_handlers.jaccard_similarity_handler import (
@@ -25,7 +25,16 @@ def search_better_stable_coin_pools(categorized_positions: dict):
         defillama = json.load(f)
     max_apy = _get_max_apy(categorized_positions, defillama)
     topn = _get_topn_apy_pool(defillama, max_apy)
-    _show_topn(topn)
+    top_n_stable_coins = []
+    for pool in sorted(topn, key=lambda x: x["apy"], reverse=True):
+        if pool["tvlUsd"] < MILLION / 10:
+            continue
+        if pool["chain"] in BLACKLIST_CHAINS_FOR_STABLE_COIN:
+            continue
+        if not _check_if_symbol_consists_of_whitelist_coins(pool["symbol"]):
+            continue
+        top_n_stable_coins.append(pool)
+    return top_n_stable_coins
 
 
 def search_top_n_pool_consist_of_same_lp_token(
@@ -42,6 +51,7 @@ def search_top_n_pool_consist_of_same_lp_token(
         for portfolio in categorized_positions.values()
         for metadata in portfolio["portfolio"].values()
     )
+    top_n_list = []
     for portfolio in categorized_positions.values():
         for project_symbol, metadata in portfolio["portfolio"].items():
             if project_symbol in project_symbol_set:
@@ -59,9 +69,8 @@ def search_top_n_pool_consist_of_same_lp_token(
                 search_handler,
                 pool_ids_of_current_portfolio,
             )
-            _print_out_topn_candidate_pool(project_symbol, top_n, apr)
-    print("\n")
-    return top_n
+            top_n_list.append((project_symbol, top_n, apr))
+    return top_n_list
 
 
 def _get_search_handler(optimize_apr_mode: str, searching_algorithm: str):
@@ -105,7 +114,7 @@ def _get_topn_candidate_pool(
     return top_n
 
 
-def _print_out_topn_candidate_pool(
+def print_out_topn_candidate_pool(
     symbol: str, top_n: list, current_apr: float, n: int = 5
 ):
     if not top_n:
@@ -164,27 +173,20 @@ def _get_topn_apy_pool(defillama: dict, max_apy: float):
     return topn
 
 
-def _show_topn(topn: list):
+def show_topn_stable_coins(topn: list):
     # Code to display top N pools
     print("====================")
     print("Better stable coin:")
     print("Current Blacklist Chains: ", ", ".join(BLACKLIST_CHAINS_FOR_STABLE_COIN))
-    print("Current Blacklist Coins: ", ", ".join(BLACKLIST_STABLE_COINS))
+    print("Current Whitelist Stable Coins: ", ", ".join(STABLE_COIN_WHITELIST))
     for pool in sorted(topn, key=lambda x: x["apy"], reverse=True):
-        if pool["tvlUsd"] < MILLION:
-            continue
-        if pool["chain"] in BLACKLIST_CHAINS_FOR_STABLE_COIN:
-            continue
-
-        if _check_if_symbol_has_blacklist_coins_substring(pool["symbol"]):
-            continue
         print(
             f"- Chain: {pool['chain']}, Pool: {pool['project']}, Coin: {pool['symbol']}, TVL: {pool['tvlUsd']/MILLION:.2f}M, APR: {convert_apy_to_apr(pool['apy']/100)*100:.2f}%"
         )
 
 
-def _check_if_symbol_has_blacklist_coins_substring(symbol: str):
-    for blacklist_coin in BLACKLIST_STABLE_COINS:
-        if blacklist_coin in symbol:
-            return True
-    return False
+def _check_if_symbol_consists_of_whitelist_coins(symbol: str):
+    for subsymbol in symbol.split("-"):
+        if subsymbol not in STABLE_COIN_WHITELIST:
+            return False
+    return True

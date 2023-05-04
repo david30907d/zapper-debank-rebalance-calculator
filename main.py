@@ -11,8 +11,10 @@ from rebalance_server.adapters.networth_to_balance_adapter import (
 )
 from rebalance_server.apr_utils.apr_calculator import get_lowest_or_default_apr
 from rebalance_server.apr_utils.apr_pool_optimizer import (
+    print_out_topn_candidate_pool,
     search_better_stable_coin_pools,
     search_top_n_pool_consist_of_same_lp_token,
+    show_topn_stable_coins,
 )
 from rebalance_server.handlers import get_data_source_handler
 from rebalance_server.metrics.max_drawdown import calculate_max_drawdown
@@ -79,15 +81,20 @@ def main(
         f"Portfolio's Max Drawdown: {calculate_max_drawdown(categorized_positions_with_token_balance):.2f}"
     )
     if optimize_apr_mode:
-        search_top_n_pool_consist_of_same_lp_token(
+        top_n_with_metadata = search_top_n_pool_consist_of_same_lp_token(
             categorized_positions, optimize_apr_mode
         )
-        search_better_stable_coin_pools(categorized_positions)
+        for project_symbol, top_n, apr in top_n_with_metadata:
+            print_out_topn_candidate_pool(project_symbol, top_n, apr)
+        topn_stable_coins = search_better_stable_coin_pools(categorized_positions)
+        show_topn_stable_coins(topn_stable_coins)
     return {
         "suggestions": suggestions,
         "total_interest": total_interest,
         "portfolio_apr": portfolio_apr,
         "sharpe_ratio": sharpe_ratio,
+        "top_n_pool_consist_of_same_lp_token": top_n_with_metadata,
+        "topn_stable_coins": topn_stable_coins,
     }
 
 
