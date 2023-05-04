@@ -5,7 +5,11 @@ from rebalance_server.apr_utils.apr_calculator import (
     get_lowest_or_default_apr,
 )
 from rebalance_server.apr_utils.utils import convert_apy_to_apr
-from rebalance_server.portfolio_config import BLACKLIST_CHAINS, BLACKLIST_COINS
+from rebalance_server.portfolio_config import (
+    BLACKLIST_CHAINS,
+    BLACKLIST_CHAINS_FOR_STABLE_COIN,
+    BLACKLIST_STABLE_COINS,
+)
 from rebalance_server.search_handlers import SearchBase
 from rebalance_server.search_handlers.jaccard_similarity_handler import (
     JaccardSimilarityHandler,
@@ -164,12 +168,12 @@ def _show_topn(topn: list):
     # Code to display top N pools
     print("====================")
     print("Better stable coin:")
-    print("Current Blacklist Chains: ", ", ".join(BLACKLIST_CHAINS))
-    print("Current Blacklist Coins: ", ", ".join(BLACKLIST_COINS))
+    print("Current Blacklist Chains: ", ", ".join(BLACKLIST_CHAINS_FOR_STABLE_COIN))
+    print("Current Blacklist Coins: ", ", ".join(BLACKLIST_STABLE_COINS))
     for pool in sorted(topn, key=lambda x: x["apy"], reverse=True):
         if pool["tvlUsd"] < MILLION:
             continue
-        if pool["chain"] in BLACKLIST_CHAINS:
+        if pool["chain"] in BLACKLIST_CHAINS_FOR_STABLE_COIN:
             continue
 
         if _check_if_symbol_has_blacklist_coins_substring(pool["symbol"]):
@@ -180,7 +184,7 @@ def _show_topn(topn: list):
 
 
 def _check_if_symbol_has_blacklist_coins_substring(symbol: str):
-    for blacklist_coin in BLACKLIST_COINS:
+    for blacklist_coin in BLACKLIST_STABLE_COINS:
         if blacklist_coin in symbol:
             return True
     return False
