@@ -88,7 +88,9 @@ def _get_correct_addr(farm_obj: dict, address_column: str) -> str:
     for token in farm_obj[address_column]:
         if token["address"].startswith("ibc"):
             return token["address"].split("ibc/")[1]
-    raise NotImplementedError("Nansen handler doesn't support non-ibc address yet")
+    raise NotImplementedError(
+        "Nansen handler doesn't support non-ibc/non-uatom address yet"
+    )
 
 
 def _get_token_metadata(farm_obj: dict) -> list:

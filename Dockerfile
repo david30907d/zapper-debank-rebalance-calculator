@@ -2,7 +2,7 @@
 FROM python:3.11.3-alpine3.17
 
 # Set the working directory
-WORKDIR /app
+WORKDIR /rebalance_server
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -41,9 +41,12 @@ RUN poetry export --without-hashes -f requirements.txt -o ./requirements.txt \
 
 # Copy the app files
 COPY . .
+WORKDIR /
+COPY docker-entrypoint.sh docker-entrypoint.sh
 
 # Expose the default Flask port
 EXPOSE 5000
 
-# Run the Flask app
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Setup ENTRYPOINT
+ENTRYPOINT ["./docker-entrypoint.sh"]
+CMD ["server"]
