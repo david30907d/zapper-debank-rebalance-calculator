@@ -25,7 +25,7 @@ def get_lowest_or_default_apr(
                 f"{project_symbol}'s APR is 0, are you sure you want to continue?"
             )
         try:
-            res_json = json.load(open("yield-llama.json", "r"))
+            res_json = json.load(open("rebalance_server/yield-llama.json", "r"))
         except FileNotFoundError:
             res_json = _get_data_from_defillama()
         if random.randint(0, DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL) == 0:
@@ -45,7 +45,7 @@ def get_lowest_or_default_apr(
 def _get_data_from_defillama():
     res = requests.get("https://yields.llama.fi/pools")
     res_json = res.json()
-    json.dump(res_json, open("yield-llama.json", "w"))
+    json.dump(res_json, open("rebalance_server/yield-llama.json", "w"))
     return res_json
 
 

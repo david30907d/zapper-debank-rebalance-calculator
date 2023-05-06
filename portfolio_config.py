@@ -304,6 +304,14 @@ DEBANK_ADDRESS = {
         "composition": {"usdc": 1},
         "project": "gmd-protocol",
     },
+    "0x868a943ca49a63eb0456a00ae098d470915eea0d": {
+        "categories": ["intermediate_term_bond"],
+        "symbol": "USDC",
+        "defillama-APY-pool-id": "1acd3a3f-3ed6-4e24-9333-f1a9e41c3b17",
+        "tags": ["usdc"],
+        "composition": {"usdc": 1},
+        "project": "rehold",
+    },
 }
 
 # going to deprecate

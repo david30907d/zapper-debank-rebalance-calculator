@@ -20,8 +20,8 @@ from rebalance_server.utils.position import skip_rebalance_if_position_too_small
 MILLION = 10**6
 
 
-def search_better_stable_coin_pools(categorized_positions: dict):
-    with open("yield-llama.json", "r") as f:
+def search_better_stable_coin_pools(categorized_positions: dict, topn_int: int = 10):
+    with open("rebalance_server/yield-llama.json", "r") as f:
         defillama = json.load(f)
     max_apy = _get_max_apy(categorized_positions, defillama)
     topn = _get_topn_apy_pool(defillama, max_apy)
@@ -34,14 +34,14 @@ def search_better_stable_coin_pools(categorized_positions: dict):
         if not _check_if_symbol_consists_of_whitelist_coins(pool["symbol"]):
             continue
         top_n_stable_coins.append(pool)
-    return top_n_stable_coins
+    return top_n_stable_coins[:topn_int]
 
 
 def search_top_n_pool_consist_of_same_lp_token(
     categorized_positions: dict, optimize_apr_mode: str
 ) -> list[dict]:
     print("\n\n=======Search top n pools consist of same lp token=======")
-    res_json = json.load(open("yield-llama.json", "r"))
+    res_json = json.load(open("rebalance_server/yield-llama.json", "r"))
     search_handler = _get_search_handler(
         optimize_apr_mode=optimize_apr_mode, searching_algorithm="jaccard_similarity"
     )
@@ -91,6 +91,7 @@ def _get_topn_candidate_pool(
     res_json: dict,
     search_handler: SearchBase,
     pool_ids_of_current_portfolio: set,
+    topn_int: int = 5,
 ) -> list:
     worth = metadata["worth"]
     top_n: list[dict] = []
@@ -106,12 +107,13 @@ def _get_topn_candidate_pool(
             > search_handler.similarity_threshold
             and pool_metadata["pool"] not in pool_ids_of_current_portfolio
             and current_apr < convert_apy_to_apr(get_lowest_apy(pool_metadata))
-            and pool_metadata["tvlUsd"] > MILLION
+            and pool_metadata["tvlUsd"] > MILLION * 0.7
         ):
             top_n.append(
                 {"pool_metadata": pool_metadata, "pool_similarity": pool_similarity}
             )
-    return top_n
+    # TODO(david): use harmonic mean of tvl and apr to sort
+    return sorted(top_n, key=lambda x: -get_lowest_apy(x["pool_metadata"]))[:topn_int]
 
 
 def print_out_topn_candidate_pool(
