@@ -8,8 +8,10 @@
 
 ## Install
 
-1. `poetry install`
-2. `npm install`
+* Without Docker:
+    1. `poetry install`
+    2. `npm install`
+* With Docker: `docker build --platform linux/amd64 -t rebalance-server .`
 
 ## Data Source
 
