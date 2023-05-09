@@ -8,6 +8,7 @@ from rebalance_server.apr_utils.utils import convert_apy_to_apr
 from rebalance_server.portfolio_config import (
     BLACKLIST_CHAINS,
     BLACKLIST_CHAINS_FOR_STABLE_COIN,
+    BLACKLIST_PROTOCOL,
     STABLE_COIN_WHITELIST,
 )
 from rebalance_server.search_handlers import SearchBase
@@ -23,7 +24,9 @@ MILLION = 10**6
 def search_better_stable_coin_pools(categorized_positions: dict, topn_int: int = 10):
     with open("rebalance_server/yield-llama.json", "r") as f:
         defillama = json.load(f)
-    max_apy = _get_max_apy(categorized_positions, defillama)
+    max_apy = _get_current_stable_max_apy_in_your_portfolio(
+        categorized_positions, defillama
+    )
     topn = _get_topn_apy_pool(defillama, max_apy)
     top_n_stable_coins = []
     for pool in sorted(topn, key=lambda x: x["apy"], reverse=True):
@@ -32,6 +35,8 @@ def search_better_stable_coin_pools(categorized_positions: dict, topn_int: int =
         if pool["chain"] in BLACKLIST_CHAINS_FOR_STABLE_COIN:
             continue
         if not _check_if_symbol_consists_of_whitelist_coins(pool["symbol"]):
+            continue
+        if pool["project"] in BLACKLIST_PROTOCOL:
             continue
         top_n_stable_coins.append(pool)
     return top_n_stable_coins[:topn_int]
@@ -100,6 +105,8 @@ def _get_topn_candidate_pool(
             continue
         if pool_metadata["chain"] in BLACKLIST_CHAINS:
             continue
+        if pool_metadata["project"] in BLACKLIST_PROTOCOL:
+            continue
         if (
             pool_similarity := search_handler.get_similarity(
                 metadata, pool_metadata["symbol"].lower()
@@ -137,7 +144,9 @@ def print_out_topn_candidate_pool(
         )
 
 
-def _get_max_apy(categorized_positions: dict, defillama: dict):
+def _get_current_stable_max_apy_in_your_portfolio(
+    categorized_positions: dict, defillama: dict
+):
     """
     # Code to calculate the maximum APY for stable coin pools
     think of cash as intermediate_term_bond, since stable usd coin is actually a bond issued by US government

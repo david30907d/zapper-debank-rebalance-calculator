@@ -17,6 +17,11 @@ CORS(app, resources={r"*": {"origins": "*", "methods": ["GET", "POST", "OPTIONS"
 
 
 @app.route("/", methods=["GET"])
+def health():
+    return "Healthy", 200
+
+
+@app.route("/address", methods=["GET"])
 @cache.cached(timeout=300)
 def get_suggestions():
     response = main(

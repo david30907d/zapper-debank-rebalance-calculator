@@ -2,6 +2,7 @@ MIN_REBALANCE_POSITION_THRESHOLD = 500
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
 BLACKLIST_CHAINS_FOR_STABLE_COIN = BLACKLIST_CHAINS.union({"Ethereum"})
+BLACKLIST_PROTOCOL = {"rehold", "deri-protocol"}
 STABLE_COIN_WHITELIST = {"USDT", "USDC", "LUSD", "DAI", "FRAX", "VST"}
 DEBANK_ADDRESS = {
     "0x76ba3ec5f5adbf1c58c91e86502232317eea72de": {
@@ -267,7 +268,7 @@ DEBANK_ADDRESS = {
     "0x72a19342e8f1838460ebfccef09f6585e32db86e": {
         "categories": ["small_cap_us_stocks", "commodities"],
         "symbol": "CVX",
-        "defillama-APY-pool-id": "777032e6-e815-4f44-90b4-abb98f0f9632",
+        "DEFAULT_APR": 0.2,
         "tags": ["cvx"],
         "composition": {"cvx": 1},
         "project": "convex-finance",
@@ -383,6 +384,17 @@ NANSEN_ADDRESS = {
         "project": "Equilibre",
         "symbol": "KAVA-WETH",
         "DEFAULT_APR": 0.1,
+        "tags": ["kava", "eth"],
+        "composition": {
+            "kava": 0.5,
+            "eth": 0.5,
+        },
+    },
+    "0xf731202a3cf7efa9368c2d7bd613926f7a144db5": {
+        "categories": ["non_us_developed_market_stocks", "long_term_bond"],
+        "project": "sushiswap",
+        "symbol": "KAVA-WETH",
+        "DEFAULT_APR": 0.38,
         "tags": ["kava", "eth"],
         "composition": {
             "kava": 0.5,
