@@ -21,7 +21,7 @@ from rebalance_server.utils.position import skip_rebalance_if_position_too_small
 MILLION = 10**6
 
 
-def search_better_stable_coin_pools(categorized_positions: dict, topn_int: int = 10):
+def search_better_stable_coin_pools(categorized_positions: dict, topn_int: int = 5):
     with open("rebalance_server/yield-llama.json", "r") as f:
         defillama = json.load(f)
     max_apy = _get_current_stable_max_apy_in_your_portfolio(

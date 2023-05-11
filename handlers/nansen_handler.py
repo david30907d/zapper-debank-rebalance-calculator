@@ -89,7 +89,7 @@ def _get_correct_addr(farm_obj: dict, address_column: str) -> str:
         if token["address"].startswith("ibc"):
             return token["address"].split("ibc/")[1]
     raise NotImplementedError(
-        "Nansen handler doesn't support non-ibc/non-uatom address yet"
+        "Nansen handler doesn't support non-ibc address yet, for nansen's COSMOS data, you need to manually replace uatom to ibc/DEC41A02E47658D40FC71E5A35A9C807111F5A6662A3FB5DA84C4E6F53E616B3. It's a fake cosmos stake address"
     )
 
 

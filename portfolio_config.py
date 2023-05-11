@@ -1,7 +1,7 @@
 MIN_REBALANCE_POSITION_THRESHOLD = 500
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
-BLACKLIST_CHAINS_FOR_STABLE_COIN = BLACKLIST_CHAINS.union({"Ethereum"})
+BLACKLIST_CHAINS_FOR_STABLE_COIN = {"Ethereum"}
 BLACKLIST_PROTOCOL = {"rehold", "deri-protocol"}
 STABLE_COIN_WHITELIST = {"USDT", "USDC", "LUSD", "DAI", "FRAX", "VST"}
 DEBANK_ADDRESS = {
@@ -194,7 +194,7 @@ DEBANK_ADDRESS = {
         "project": "convex-finance",
     },
     "0x20ec0d06f447d550fc6edee42121bc8c1817b97d": {
-        "categories": ["long_term_bond", "commodities", "large_cap_us_stocks"],
+        "categories": ["long_term_bond", "commodities"],
         "symbol": "WMATIC-WETH",
         "defillama-APY-pool-id": "1f23a6a9-84d0-4cf9-b978-aba431703757",
         "tags": ["matic", "eth"],
@@ -313,21 +313,36 @@ DEBANK_ADDRESS = {
         "composition": {"usdc": 1},
         "project": "rehold",
     },
-}
-
-# going to deprecate
-BINANCE_ADDRESS = {
+    "0xfff4b05a10c5df1382272e554254ea8b097ec03e": {
+        "categories": ["small_cap_us_stocks"],
+        "project": "Equilibria",
+        "symbol": "PENDLE",
+        "DEFAULT_APR": 10,
+        "tags": ["pendle"],
+        "composition": {
+            "pendle": 0.5,
+        },
+    },
+    "0x481fcfa00ee6b2384ff0b3c3b5b29ad911c1aaa7": {
+        "categories": ["long_term_bond", "commodities"],
+        "symbol": "WMATIC-WETH",
+        "DEFAULT_APR": 0.23,
+        "tags": ["matic", "eth"],
+        "composition": {"eth": 0.5, "matic": 0.5},
+        "project": "quickswap-dex",
+    },
     "0x0fa70bd9b892c7b6d2a9ea8dd1ce446e52f86935": {
         "categories": ["commodities"],
-        "project": "binance",
-        "symbol": "FIL-stake",
-        "DEFAULT_APR": 0.13,
+        "project": "stfil",
+        "symbol": "FIL",
+        "defillama-APY-pool-id": "03cdc005-9fb7-4e0a-9f11-e0155ee4c8bf",
         "tags": ["fil"],
         "composition": {
             "fil": 1,
         },
-    }
+    },
 }
+
 
 NANSEN_ADDRESS = {
     "EA1D43981D5C9A1C4AAEA9C23BB1D4FA126BA9BC7020A25E0AE4AA841EA25DC5": {
@@ -405,7 +420,6 @@ NANSEN_ADDRESS = {
 
 ADDRESS_2_CATEGORY = {
     **DEBANK_ADDRESS,
-    **BINANCE_ADDRESS,
     **NANSEN_ADDRESS,
 }
 
@@ -467,6 +481,7 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "PT-rETH-WETH_BalancerLP Aura-26DEC2024": "rocket-pool-eth",
     "BTCB": "bitcoin",
     "BUSD": "binance-usd",
+    "PENDLE": "pendle",
 }
 
 LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {
