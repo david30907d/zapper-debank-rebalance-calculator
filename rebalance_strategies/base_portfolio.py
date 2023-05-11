@@ -45,12 +45,14 @@ class BasePortfolio(ABC):
             key=lambda x: -x[1]["worth"],
         ):
             balanceUSD = position_obj["worth"]
+            apr = position_obj["APR"]
             if skip_rebalance_if_position_too_small(balanceUSD):
                 continue
             result.append(
                 {
                     "symbol": symbol,
                     "balanceUSD": balanceUSD,
+                    "apr": apr,
                     "diffrence": diffrence
                     * balanceUSD
                     / single_category_in_the_portfolio["sum"],

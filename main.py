@@ -92,6 +92,7 @@ def main(
         topn_stable_coins = search_better_stable_coin_pools(categorized_positions)
         show_topn_stable_coins(topn_stable_coins)
     return {
+        "net_worth": net_worth,
         "suggestions": suggestions,
         "total_interest": total_interest,
         "portfolio_apr": portfolio_apr,
