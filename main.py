@@ -68,7 +68,6 @@ def main(
     total_interest = calculate_interest(categorized_positions)
     portfolio_apr = 100 * total_interest / net_worth
     print(f"Portfolio's APR: {portfolio_apr:.2f}%")
-
     # [TODO](david): uncomment sharpe ratio and max drawdown once we've migrated to standalone server not lambda or cloud run
     # adapter = get_networh_to_balance_adapter(adapter="coingecko")
     # categorized_positions_with_token_balance = adapter(categorized_positions)

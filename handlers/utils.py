@@ -13,7 +13,6 @@ def place_value_into_categorized_portfolio_dict(
         weighted_balanceUSD = get_weighted_balanceUSD(
             net_usd_valud, category, metadata, length_of_categories
         )
-        # weighted_balanceUSD = net_usd_valud / length_of_categories
         result[category]["portfolio"][f"{project}:{symbol}"][
             "worth"
         ] += weighted_balanceUSD

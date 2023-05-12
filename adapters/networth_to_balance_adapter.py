@@ -9,6 +9,7 @@ def get_networh_to_balance_adapter(adapter: str) -> callable:
 
 def coingecko_net_worth_2_balance_adapter(categorized_positions: dict) -> float:
     """
+    output:
     {
         "usdt-weth-sushi-lp": [
             {

@@ -1,4 +1,5 @@
 from rebalance_server.rebalance_strategies.base_portfolio import BasePortfolio
+from rebalance_server.utils.position import skip_rebalance_if_position_too_small
 
 
 class PermanentPortfolio(BasePortfolio):
@@ -22,3 +23,33 @@ class PermanentPortfolio(BasePortfolio):
     @property
     def target_asset_allocation(self):
         return self._target_asset_allocation
+
+    def get_suggestions_for_positions(
+        self, category, investment_shift, single_category_in_the_portfolio, net_worth
+    ):
+        if abs(investment_shift) < self.REBALANCE_THRESHOLD:
+            return []
+        target_sum_of_this_category = net_worth * self.target_asset_allocation[category]
+        diffrence = (
+            target_sum_of_this_category - single_category_in_the_portfolio["sum"]
+        )
+        result = []
+        for symbol, position_obj in sorted(
+            single_category_in_the_portfolio["portfolio"].items(),
+            key=lambda x: -x[1]["worth"],
+        ):
+            balanceUSD = position_obj["worth"]
+            apr = position_obj["APR"]
+            if skip_rebalance_if_position_too_small(balanceUSD):
+                continue
+            result.append(
+                {
+                    "symbol": symbol,
+                    "balanceUSD": balanceUSD,
+                    "apr": apr,
+                    "diffrence": diffrence
+                    * balanceUSD
+                    / single_category_in_the_portfolio["sum"],
+                }
+            )
+        return result

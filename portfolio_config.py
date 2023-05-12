@@ -351,7 +351,7 @@ NANSEN_ADDRESS = {
             "long_term_bond",
         ],
         "project": "Osmosis",
-        "symbol": "OSMO/WETH",
+        "symbol": "OSMO-WETH",
         "defillama-APY-pool-id": "5fe464d2-3575-4b70-bc69-cc52d2857e4a",
         "tags": ["osmo", "eth"],
         "composition": {
@@ -365,7 +365,7 @@ NANSEN_ADDRESS = {
             "non_us_developed_market_stocks",
         ],
         "project": "Osmosis",
-        "symbol": "OSMO/KAVA",
+        "symbol": "OSMO-KAVA",
         "defillama-APY-pool-id": "f6efb5eb-b6fc-4ada-8fe2-05702f38d606",
         "tags": ["osmo", "kava"],
         "composition": {
@@ -376,7 +376,7 @@ NANSEN_ADDRESS = {
     "27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2": {
         "categories": ["non_us_emerging_market_stocks"],
         "project": "Osmosis",
-        "symbol": "OSMO/ATOM",
+        "symbol": "OSMO-ATOM",
         "defillama-APY-pool-id": "4ced8c2d-67c4-4555-b025-be49c110ca58",
         "tags": ["osmo", "atom"],
         "composition": {
@@ -387,7 +387,7 @@ NANSEN_ADDRESS = {
     "DEC41A02E47658D40FC71E5A35A9C807111F5A6662A3FB5DA84C4E6F53E616B3": {
         "categories": ["non_us_emerging_market_stocks", "commodities"],
         "project": "Cosmos",
-        "symbol": "ATOM-stake",
+        "symbol": "ATOM",
         "DEFAULT_APR": 0.2,
         "tags": ["atom"],
         "composition": {
