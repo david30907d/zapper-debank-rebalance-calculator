@@ -111,16 +111,14 @@ class AllWeatherPortfolio(BasePortfolio):
                     - current_ratio_of_this_position_in_this_category
                 )
                 < self.REBALANCE_THRESHOLD
-            ):
-                continue
-            if skip_rebalance_if_position_too_small(balanceUSD):
-                continue
+            ) or skip_rebalance_if_position_too_small(abs(difference)):
+                difference = 0
             result.append(
                 {
                     "symbol": symbol,
                     "balanceUSD": balanceUSD,
                     "apr": apr,
-                    "diffrence": difference,
+                    "difference": difference,
                 }
             )
         return result

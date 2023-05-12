@@ -126,7 +126,7 @@ DEBANK_ADDRESS = {
     "0xd50cf00b6e600dd036ba8ef475677d816d6c4281": {
         "categories": ["long_term_bond"],
         "project": "radiant",
-        "symbol": "Radiant-ETH-lending-bnb",
+        "symbol": "ETH",
         "DEFAULT_APR": 0.13,
         "tags": ["eth"],
         "composition": {"eth": 1},

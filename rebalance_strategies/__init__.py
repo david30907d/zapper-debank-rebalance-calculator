@@ -26,7 +26,7 @@ def print_rebalancing_suggestions(suggestions: list[tuple], net_worth: float):
             symbol = position_obj["symbol"]
             balanceUSD = position_obj["balanceUSD"]
             print(
-                f"Suggestion: modify this amount of USD: {position_obj['diffrence']:.2f} for position {symbol}, current worth: {balanceUSD:.2f}, percentage: {balanceUSD/net_worth:.2f}"
+                f"Suggestion: modify this amount of USD: {position_obj['difference']:.2f} for position {symbol}, current worth: {balanceUSD:.2f}, percentage: {balanceUSD/net_worth:.2f}"
             )
         print("====================")
 
