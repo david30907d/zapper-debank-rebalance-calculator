@@ -1,4 +1,5 @@
 import json
+import math
 import random
 from collections import defaultdict
 
@@ -85,7 +86,7 @@ class AllWeatherPortfolio(BasePortfolio):
         target_sum_of_this_category = net_worth * self.target_asset_allocation[category]
         result = []
         lp_token_name_2_market_cap_proportino_dict = self._calculate_proportion_for_positions_in_a_single_category_by_market_cap_weighting(
-            category, single_category_in_the_portfolio
+            single_category_in_the_portfolio
         )
 
         for symbol, position_obj in single_category_in_the_portfolio[
@@ -124,29 +125,78 @@ class AllWeatherPortfolio(BasePortfolio):
         return result
 
     def _calculate_proportion_for_positions_in_a_single_category_by_market_cap_weighting(
-        self, category, single_category_in_the_portfolio: dict
+        self, single_category_in_the_portfolio: dict
     ) -> dict:
         lp_token_name_2_market_cap_proportino_dict = defaultdict(float)
-        for symbol, position_obj in single_category_in_the_portfolio[
-            "portfolio"
-        ].items():
-            # average the market cap of all tokens in the LP
-            for token_metadata in position_obj["tokens_metadata"]:
-                # since most of my LPs are paired with ETH, I don't want to include ETH in the calculation.
-                # ETH's market cap is too big, it will skew the result
-                if "eth" in token_metadata["symbol"].lower():
-                    continue
-                lp_token_name_2_market_cap_proportino_dict[
-                    symbol
-                ] += self.market_cap_of_tokens[
+        for (
+            symbol_consists_of_project_and_lp_token,
+            position_obj,
+        ) in single_category_in_the_portfolio["portfolio"].items():
+            print(symbol_consists_of_project_and_lp_token)
+            lp_token_name_2_market_cap_proportino_dict[
+                symbol_consists_of_project_and_lp_token
+            ] = self._calcualte_market_cap_of_this_lp_token(
+                symbol_consists_of_project_and_lp_token, position_obj
+            )
+        return self._calculate_proportion_via_market_cap_for_all_lp_positions_in_this_category(
+            lp_token_name_2_market_cap_proportino_dict
+        )
+
+    def _calcualte_market_cap_of_this_lp_token(
+        self, symbol_consists_of_project_and_lp_token: str, position_obj: dict
+    ) -> float:
+        market_cap_of_this_lp_token = 0
+        if symbol_consists_of_project_and_lp_token in ["radiant:lending"]:
+            return 0
+        print(position_obj["metadata"]["composition"])
+        # average the market cap of all tokens in the LP
+        for token_metadata in position_obj["tokens_metadata"]:
+            # since most of my LPs are paired with ETH, I don't want to include ETH in the calculation.
+            # ETH's market cap is too big, it will skew the result
+            if "eth" in token_metadata["symbol"].lower():
+                continue
+            print(
+                token_metadata,
+                token_metadata["symbol"] in position_obj["metadata"]["composition"],
+            )
+            log_market_cap = math.log(
+                self.market_cap_of_tokens[
                     ZAPPER_SYMBOL_2_COINGECKO_MAPPING[token_metadata["symbol"]]
                 ]
-            lp_token_name_2_market_cap_proportino_dict[symbol] /= len(
-                position_obj["tokens_metadata"]
             )
+            composition_of_this_lp_token = position_obj["metadata"]["composition"][
+                token_metadata["symbol"].lower()
+            ]
+            # market_cap_of_this_lp_token += log_market_cap * composition_of_this_lp_token
+            market_cap_of_this_lp_token += log_market_cap * composition_of_this_lp_token
+        # market_cap_of_this_lp_token /= len(
+        #     position_obj["tokens_metadata"]
+        # )
+        return self._make_sure_eth_position_would_not_be_skipped(
+            market_cap_of_this_lp_token
+        )
+        # lp_token_name_2_market_cap_proportino_dict[symbol_consists_of_project_and_lp_token] = self._make_sure_eth_position_would_not_be_skipped(lp_token_name_2_market_cap_proportino_dict[symbol_consists_of_project_and_lp_token])
+        return market_cap_of_this_lp_token
+
+    @staticmethod
+    def _calculate_proportion_via_market_cap_for_all_lp_positions_in_this_category(
+        lp_token_name_2_market_cap_proportino_dict: dict,
+    ) -> dict:
         sum_of_market_cap = sum(lp_token_name_2_market_cap_proportino_dict.values())
-        for symbol, market_cap in lp_token_name_2_market_cap_proportino_dict.items():
-            lp_token_name_2_market_cap_proportino_dict[symbol] = (
-                market_cap / sum_of_market_cap
-            )
+        for (
+            symbol_consists_of_project_and_lp_token,
+            market_cap,
+        ) in lp_token_name_2_market_cap_proportino_dict.items():
+            lp_token_name_2_market_cap_proportino_dict[
+                symbol_consists_of_project_and_lp_token
+            ] = (market_cap / sum_of_market_cap)
         return lp_token_name_2_market_cap_proportino_dict
+
+    def _make_sure_eth_position_would_not_be_skipped(
+        self, market_cap_of_this_lp_token: float
+    ):
+        if market_cap_of_this_lp_token == 0:
+            return math.log(
+                self.market_cap_of_tokens[ZAPPER_SYMBOL_2_COINGECKO_MAPPING["ETH"]]
+            )
+        return market_cap_of_this_lp_token
