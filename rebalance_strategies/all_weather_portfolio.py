@@ -132,7 +132,6 @@ class AllWeatherPortfolio(BasePortfolio):
             symbol_consists_of_project_and_lp_token,
             position_obj,
         ) in single_category_in_the_portfolio["portfolio"].items():
-            print(symbol_consists_of_project_and_lp_token)
             lp_token_name_2_market_cap_proportino_dict[
                 symbol_consists_of_project_and_lp_token
             ] = self._calcualte_market_cap_of_this_lp_token(
@@ -148,17 +147,12 @@ class AllWeatherPortfolio(BasePortfolio):
         market_cap_of_this_lp_token = 0
         if symbol_consists_of_project_and_lp_token in ["radiant:lending"]:
             return 0
-        print(position_obj["metadata"]["composition"])
         # average the market cap of all tokens in the LP
         for token_metadata in position_obj["tokens_metadata"]:
             # since most of my LPs are paired with ETH, I don't want to include ETH in the calculation.
             # ETH's market cap is too big, it will skew the result
             if "eth" in token_metadata["symbol"].lower():
                 continue
-            print(
-                token_metadata,
-                token_metadata["symbol"] in position_obj["metadata"]["composition"],
-            )
             log_market_cap = math.log(
                 self.market_cap_of_tokens[
                     ZAPPER_SYMBOL_2_COINGECKO_MAPPING[token_metadata["symbol"]]
@@ -167,16 +161,10 @@ class AllWeatherPortfolio(BasePortfolio):
             composition_of_this_lp_token = position_obj["metadata"]["composition"][
                 token_metadata["symbol"].lower()
             ]
-            # market_cap_of_this_lp_token += log_market_cap * composition_of_this_lp_token
             market_cap_of_this_lp_token += log_market_cap * composition_of_this_lp_token
-        # market_cap_of_this_lp_token /= len(
-        #     position_obj["tokens_metadata"]
-        # )
         return self._make_sure_eth_position_would_not_be_skipped(
             market_cap_of_this_lp_token
         )
-        # lp_token_name_2_market_cap_proportino_dict[symbol_consists_of_project_and_lp_token] = self._make_sure_eth_position_would_not_be_skipped(lp_token_name_2_market_cap_proportino_dict[symbol_consists_of_project_and_lp_token])
-        return market_cap_of_this_lp_token
 
     @staticmethod
     def _calculate_proportion_via_market_cap_for_all_lp_positions_in_this_category(
