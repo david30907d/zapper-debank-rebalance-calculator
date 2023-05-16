@@ -85,7 +85,7 @@ class AllWeatherPortfolio(BasePortfolio):
         target_sum_of_this_category = net_worth * self.target_asset_allocation[category]
         result = []
         single_category_in_the_portfolio_without_living_expenses = (
-            self._delete_living_expenses_positions_from_suggestions(
+            self._delete_special_positions_from_suggestions(
                 single_category_in_the_portfolio
             )
         )
@@ -133,17 +133,21 @@ class AllWeatherPortfolio(BasePortfolio):
         return result
 
     @staticmethod
-    def _delete_living_expenses_positions_from_suggestions(
+    def _delete_special_positions_from_suggestions(
         single_category_in_the_portfolio: dict,
     ) -> dict:
-        # no suggestions for user's living expenses
+        # 1. no suggestions for user's living expenses
         # since it varies from person to person
+        # 2. no suggestions for airdrop tokens
         symbols_to_delete = []
 
         for symbol, position_obj in single_category_in_the_portfolio[
             "portfolio"
         ].items():
-            if position_obj["metadata"].get("living-expenses") is True:
+            if (
+                position_obj["metadata"].get("living-expenses") is True
+                or position_obj["metadata"].get("forAirdrop") is True
+            ):
                 symbols_to_delete.append(symbol)
 
         for symbol in symbols_to_delete:

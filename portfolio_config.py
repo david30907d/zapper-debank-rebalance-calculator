@@ -3,7 +3,7 @@ DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
 BLACKLIST_CHAINS_FOR_STABLE_COIN = {"Ethereum"}
 BLACKLIST_PROTOCOL = {"rehold", "deri-protocol"}
-STABLE_COIN_WHITELIST = {"USDT", "USDC", "LUSD", "DAI", "FRAX", "VST"}
+STABLE_COIN_WHITELIST = {"USDT", "USDC"}
 DEBANK_ADDRESS = {
     "0x76ba3ec5f5adbf1c58c91e86502232317eea72de": {
         "categories": ["large_cap_us_stocks", "long_term_bond"],
@@ -211,6 +211,7 @@ DEBANK_ADDRESS = {
         "DEFAULT_APR": 0.31,
         "tags": ["usdc", "eth"],
         "composition": {"eth": 0.5, "usdc": 0.5},
+        "forAirdrop": True,
     },
     "0x7d49e5adc0eaad9c027857767638613253ef125f": {
         "categories": [
