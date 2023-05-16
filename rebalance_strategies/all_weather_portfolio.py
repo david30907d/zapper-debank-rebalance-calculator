@@ -75,27 +75,35 @@ class AllWeatherPortfolio(BasePortfolio):
         return self._market_cap_of_tokens
 
     def get_suggestions_for_positions(
-        self, category, investment_shift, single_category_in_the_portfolio, net_worth
+        self, category, _, single_category_in_the_portfolio, net_worth
     ):
         # 6. `symbol.split('-')`
         # 7. calculate how many token you need to sell?
         #     * for sell, just unstake your LP and then swap them to ETH
         #     * for buying, use the investment shift to calculate how many token you need to buy for LP
         # 8. populate those numbers to `zap in` page
-
         target_sum_of_this_category = net_worth * self.target_asset_allocation[category]
         result = []
+        single_category_in_the_portfolio_without_living_expenses = (
+            self._delete_living_expenses_positions_from_suggestions(
+                single_category_in_the_portfolio
+            )
+        )
         lp_token_name_2_market_cap_proportino_dict = self._calculate_proportion_for_positions_in_a_single_category_by_market_cap_weighting(
-            single_category_in_the_portfolio
+            single_category_in_the_portfolio_without_living_expenses
         )
 
-        for symbol, position_obj in single_category_in_the_portfolio[
+        for (
+            symbol,
+            position_obj,
+        ) in single_category_in_the_portfolio_without_living_expenses[
             "portfolio"
         ].items():
             balanceUSD = position_obj["worth"]
             apr = position_obj["APR"]
             current_ratio_of_this_position_in_this_category = (
-                balanceUSD / single_category_in_the_portfolio["sum"]
+                balanceUSD
+                / single_category_in_the_portfolio_without_living_expenses["sum"]
             )
             target_ratio_of_this_position_in_this_category = (
                 lp_token_name_2_market_cap_proportino_dict[symbol]
@@ -103,7 +111,7 @@ class AllWeatherPortfolio(BasePortfolio):
             difference = (
                 target_sum_of_this_category
                 * lp_token_name_2_market_cap_proportino_dict[symbol]
-                - single_category_in_the_portfolio["sum"]
+                - single_category_in_the_portfolio_without_living_expenses["sum"]
                 * current_ratio_of_this_position_in_this_category
             )
             if (
@@ -124,14 +132,34 @@ class AllWeatherPortfolio(BasePortfolio):
             )
         return result
 
+    @staticmethod
+    def _delete_living_expenses_positions_from_suggestions(
+        single_category_in_the_portfolio: dict,
+    ) -> dict:
+        # no suggestions for user's living expenses
+        # since it varies from person to person
+        symbols_to_delete = []
+
+        for symbol, position_obj in single_category_in_the_portfolio[
+            "portfolio"
+        ].items():
+            if position_obj["metadata"].get("living-expenses") is True:
+                symbols_to_delete.append(symbol)
+
+        for symbol in symbols_to_delete:
+            del single_category_in_the_portfolio["portfolio"][symbol]
+        return single_category_in_the_portfolio
+
     def _calculate_proportion_for_positions_in_a_single_category_by_market_cap_weighting(
-        self, single_category_in_the_portfolio: dict
+        self, single_category_in_the_portfolio_without_living_expenses: dict
     ) -> dict:
         lp_token_name_2_market_cap_proportino_dict = defaultdict(float)
         for (
             symbol_consists_of_project_and_lp_token,
             position_obj,
-        ) in single_category_in_the_portfolio["portfolio"].items():
+        ) in single_category_in_the_portfolio_without_living_expenses[
+            "portfolio"
+        ].items():
             lp_token_name_2_market_cap_proportino_dict[
                 symbol_consists_of_project_and_lp_token
             ] = self._calcualte_market_cap_of_this_lp_token(

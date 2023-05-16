@@ -356,6 +356,7 @@ DEBANK_ADDRESS = {
             "usdc": 0.5,
             "usdt": 0.5,
         },
+        "living-expenses": True,
     },
 }
 
