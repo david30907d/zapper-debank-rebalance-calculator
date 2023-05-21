@@ -183,7 +183,6 @@ class AllWeatherPortfolio(BasePortfolio):
         print(token_symbol_to_index)
         print("==========================")
         print("==========================")
-
         suggestions = []
         for category, single_category_in_the_portfolio in categorized_positions.items():
             target_sum_of_this_category = (
