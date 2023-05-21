@@ -3,6 +3,8 @@ import math
 import random
 from collections import defaultdict
 
+import cvxpy as cp
+import numpy as np
 import requests
 
 from rebalance_server.portfolio_config import (
@@ -29,6 +31,7 @@ class AllWeatherPortfolio(BasePortfolio):
             "non_us_developed_market_stocks": 0.06,
             "non_us_emerging_market_stocks": 0.03,
         }
+        self._target_desired_weights = [0.4, 0.15, 0.075, 0.075, 0.18, 0.03, 0.06, 0.03]
         self.token_set = set(ZAPPER_SYMBOL_2_COINGECKO_MAPPING.values())
         assert len(self.token_set) < 100
         self._market_cap_of_tokens = {}
@@ -60,6 +63,7 @@ class AllWeatherPortfolio(BasePortfolio):
                 for token_obj in raw_market_cap_data
             }
             self._market_cap_of_tokens["jones-glp"] = 550385259
+            self._market_cap_of_tokens["glp"] = 550385259
         print("[TODO]: need to figure out a way to update jones-glp market cap")
         json.dump(
             self._market_cap_of_tokens,
@@ -73,6 +77,130 @@ class AllWeatherPortfolio(BasePortfolio):
     @property
     def market_cap_of_tokens(self):
         return self._market_cap_of_tokens
+
+    @property
+    def category_desired_weights(self):
+        return self._target_desired_weights
+
+    def calculate_rebalancing_suggestions(self, categorized_positions, net_worth):
+        desired_weights = []
+        desired_weights_dict = {}
+        index = 0
+        lp_pairs_categories = [[], [], [], [], [], [], [], []]
+        token_symbol_to_index = {}
+        for category_index, single_category_in_the_portfolio in enumerate(
+            categorized_positions.values()
+        ):
+            for position_obj in single_category_in_the_portfolio["portfolio"].values():
+                # edge case for Radiant-ETH-lending
+                if position_obj["metadata"]["symbol"].lower() == "lending":
+                    continue
+                # edge case for glp
+                if position_obj["metadata"]["symbol"].lower() == "glp":
+                    if "glp" not in token_symbol_to_index:
+                        token_symbol_to_index["glp"] = index
+                        index += 1
+                    desired_weights_dict["glp"] = {
+                        "index": token_symbol_to_index["glp"],
+                        "market_cap": self.market_cap_of_tokens["glp"],
+                    }
+                    lp_pairs_categories[category_index].append(
+                        [token_symbol_to_index["glp"]]
+                    )
+                    continue
+                indices_of_lp_tokens = []
+                for token_metadata in position_obj["tokens_metadata"]:
+                    mapped_token_symbol = ZAPPER_SYMBOL_2_COINGECKO_MAPPING[
+                        token_metadata["symbol"]
+                    ]
+                    if mapped_token_symbol not in token_symbol_to_index:
+                        token_symbol_to_index[mapped_token_symbol] = index
+                        index += 1
+                    market_cap_of_token = self.market_cap_of_tokens[mapped_token_symbol]
+                    desired_weights_dict[mapped_token_symbol] = {
+                        "index": token_symbol_to_index[mapped_token_symbol],
+                        "market_cap": market_cap_of_token,
+                    }
+                    indices_of_lp_tokens.append(
+                        token_symbol_to_index[mapped_token_symbol]
+                    )
+                # Define the LP pairs and their categories
+                # For example: Tokens 0-1 and 2-3 form LP pairs in the first category, and tokens 4-5 and 6-7 form LP pairs in the second category
+                # lp_pairs_categories = [[[0, 1], [2, 3]], [[4, 5], [6, 7]]]
+                lp_pairs_categories[category_index].append(indices_of_lp_tokens)
+        print("indices_of_lp_tokens: ", lp_pairs_categories)
+        # Define the desired weights (market cap weights scaled by All Weather portfolio allocations)
+        desired_weights = np.array(
+            [
+                math.log(token_metadata["market_cap"])
+                for token_metadata in sorted(
+                    desired_weights_dict.values(), key=lambda x: x["index"]
+                )
+            ]
+        )
+        # desired_weights = np.array([token_metadata['market_cap'] for token_metadata in sorted(desired_weights_dict.values(), key=lambda x: x['index'])])
+
+        # Normalize desired_weights
+        desired_weights = desired_weights / np.sum(desired_weights)
+
+        # Create a variable for each LP's weight
+        lp_weights = cp.Variable(num_pairs)
+
+        # Set up the objective function: minimize the sum of squared differences between desired and actual weights
+        objective = cp.Minimize(cp.sum_squares(desired_weights - weights))
+
+        # Set up the constraints: the sum of the weights of the LP pairs in each category equals the category weight,
+        # each LP token pair has equal weights for the two tokens, and all weights are non-negative
+        # TODO(david): len(lp_pairs_category) == 2 is because GLP and crvCVX are not classic LP token or no LP token.
+        print("category_desired_weights: ", self.category_desired_weights)
+        constraints = [
+            cp.sum([weights[lp_pair] for lp_pair in lp_pairs_category])
+            == category_weight
+            for lp_pairs_category, category_weight in zip(
+                lp_pairs_categories, self.category_desired_weights
+            )
+            if len(lp_pairs_category) == 2
+        ]
+        for lp_pairs_category in lp_pairs_categories:
+            for lp_pair in lp_pairs_category:
+                print(lp_pair)
+        # constraints += [weights[lp_pair[0]] == weights[lp_pair[1]] for lp_pairs_category in lp_pairs_categories for lp_pair in lp_pairs_category]
+        constraints += [weights >= 0]
+
+        # Define and solve the problem
+        problem = cp.Problem(objective, constraints)
+        problem.solve()
+
+        # The optimal weights are stored in the 'weights.value' attribute
+        optimal_weights = weights.value
+
+        # Normalize optimal_weights
+        optimal_weights = optimal_weights / np.sum(optimal_weights)
+
+        # Print the optimal weights
+        print("optimal_weights: ", optimal_weights)
+        print("==========================")
+        print(token_symbol_to_index)
+        print("==========================")
+        print("==========================")
+
+        suggestions = []
+        for category, single_category_in_the_portfolio in categorized_positions.items():
+            target_sum_of_this_category = (
+                net_worth * self.target_asset_allocation[category]
+            )
+            investment_shift = (
+                single_category_in_the_portfolio["sum"] - target_sum_of_this_category
+            ) / net_worth
+            suggestions_for_this_category = self._get_suggestions_for_this_category(
+                category,
+                target_sum_of_this_category,
+                investment_shift,
+                single_category_in_the_portfolio,
+                net_worth,
+            )
+            suggestions.append(suggestions_for_this_category)
+        return suggestions
 
     def get_suggestions_for_positions(
         self, category, _, single_category_in_the_portfolio, net_worth

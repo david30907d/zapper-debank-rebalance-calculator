@@ -25,6 +25,8 @@ RUN poetry export --without-hashes -f requirements.txt -o ./requirements.txt \
 # Copy the app files
 COPY . .
 WORKDIR /
+# TODO(david): use poetry to install cvxpy once urllib3 and requests has fixed their incompatibility issues
+RUN pip install cvxpy==1.3.1
 # COPY nginx.conf /etc/nginx/nginx.conf
 COPY docker-entrypoint.sh docker-entrypoint.sh
 # Expose the default Flask port

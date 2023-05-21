@@ -1,0 +1,1453 @@
+{
+  "net_worth": 174346.20926722637,
+  "portfolio_apr": 33.599690355580506,
+  "suggestions": [
+    {
+      "category": "long_term_bond",
+      "investment_shift_of_this_category": 0.015449098352548268,
+      "suggestions_for_positions": [
+        {
+          "apr": 0.2017935143496974,
+          "balanceUSD": 12879.247357505885,
+          "difference": 0,
+          "symbol": "pendle:GLP"
+        },
+        {
+          "apr": 0.7023957415855853,
+          "balanceUSD": 3785.344174587152,
+          "difference": 0,
+          "symbol": "radiant:RDNT-ETH"
+        },
+        {
+          "apr": 0.12187587482087481,
+          "balanceUSD": 2878.2981637181697,
+          "difference": 0,
+          "symbol": "convex-finance:WETH-CRV"
+        },
+        {
+          "apr": 0.209,
+          "balanceUSD": 36599.852693553505,
+          "difference": -21061.66671591923,
+          "symbol": "pendle:RETH-WETH"
+        },
+        {
+          "apr": 0.23,
+          "balanceUSD": 1433.6250717227522,
+          "difference": 5347.061078066802,
+          "symbol": "quickswap-dex:WMATIC-WETH"
+        },
+        {
+          "apr": 0.21531501373081796,
+          "balanceUSD": 2072.169888026021,
+          "difference": 0,
+          "symbol": "sushiswap:DPX-WETH"
+        },
+        {
+          "apr": 0.31,
+          "balanceUSD": 2670.1544023359047,
+          "difference": 4504.910119170586,
+          "symbol": "SpaceFi:USDC-ETH"
+        },
+        {
+          "apr": 0.29298062563796745,
+          "balanceUSD": 362.6802991749078,
+          "difference": 5294.490930218184,
+          "symbol": "gamma:MAGIC-WETH"
+        },
+        {
+          "apr": 0.07,
+          "balanceUSD": 914.3114623525137,
+          "difference": 0,
+          "symbol": "radiant:lending"
+        },
+        {
+          "apr": 0.38,
+          "balanceUSD": 8836.291928277096,
+          "difference": 0,
+          "symbol": "sushiswap:KAVA-WETH"
+        }
+      ],
+      "sum_of_this_category_in_the_portfolio": 72431.97544125389,
+      "target_sum_of_this_category": 69738.48370689055
+    },
+    {
+      "category": "intermediate_term_bond",
+      "investment_shift_of_this_category": 0.03405253920311957,
+      "suggestions_for_positions": [
+        {
+          "apr": 0.07173600013523629,
+          "balanceUSD": 6838.703032102723,
+          "difference": -2736.0760374323963,
+          "symbol": "frax:VST-FRAX"
+        },
+        {
+          "apr": 0.2017935143496974,
+          "balanceUSD": 10017.192389171245,
+          "difference": -5484.2707886356675,
+          "symbol": "pendle:GLP"
+        },
+        {
+          "apr": 0.22762396208586888,
+          "balanceUSD": 1799.4587577332125,
+          "difference": 3735.637230374179,
+          "symbol": "auragi-finance:USDT-USDC"
+        },
+        {
+          "apr": 0.1536228140376794,
+          "balanceUSD": 6564.969980754683,
+          "difference": 0,
+          "symbol": "yearn-finance:OHMFRAXBP-F"
+        },
+        {
+          "apr": 0.0,
+          "balanceUSD": 4198.383953973699,
+          "difference": 0,
+          "symbol": "frax:OHM-FRAX"
+        },
+        {
+          "apr": 0.31,
+          "balanceUSD": 2670.1544023359047,
+          "difference": 0,
+          "symbol": "SpaceFi:USDC-ETH"
+        }
+      ],
+      "sum_of_this_category_in_the_portfolio": 32088.86251607147,
+      "target_sum_of_this_category": 26151.931390083955
+    },
+    {
+      "category": "commodities",
+      "investment_shift_of_this_category": 0.0016972413369522317,
+      "suggestions_for_positions": [
+        {
+          "apr": 0.12187587482087481,
+          "balanceUSD": 1439.1490818590848,
+          "difference": 0,
+          "symbol": "convex-finance:WETH-CRV"
+        },
+        {
+          "apr": 0.2,
+          "balanceUSD": 647.09758154486,
+          "difference": 1411.2038466323825,
+          "symbol": "convex-finance:CVX"
+        },
+        {
+          "apr": 0.10783975677407742,
+          "balanceUSD": 1256.9868895315456,
+          "difference": 749.0769594713845,
+          "symbol": "convex-finance:CVXCRV"
+        },
+        {
+          "apr": 0.23,
+          "balanceUSD": 1433.6250717227522,
+          "difference": 0,
+          "symbol": "quickswap-dex:WMATIC-WETH"
+        },
+        {
+          "apr": 0.7023957415855853,
+          "balanceUSD": 5827.093710307994,
+          "difference": -3588.8040254316197,
+          "symbol": "radiant:RDNT-BNB"
+        },
+        {
+          "apr": 0.09833279946841578,
+          "balanceUSD": 2645.51419136,
+          "difference": 0,
+          "symbol": "stfil:FIL"
+        },
+        {
+          "apr": 0.2,
+          "balanceUSD": 122.406762025,
+          "difference": 2165.2381172786154,
+          "symbol": "cosmos:atom"
+        }
+      ],
+      "sum_of_this_category_in_the_portfolio": 13371.873288351238,
+      "target_sum_of_this_category": 13075.965695041978
+    },
+    {
+      "category": "gold",
+      "investment_shift_of_this_category": -0.017544248990136898,
+      "suggestions_for_positions": [
+        {
+          "apr": 0.2017935143496974,
+          "balanceUSD": 10017.192389171245,
+          "difference": 0,
+          "symbol": "pendle:GLP"
+        }
+      ],
+      "sum_of_this_category_in_the_portfolio": 10017.192389171245,
+      "target_sum_of_this_category": 13075.965695041978
+    },
+    {
+      "category": "large_cap_us_stocks",
+      "investment_shift_of_this_category": 0.013189166032243562,
+      "suggestions_for_positions": [
+        {
+          "apr": 0.2017935143496974,
+          "balanceUSD": 10017.192389171245,
+          "difference": 0,
+          "symbol": "pendle:GLP"
+        },
+        {
+          "apr": 0.7023957415855853,
+          "balanceUSD": 15141.376698348608,
+          "difference": -11572.305002603181,
+          "symbol": "radiant:RDNT-ETH"
+        },
+        {
+          "apr": 0.12187587482087481,
+          "balanceUSD": 1439.1490818590848,
+          "difference": 2541.8578250961673,
+          "symbol": "convex-finance:WETH-CRV"
+        },
+        {
+          "apr": 0.10783975677407742,
+          "balanceUSD": 1256.9868895315456,
+          "difference": 6268.180395126993,
+          "symbol": "convex-finance:CVXCRV"
+        },
+        {
+          "apr": 0.7023957415855853,
+          "balanceUSD": 5827.093710307994,
+          "difference": 2569.2015115973572,
+          "symbol": "radiant:RDNT-BNB"
+        }
+      ],
+      "sum_of_this_category_in_the_portfolio": 33681.798769218476,
+      "target_sum_of_this_category": 31382.317668100746
+    },
+    {
+      "category": "small_cap_us_stocks",
+      "investment_shift_of_this_category": -0.008228329776645858,
+      "suggestions_for_positions": [
+        {
+          "apr": 0.2,
+          "balanceUSD": 647.09758154486,
+          "difference": 1207.1381427043084,
+          "symbol": "convex-finance:CVX"
+        },
+        {
+          "apr": 0.21531501373081796,
+          "balanceUSD": 2072.169888026021,
+          "difference": -1254.5181649236793,
+          "symbol": "sushiswap:DPX-WETH"
+        },
+        {
+          "apr": 10,
+          "balanceUSD": 713.8604041121536,
+          "difference": 948.9672275336569,
+          "symbol": "Equilibria:PENDLE"
+        },
+        {
+          "apr": 0.29298062563796745,
+          "balanceUSD": 362.6802991749078,
+          "difference": 532.9908998445637,
+          "symbol": "gamma:MAGIC-WETH"
+        }
+      ],
+      "sum_of_this_category_in_the_portfolio": 3795.8081728579423,
+      "target_sum_of_this_category": 5230.386278016791
+    },
+    {
+      "category": "non_us_developed_market_stocks",
+      "investment_shift_of_this_category": -0.009317556341397644,
+      "suggestions_for_positions": [
+        {
+          "apr": 0.38,
+          "balanceUSD": 8836.291928277096,
+          "difference": 0,
+          "symbol": "sushiswap:KAVA-WETH"
+        }
+      ],
+      "sum_of_this_category_in_the_portfolio": 8836.291928277096,
+      "target_sum_of_this_category": 10460.772556033582
+    },
+    {
+      "category": "non_us_emerging_market_stocks",
+      "investment_shift_of_this_category": -0.029297909816683294,
+      "suggestions_for_positions": [
+        {
+          "apr": 0.2,
+          "balanceUSD": 122.406762025,
+          "difference": 0,
+          "symbol": "cosmos:atom"
+        }
+      ],
+      "sum_of_this_category_in_the_portfolio": 122.406762025,
+      "target_sum_of_this_category": 5230.386278016791
+    }
+  ],
+  "top_n_pool_consist_of_same_lp_token": [
+    [
+      "pendle:GLP",
+      [],
+      0.2017935143496974
+    ],
+    [
+      "radiant:RDNT-ETH",
+      [],
+      0.7023957415855853
+    ],
+    [
+      "convex-finance:WETH-CRV",
+      [
+        {
+          "pool_metadata": {
+            "apy": 35.25741,
+            "apyBase": 0.05358,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 20.29413,
+            "apyPct1D": -2.07065,
+            "apyPct30D": null,
+            "apyPct7D": 35.03853,
+            "apyReward": 35.20383,
+            "chain": "Ethereum",
+            "count": 24,
+            "exposure": "multi",
+            "il7d": null,
+            "ilRisk": "yes",
+            "mu": 20.46004,
+            "outlier": false,
+            "pool": "b8c90f85-fcf5-4bcf-af8a-e361209dff0d",
+            "poolMeta": null,
+            "predictions": {
+              "binnedConfidence": 3,
+              "predictedClass": "Down",
+              "predictedProbability": 93
+            },
+            "project": "convex-finance",
+            "rewardTokens": [
+              "0xd533a949740bb3306d119cc777fa900ba034cd52",
+              "0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b"
+            ],
+            "sigma": 0.5648,
+            "stablecoin": false,
+            "symbol": "CRV-FRXETH",
+            "tvlUsd": 783340,
+            "underlyingTokens": [
+              "0xD533a949740bb3306d119CC777fa900bA034cd52",
+              "0x5E8422345238F34275888049021821E8E08CAa1f"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 14.55,
+            "apyBase": null,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 16.43222,
+            "apyPct1D": -0.72,
+            "apyPct30D": -3.27,
+            "apyPct7D": -1.92,
+            "apyReward": null,
+            "chain": "Ethereum",
+            "count": 357,
+            "exposure": "multi",
+            "il7d": null,
+            "ilRisk": "yes",
+            "mu": 30.55163,
+            "outlier": false,
+            "pool": "1e13c46e-d42f-43e8-bda2-8ca344b5ce1c",
+            "poolMeta": null,
+            "predictions": {
+              "binnedConfidence": 2,
+              "predictedClass": "Stable/Up",
+              "predictedProbability": 63
+            },
+            "project": "concentrator",
+            "rewardTokens": null,
+            "sigma": 0.65299,
+            "stablecoin": false,
+            "symbol": "ETH-CRV",
+            "tvlUsd": 743325,
+            "underlyingTokens": null,
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        }
+      ],
+      0.12187587482087481
+    ],
+    [
+      "pendle:RETH-WETH",
+      [
+        {
+          "pool_metadata": {
+            "apy": 59.82585,
+            "apyBase": null,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 146.69575,
+            "apyPct1D": -11.70748,
+            "apyPct30D": null,
+            "apyPct7D": -46.95924,
+            "apyReward": 59.82585,
+            "chain": "Ethereum",
+            "count": 18,
+            "exposure": "single",
+            "il7d": null,
+            "ilRisk": "no",
+            "mu": 130.26487,
+            "outlier": true,
+            "pool": "a7440518-4d50-4983-bf3e-dfd31ef296e3",
+            "poolMeta": null,
+            "predictions": {
+              "binnedConfidence": 1,
+              "predictedClass": "Stable/Up",
+              "predictedProbability": 55.00000000000001
+            },
+            "project": "asymetrix-protocol",
+            "rewardTokens": [
+              "0x67d85A291fcDC862A78812a3C26d55e28FFB2701"
+            ],
+            "sigma": 1.54102,
+            "stablecoin": false,
+            "symbol": "STETH",
+            "tvlUsd": 6314511,
+            "underlyingTokens": [
+              "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 54.81729,
+            "apyBase": 54.81729,
+            "apyBase7d": null,
+            "apyBaseInception": -2.11956,
+            "apyMean30d": 57.56919,
+            "apyPct1D": 0,
+            "apyPct30D": -3.72984,
+            "apyPct7D": -3.76231,
+            "apyReward": null,
+            "chain": "Ethereum",
+            "count": 210,
+            "exposure": "single",
+            "il7d": null,
+            "ilRisk": "no",
+            "mu": 22.00541,
+            "outlier": false,
+            "pool": "4f5f8c55-1237-4934-8a71-aacd40cd41ae",
+            "poolMeta": "Covered-Call",
+            "predictions": {
+              "binnedConfidence": 3,
+              "predictedClass": "Down",
+              "predictedProbability": 98
+            },
+            "project": "ribbon",
+            "rewardTokens": null,
+            "sigma": 0.76647,
+            "stablecoin": false,
+            "symbol": "ETH",
+            "tvlUsd": 7610262,
+            "underlyingTokens": [
+              "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 26.39768,
+            "apyBase": 26.39768,
+            "apyBase7d": null,
+            "apyBaseInception": -0.01035,
+            "apyMean30d": 27.65943,
+            "apyPct1D": 0,
+            "apyPct30D": -9.542,
+            "apyPct7D": -1.08581,
+            "apyReward": null,
+            "chain": "Ethereum",
+            "count": 193,
+            "exposure": "single",
+            "il7d": null,
+            "ilRisk": "no",
+            "mu": 14.74256,
+            "outlier": false,
+            "pool": "7e5cf37d-6537-4a3e-883b-f1f3d88c87c2",
+            "poolMeta": "Covered-Call",
+            "predictions": {
+              "binnedConfidence": 3,
+              "predictedClass": "Down",
+              "predictedProbability": 91
+            },
+            "project": "ribbon",
+            "rewardTokens": null,
+            "sigma": 0.4254,
+            "stablecoin": false,
+            "symbol": "STETH",
+            "tvlUsd": 8751615,
+            "underlyingTokens": [
+              "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 25.92,
+            "apyBase": null,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 26.729,
+            "apyPct1D": -0.33,
+            "apyPct30D": null,
+            "apyPct7D": 1.95,
+            "apyReward": null,
+            "chain": "Kava",
+            "count": 18,
+            "exposure": "single",
+            "il7d": null,
+            "ilRisk": "no",
+            "mu": 25.73224,
+            "outlier": false,
+            "pool": "5d788df5-b1de-45c2-97e7-10dc61aa98ab",
+            "poolMeta": "Mare",
+            "predictions": {
+              "binnedConfidence": 1,
+              "predictedClass": "Down",
+              "predictedProbability": 55.00000000000001
+            },
+            "project": "acryptos",
+            "rewardTokens": null,
+            "sigma": 0.21464,
+            "stablecoin": false,
+            "symbol": "ETH",
+            "tvlUsd": 2840366,
+            "underlyingTokens": null,
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 24.77049,
+            "apyBase": 6.35049,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 25.10063,
+            "apyPct1D": 4.6259,
+            "apyPct30D": -13.54959,
+            "apyPct7D": 6.25824,
+            "apyReward": 18.42,
+            "chain": "Ethereum",
+            "count": 34,
+            "exposure": "single",
+            "il7d": null,
+            "ilRisk": "no",
+            "mu": 26.44849,
+            "outlier": false,
+            "pool": "98fb5491-e12b-4197-89a9-5b6524b08f17",
+            "poolMeta": null,
+            "predictions": {
+              "binnedConfidence": 1,
+              "predictedClass": "Down",
+              "predictedProbability": 62
+            },
+            "project": "unsheth",
+            "rewardTokens": [
+              "0xe60779cc1b2c1d0580611c526a8df0e3f870ec48"
+            ],
+            "sigma": 0.27112,
+            "stablecoin": false,
+            "symbol": "UNSHETH",
+            "tvlUsd": 22990827,
+            "underlyingTokens": [
+              "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        }
+      ],
+      0.209
+    ],
+    [
+      "quickswap-dex:WMATIC-WETH",
+      [],
+      0.23
+    ],
+    [
+      "sushiswap:DPX-WETH",
+      [
+        {
+          "pool_metadata": {
+            "apy": 25.20133,
+            "apyBase": 3.18503,
+            "apyBase7d": 4.12336,
+            "apyBaseInception": null,
+            "apyMean30d": 31.46446,
+            "apyPct1D": -0.74974,
+            "apyPct30D": -10.00032,
+            "apyPct7D": -4.60406,
+            "apyReward": 22.0163,
+            "chain": "Arbitrum",
+            "count": 446,
+            "exposure": "multi",
+            "il7d": -0.1611,
+            "ilRisk": "yes",
+            "mu": 15.62251,
+            "outlier": false,
+            "pool": "168bac77-6fb7-47a3-a39f-25cf6752bad1",
+            "poolMeta": null,
+            "predictions": {
+              "binnedConfidence": 3,
+              "predictedClass": "Down",
+              "predictedProbability": 84
+            },
+            "project": "sushiswap",
+            "rewardTokens": [
+              "0xd4d42F0b6DEF4CE0383636770eF773390d85c61A",
+              "0x6c2c06790b3e3e3c38e12ee22f8183b37a13ee55"
+            ],
+            "sigma": 0.58933,
+            "stablecoin": false,
+            "symbol": "RDPX-WETH",
+            "tvlUsd": 5289467,
+            "underlyingTokens": [
+              "0x32eb7902d4134bf98a28b963d26de779af92a212",
+              "0x82af49447d8a07e3bd95bd0d56f35241523fbab1"
+            ],
+            "volumeUsd1d": 153854.82843,
+            "volumeUsd7d": 1398100.84476
+          },
+          "pool_similarity": true
+        }
+      ],
+      0.21531501373081796
+    ],
+    [
+      "SpaceFi:USDC-ETH",
+      [
+        {
+          "pool_metadata": {
+            "apy": 113.6464,
+            "apyBase": 11.89859,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 141.31974,
+            "apyPct1D": -1.92185,
+            "apyPct30D": null,
+            "apyPct7D": -31.44534,
+            "apyReward": 101.74781,
+            "chain": "Arbitrum",
+            "count": 15,
+            "exposure": "multi",
+            "il7d": null,
+            "ilRisk": "yes",
+            "mu": 138.07394,
+            "outlier": true,
+            "pool": "ec999890-8f09-4a68-9188-ddd5cef36a45",
+            "poolMeta": "LionDEX LP pool",
+            "predictions": {
+              "binnedConfidence": 1,
+              "predictedClass": "Stable/Up",
+              "predictedProbability": 51
+            },
+            "project": "liondex",
+            "rewardTokens": [
+              "0x8ebb85d53e6955e557b7c53acde1d42fd68561ec"
+            ],
+            "sigma": 0.5688,
+            "stablecoin": false,
+            "symbol": "WBTC-ETH-USDC",
+            "tvlUsd": 1905647,
+            "underlyingTokens": [
+              "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f",
+              "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+              "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 45.14635,
+            "apyBase": -9.18912,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 42.77495,
+            "apyPct1D": 6.56204,
+            "apyPct30D": null,
+            "apyPct7D": 11.95153,
+            "apyReward": 54.33546,
+            "chain": "Ethereum",
+            "count": 29,
+            "exposure": "multi",
+            "il7d": null,
+            "ilRisk": "yes",
+            "mu": 41.89494,
+            "outlier": true,
+            "pool": "02db9a0d-9b44-4cf2-81fe-6d22be6e184d",
+            "poolMeta": null,
+            "predictions": {
+              "binnedConfidence": 3,
+              "predictedClass": "Down",
+              "predictedProbability": 89
+            },
+            "project": "mellow-protocol",
+            "rewardTokens": [
+              "0x5A98FcBEA516Cf06857215779Fd812CA3beF1B32"
+            ],
+            "sigma": 0.48522,
+            "stablecoin": false,
+            "symbol": "WSTETH-USDC",
+            "tvlUsd": 1017226,
+            "underlyingTokens": [
+              "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0",
+              "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 59.50507,
+            "apyBase": 26.07441,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 40.66956,
+            "apyPct1D": 10.15094,
+            "apyPct30D": 25.5248,
+            "apyPct7D": 30.533,
+            "apyReward": 33.43066,
+            "chain": "Arbitrum",
+            "count": 55,
+            "exposure": "multi",
+            "il7d": null,
+            "ilRisk": "yes",
+            "mu": 35.84954,
+            "outlier": false,
+            "pool": "fd535169-c357-403b-bd1a-50fedf444813",
+            "poolMeta": "",
+            "predictions": {
+              "binnedConfidence": 3,
+              "predictedClass": "Down",
+              "predictedProbability": 96
+            },
+            "project": "gamma",
+            "rewardTokens": [
+              "0x3b475f6f2f41853706afc9fa6a6b8c5df1a2724c"
+            ],
+            "sigma": 0.8459,
+            "stablecoin": false,
+            "symbol": "WETH-USDC",
+            "tvlUsd": 2145029,
+            "underlyingTokens": [
+              "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+              "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 39.14403,
+            "apyBase": 20.25207,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 42.83112,
+            "apyPct1D": 9.06275,
+            "apyPct30D": -16.93063,
+            "apyPct7D": -6.09843,
+            "apyReward": 18.89196,
+            "chain": "Polygon",
+            "count": 106,
+            "exposure": "multi",
+            "il7d": null,
+            "ilRisk": "yes",
+            "mu": 63.03775,
+            "outlier": true,
+            "pool": "44952336-99af-4552-b811-b878ff49abf1",
+            "poolMeta": "",
+            "predictions": {
+              "binnedConfidence": 1,
+              "predictedClass": "Down",
+              "predictedProbability": 60
+            },
+            "project": "gamma",
+            "rewardTokens": [
+              "0x958d208cdf087843e9ad98d23823d32e17d723a1",
+              "0x385eeac5cb85a38a9a07a70c73e0a3271cfb54a7",
+              "0x7a7b94f18ef6ad056cda648588181cda84800f94",
+              "0xc2a45fe7d40bcac8369371b08419ddafd3131b4a",
+              "0xc3c7d422809852031b44ab29eec9f1eff2a58756",
+              "0x6e4e624106cb12e168e6533f8ec7c82263358940",
+              "0x101a023270368c0d50bffb62780f4afd4ea79c35",
+              "0x67eb41a14c0fe5cd701fc9d5a3d6597a72f641a6",
+              "0xec38621e72d86775a89c7422746de1f52bba5320",
+              "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+              "0x0c9c7712c83b3c70e7c5e11100d33d9401bdf9dd",
+              "0x1d734a02ef1e1f5886e66b0673b71af5b53ffa94"
+            ],
+            "sigma": 0.94148,
+            "stablecoin": false,
+            "symbol": "USDC-WETH",
+            "tvlUsd": 5344408,
+            "underlyingTokens": [
+              "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+              "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        }
+      ],
+      0.31
+    ],
+    [
+      "gamma:MAGIC-WETH",
+      [],
+      0.29298062563796745
+    ],
+    [
+      "radiant:lending",
+      [
+        {
+          "pool_metadata": {
+            "apy": 59.82585,
+            "apyBase": null,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 146.69575,
+            "apyPct1D": -11.70748,
+            "apyPct30D": null,
+            "apyPct7D": -46.95924,
+            "apyReward": 59.82585,
+            "chain": "Ethereum",
+            "count": 18,
+            "exposure": "single",
+            "il7d": null,
+            "ilRisk": "no",
+            "mu": 130.26487,
+            "outlier": true,
+            "pool": "a7440518-4d50-4983-bf3e-dfd31ef296e3",
+            "poolMeta": null,
+            "predictions": {
+              "binnedConfidence": 1,
+              "predictedClass": "Stable/Up",
+              "predictedProbability": 55.00000000000001
+            },
+            "project": "asymetrix-protocol",
+            "rewardTokens": [
+              "0x67d85A291fcDC862A78812a3C26d55e28FFB2701"
+            ],
+            "sigma": 1.54102,
+            "stablecoin": false,
+            "symbol": "STETH",
+            "tvlUsd": 6314511,
+            "underlyingTokens": [
+              "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 54.81729,
+            "apyBase": 54.81729,
+            "apyBase7d": null,
+            "apyBaseInception": -2.11956,
+            "apyMean30d": 57.56919,
+            "apyPct1D": 0,
+            "apyPct30D": -3.72984,
+            "apyPct7D": -3.76231,
+            "apyReward": null,
+            "chain": "Ethereum",
+            "count": 210,
+            "exposure": "single",
+            "il7d": null,
+            "ilRisk": "no",
+            "mu": 22.00541,
+            "outlier": false,
+            "pool": "4f5f8c55-1237-4934-8a71-aacd40cd41ae",
+            "poolMeta": "Covered-Call",
+            "predictions": {
+              "binnedConfidence": 3,
+              "predictedClass": "Down",
+              "predictedProbability": 98
+            },
+            "project": "ribbon",
+            "rewardTokens": null,
+            "sigma": 0.76647,
+            "stablecoin": false,
+            "symbol": "ETH",
+            "tvlUsd": 7610262,
+            "underlyingTokens": [
+              "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 26.39768,
+            "apyBase": 26.39768,
+            "apyBase7d": null,
+            "apyBaseInception": -0.01035,
+            "apyMean30d": 27.65943,
+            "apyPct1D": 0,
+            "apyPct30D": -9.542,
+            "apyPct7D": -1.08581,
+            "apyReward": null,
+            "chain": "Ethereum",
+            "count": 193,
+            "exposure": "single",
+            "il7d": null,
+            "ilRisk": "no",
+            "mu": 14.74256,
+            "outlier": false,
+            "pool": "7e5cf37d-6537-4a3e-883b-f1f3d88c87c2",
+            "poolMeta": "Covered-Call",
+            "predictions": {
+              "binnedConfidence": 3,
+              "predictedClass": "Down",
+              "predictedProbability": 91
+            },
+            "project": "ribbon",
+            "rewardTokens": null,
+            "sigma": 0.4254,
+            "stablecoin": false,
+            "symbol": "STETH",
+            "tvlUsd": 8751615,
+            "underlyingTokens": [
+              "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 25.92,
+            "apyBase": null,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 26.729,
+            "apyPct1D": -0.33,
+            "apyPct30D": null,
+            "apyPct7D": 1.95,
+            "apyReward": null,
+            "chain": "Kava",
+            "count": 18,
+            "exposure": "single",
+            "il7d": null,
+            "ilRisk": "no",
+            "mu": 25.73224,
+            "outlier": false,
+            "pool": "5d788df5-b1de-45c2-97e7-10dc61aa98ab",
+            "poolMeta": "Mare",
+            "predictions": {
+              "binnedConfidence": 1,
+              "predictedClass": "Down",
+              "predictedProbability": 55.00000000000001
+            },
+            "project": "acryptos",
+            "rewardTokens": null,
+            "sigma": 0.21464,
+            "stablecoin": false,
+            "symbol": "ETH",
+            "tvlUsd": 2840366,
+            "underlyingTokens": null,
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 24.77049,
+            "apyBase": 6.35049,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 25.10063,
+            "apyPct1D": 4.6259,
+            "apyPct30D": -13.54959,
+            "apyPct7D": 6.25824,
+            "apyReward": 18.42,
+            "chain": "Ethereum",
+            "count": 34,
+            "exposure": "single",
+            "il7d": null,
+            "ilRisk": "no",
+            "mu": 26.44849,
+            "outlier": false,
+            "pool": "98fb5491-e12b-4197-89a9-5b6524b08f17",
+            "poolMeta": null,
+            "predictions": {
+              "binnedConfidence": 1,
+              "predictedClass": "Down",
+              "predictedProbability": 62
+            },
+            "project": "unsheth",
+            "rewardTokens": [
+              "0xe60779cc1b2c1d0580611c526a8df0e3f870ec48"
+            ],
+            "sigma": 0.27112,
+            "stablecoin": false,
+            "symbol": "UNSHETH",
+            "tvlUsd": 22990827,
+            "underlyingTokens": [
+              "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        }
+      ],
+      0.07
+    ],
+    [
+      "sushiswap:KAVA-WETH",
+      [],
+      0.38
+    ],
+    [
+      "frax:VST-FRAX",
+      [],
+      0.07173600013523629
+    ],
+    [
+      "auragi-finance:USDT-USDC",
+      [],
+      0.22762396208586888
+    ],
+    [
+      "yearn-finance:OHMFRAXBP-F",
+      [],
+      0.1536228140376794
+    ],
+    [
+      "frax:OHM-FRAX",
+      [],
+      0.0
+    ],
+    [
+      "convex-finance:CVX",
+      [
+        {
+          "pool_metadata": {
+            "apy": 35.22179,
+            "apyBase": 0.01687,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 34.35331,
+            "apyPct1D": -0.21815,
+            "apyPct30D": -1.88841,
+            "apyPct7D": 6.14658,
+            "apyReward": 35.20492,
+            "chain": "Ethereum",
+            "count": 43,
+            "exposure": "multi",
+            "il7d": null,
+            "ilRisk": "yes",
+            "mu": 34.51683,
+            "outlier": false,
+            "pool": "2f73ca67-3484-4aa3-8a26-48718a3b8bd7",
+            "poolMeta": null,
+            "predictions": {
+              "binnedConfidence": 1,
+              "predictedClass": "Down",
+              "predictedProbability": 53
+            },
+            "project": "convex-finance",
+            "rewardTokens": [
+              "0xd533a949740bb3306d119cc777fa900ba034cd52",
+              "0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b"
+            ],
+            "sigma": 0.10235,
+            "stablecoin": false,
+            "symbol": "CVX-CLEVCVX",
+            "tvlUsd": 2149499,
+            "underlyingTokens": [
+              "0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B",
+              "0xf05e58fCeA29ab4dA01A495140B349F8410Ba904"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 24.76926,
+            "apyBase": 24.76926,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 24.85041,
+            "apyPct1D": 0.62199,
+            "apyPct30D": -1.8486,
+            "apyPct7D": 0.57664,
+            "apyReward": 0,
+            "chain": "Ethereum",
+            "count": 415,
+            "exposure": "single",
+            "il7d": null,
+            "ilRisk": "no",
+            "mu": 30.06608,
+            "outlier": false,
+            "pool": "36d07713-d5de-42d8-9b34-5c71e788a77e",
+            "poolMeta": null,
+            "predictions": {
+              "binnedConfidence": 1,
+              "predictedClass": "Stable/Up",
+              "predictedProbability": 60
+            },
+            "project": "badger-dao",
+            "rewardTokens": [],
+            "sigma": 0.38587,
+            "stablecoin": false,
+            "symbol": "BVECVX",
+            "tvlUsd": 10201662,
+            "underlyingTokens": [
+              "0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        }
+      ],
+      0.2
+    ],
+    [
+      "convex-finance:CVXCRV",
+      [
+        {
+          "pool_metadata": {
+            "apy": 30.41,
+            "apyBase": null,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 29.73695,
+            "apyPct1D": -0.94,
+            "apyPct30D": 2.61,
+            "apyPct7D": 1.32,
+            "apyReward": null,
+            "chain": "Ethereum",
+            "count": 54,
+            "exposure": "multi",
+            "il7d": null,
+            "ilRisk": "yes",
+            "mu": 37.09388,
+            "outlier": true,
+            "pool": "8d7633d8-be8c-4b65-ba87-76bc808c9aed",
+            "poolMeta": null,
+            "predictions": {
+              "binnedConfidence": 2,
+              "predictedClass": "Down",
+              "predictedProbability": 75
+            },
+            "project": "concentrator",
+            "rewardTokens": null,
+            "sigma": 0.70186,
+            "stablecoin": false,
+            "symbol": "CRV-CVXCRV",
+            "tvlUsd": 2345590,
+            "underlyingTokens": null,
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 25.74962,
+            "apyBase": 0.09064,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 25.14664,
+            "apyPct1D": -0.89531,
+            "apyPct30D": 0.71489,
+            "apyPct7D": 1.17199,
+            "apyReward": 25.65898,
+            "chain": "Ethereum",
+            "count": 43,
+            "exposure": "multi",
+            "il7d": null,
+            "ilRisk": "yes",
+            "mu": 25.23548,
+            "outlier": false,
+            "pool": "3f6f3937-1f0c-4cec-8d3b-904434085bfa",
+            "poolMeta": null,
+            "predictions": {
+              "binnedConfidence": 2,
+              "predictedClass": "Down",
+              "predictedProbability": 68
+            },
+            "project": "convex-finance",
+            "rewardTokens": [
+              "0xd533a949740bb3306d119cc777fa900ba034cd52",
+              "0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b"
+            ],
+            "sigma": 0.05969,
+            "stablecoin": false,
+            "symbol": "CRV-CVXCRV",
+            "tvlUsd": 47289158,
+            "underlyingTokens": [
+              "0xD533a949740bb3306d119CC777fa900bA034cd52",
+              "0x62B9c7356A2Dc64a1969e19C23e4f579F9810Aa7"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 24.72385,
+            "apyBase": 0.31213,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 24.57569,
+            "apyPct1D": -0.8325,
+            "apyPct30D": -2.17726,
+            "apyPct7D": 3.66287,
+            "apyReward": 24.41172,
+            "chain": "Ethereum",
+            "count": 119,
+            "exposure": "multi",
+            "il7d": null,
+            "ilRisk": "yes",
+            "mu": 28.53335,
+            "outlier": false,
+            "pool": "1fbe7e03-75f3-4d65-8423-2cc023f786d7",
+            "poolMeta": null,
+            "predictions": {
+              "binnedConfidence": 2,
+              "predictedClass": "Stable/Up",
+              "predictedProbability": 71.55555555555556
+            },
+            "project": "convex-finance",
+            "rewardTokens": [
+              "0xd533a949740bb3306d119cc777fa900ba034cd52",
+              "0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b"
+            ],
+            "sigma": 0.19019,
+            "stablecoin": false,
+            "symbol": "CRV-YCRV",
+            "tvlUsd": 7291337,
+            "underlyingTokens": [
+              "0xD533a949740bb3306d119CC777fa900bA034cd52",
+              "0xFCc5c47bE19d06BF83eB04298b026F81069ff65b"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 22.92539,
+            "apyBase": 21.11744,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 19.08907,
+            "apyPct1D": 0.01741,
+            "apyPct30D": 4.99004,
+            "apyPct7D": 3.34899,
+            "apyReward": 1.80795,
+            "chain": "Ethereum",
+            "count": 140,
+            "exposure": "single",
+            "il7d": null,
+            "ilRisk": "no",
+            "mu": 21.01163,
+            "outlier": false,
+            "pool": "009b310f-8777-4d5d-a894-548b3218d18c",
+            "poolMeta": "Curve",
+            "predictions": {
+              "binnedConfidence": 3,
+              "predictedClass": "Down",
+              "predictedProbability": 81
+            },
+            "project": "stakedao",
+            "rewardTokens": [
+              "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
+              "0x73968b9a57c6e53d41345fd57a6e6ae27d6cdb2f"
+            ],
+            "sigma": 0.16028,
+            "stablecoin": false,
+            "symbol": "CRV",
+            "tvlUsd": 24964693,
+            "underlyingTokens": [
+              "0xD1b5651E55D4CeeD36251c61c50C889B36F6abB5"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        },
+        {
+          "pool_metadata": {
+            "apy": 24.72537,
+            "apyBase": 0.34385,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 18.05172,
+            "apyPct1D": -2.46425,
+            "apyPct30D": 13.43484,
+            "apyPct7D": 4.2823,
+            "apyReward": 24.38152,
+            "chain": "Ethereum",
+            "count": 218,
+            "exposure": "multi",
+            "il7d": null,
+            "ilRisk": "yes",
+            "mu": 26.41041,
+            "outlier": false,
+            "pool": "1ec3feee-b2a9-454f-9dd3-f54ecde0f2b1",
+            "poolMeta": null,
+            "predictions": {
+              "binnedConfidence": 3,
+              "predictedClass": "Down",
+              "predictedProbability": 80
+            },
+            "project": "convex-finance",
+            "rewardTokens": [
+              "0xd533a949740bb3306d119cc777fa900ba034cd52",
+              "0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b"
+            ],
+            "sigma": 1.2386,
+            "stablecoin": false,
+            "symbol": "CRV-SDCRV",
+            "tvlUsd": 1298069,
+            "underlyingTokens": [
+              "0xD533a949740bb3306d119CC777fa900bA034cd52",
+              "0xD1b5651E55D4CeeD36251c61c50C889B36F6abB5"
+            ],
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        }
+      ],
+      0.10783975677407742
+    ],
+    [
+      "radiant:RDNT-BNB",
+      [],
+      0.7023957415855853
+    ],
+    [
+      "stfil:FIL",
+      [
+        {
+          "pool_metadata": {
+            "apy": 20,
+            "apyBase": null,
+            "apyBase7d": null,
+            "apyBaseInception": null,
+            "apyMean30d": 20,
+            "apyPct1D": 0,
+            "apyPct30D": null,
+            "apyPct7D": null,
+            "apyReward": null,
+            "chain": "Filecoin",
+            "count": 6,
+            "exposure": "single",
+            "il7d": null,
+            "ilRisk": "no",
+            "mu": 20,
+            "outlier": false,
+            "pool": "461800a1-f60b-4dd8-8914-e3e8b78a43dd",
+            "poolMeta": "360days lockup",
+            "predictions": {
+              "binnedConfidence": null,
+              "predictedClass": null,
+              "predictedProbability": null
+            },
+            "project": "filet-finance",
+            "rewardTokens": null,
+            "sigma": 0,
+            "stablecoin": false,
+            "symbol": "FIL",
+            "tvlUsd": 2469979,
+            "underlyingTokens": null,
+            "volumeUsd1d": null,
+            "volumeUsd7d": null
+          },
+          "pool_similarity": true
+        }
+      ],
+      0.09833279946841578
+    ],
+    [
+      "cosmos:atom",
+      [],
+      0.2
+    ],
+    [
+      "Equilibria:PENDLE",
+      [],
+      10
+    ]
+  ],
+  "topn_stable_coins": [
+    {
+      "apy": 38.09266,
+      "apyBase": 38.09266,
+      "apyBase7d": null,
+      "apyBaseInception": null,
+      "apyMean30d": 10512.64369,
+      "apyPct1D": -0.06584,
+      "apyPct30D": null,
+      "apyPct7D": null,
+      "apyReward": null,
+      "chain": "Optimism",
+      "count": 6,
+      "exposure": "single",
+      "il7d": null,
+      "ilRisk": "no",
+      "mu": 177.07387,
+      "outlier": true,
+      "pool": "2120fa94-d599-45d4-b4d5-d9c44173b97c",
+      "poolMeta": "Barnbridge SmartYield Bond Token USD Coin-11MAY23",
+      "predictions": {
+        "binnedConfidence": null,
+        "predictedClass": null,
+        "predictedProbability": null
+      },
+      "project": "barnbridge",
+      "rewardTokens": null,
+      "sigma": 10.15885,
+      "stablecoin": true,
+      "symbol": "USDC",
+      "tvlUsd": 349323,
+      "underlyingTokens": [
+        "0x7f5c764cbc14f9669b88837ca1490cca17c31607"
+      ],
+      "volumeUsd1d": null,
+      "volumeUsd7d": null
+    }
+  ],
+  "total_interest": 58579.78646048047
+}
