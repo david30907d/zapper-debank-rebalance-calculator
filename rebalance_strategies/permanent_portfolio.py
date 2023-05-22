@@ -6,6 +6,7 @@ class PermanentPortfolio(BasePortfolio):
     """
     stock total allocation should be 25%
     Apply all weather portfolio's allocation for large_cap_us_stocks, small_cap_us_stocks, non_us_developed_market_stocks, non_us_emerging_market_stocks these 4 categories
+
     """
 
     def __init__(self):
