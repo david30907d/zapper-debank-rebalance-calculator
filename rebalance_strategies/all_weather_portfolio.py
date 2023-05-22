@@ -89,9 +89,6 @@ class AllWeatherPortfolio(BasePortfolio):
                 single_category_in_the_portfolio
             )
         )
-        lp_token_name_2_market_cap_proportino_dict = self._calculate_proportion_for_positions_in_a_single_category_by_market_cap_weighting(
-            single_category_in_the_portfolio_without_living_expenses
-        )
 
         for (
             symbol,

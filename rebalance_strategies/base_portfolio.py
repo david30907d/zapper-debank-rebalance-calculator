@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from rebalance_server.utils.position import skip_rebalance_if_position_too_small
+
 
 class BasePortfolio(ABC):
     REBALANCE_THRESHOLD = 0.05
@@ -50,3 +52,31 @@ class BasePortfolio(ABC):
     @abstractmethod
     def get_suggestions_for_positions(self):
         pass
+
+    # def _calculate_suggestions_for_positions(
+    #     self, category, single_category_in_the_portfolio, net_worth
+    # ):
+    #     target_sum_of_this_category = net_worth * self.target_asset_allocation[category]
+    #     diffrence = (
+    #         target_sum_of_this_category - single_category_in_the_portfolio["sum"]
+    #     )
+    #     result = []
+    #     for symbol, position_obj in sorted(
+    #         single_category_in_the_portfolio["portfolio"].items(),
+    #         key=lambda x: -x[1]["worth"],
+    #     ):
+    #         balanceUSD = position_obj["worth"]
+    #         apr = position_obj["APR"]
+    #         if skip_rebalance_if_position_too_small(balanceUSD):
+    #             continue
+    #         result.append(
+    #             {
+    #                 "symbol": symbol,
+    #                 "balanceUSD": balanceUSD,
+    #                 "apr": apr,
+    #                 "diffrence": diffrence
+    #                 * balanceUSD
+    #                 / single_category_in_the_portfolio["sum"],
+    #             }
+    #         )
+    #     return

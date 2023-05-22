@@ -30,7 +30,7 @@ class PermanentPortfolio(BasePortfolio):
         if abs(investment_shift) < self.REBALANCE_THRESHOLD:
             return []
         target_sum_of_this_category = net_worth * self.target_asset_allocation[category]
-        difference = (
+        diffrence = (
             target_sum_of_this_category - single_category_in_the_portfolio["sum"]
         )
         result = []
@@ -47,7 +47,7 @@ class PermanentPortfolio(BasePortfolio):
                     "symbol": symbol,
                     "balanceUSD": balanceUSD,
                     "apr": apr,
-                    "difference": difference
+                    "diffrence": diffrence
                     * balanceUSD
                     / single_category_in_the_portfolio["sum"],
                 }
