@@ -89,7 +89,7 @@ class AllWeatherPortfolio(BasePortfolio):
                 single_category_in_the_portfolio
             )
         )
-        lp_token_name_2_market_cap_proportino_dict = self._calculate_proportion_for_positions_in_a_single_category_by_market_cap_weighting(
+        lp_token_name_2_market_cap_weighting_in_this_category_dict = self._calculate_proportion_for_positions_in_a_single_category_by_market_cap_weighting(
             single_category_in_the_portfolio_without_living_expenses
         )
 
@@ -106,13 +106,12 @@ class AllWeatherPortfolio(BasePortfolio):
                 / single_category_in_the_portfolio_without_living_expenses["sum"]
             )
             target_ratio_of_this_position_in_this_category = (
-                lp_token_name_2_market_cap_proportino_dict[symbol]
+                lp_token_name_2_market_cap_weighting_in_this_category_dict[symbol]
             )
             difference = (
                 target_sum_of_this_category
-                * lp_token_name_2_market_cap_proportino_dict[symbol]
-                - single_category_in_the_portfolio_without_living_expenses["sum"]
-                * current_ratio_of_this_position_in_this_category
+                * lp_token_name_2_market_cap_weighting_in_this_category_dict[symbol]
+                - balanceUSD
             )
             if (
                 abs(
@@ -181,17 +180,19 @@ class AllWeatherPortfolio(BasePortfolio):
             return 0
         # average the market cap of all tokens in the LP
         for token_metadata in position_obj["tokens_metadata"]:
-            # since most of my LPs are paired with ETH, I don't want to include ETH in the calculation.
-            # ETH's market cap is too big, it will skew the result
-            if "eth" in token_metadata["symbol"].lower():
-                continue
+            # # since most of my LPs are paired with ETH, I don't want to include ETH in the calculation.
+            # # ETH's market cap is too big, it will skew the result
+            # if "eth" in token_metadata["symbol"].lower():
+            #     continue
             log_market_cap = math.log(
                 self.market_cap_of_tokens[
                     ZAPPER_SYMBOL_2_COINGECKO_MAPPING[token_metadata["symbol"]]
                 ]
             )
+            lowered_token = token_metadata["symbol"].lower()
+            unwrapped_symbol = "eth" if "eth" in lowered_token else lowered_token
             composition_of_this_lp_token = position_obj["metadata"]["composition"][
-                token_metadata["symbol"].lower()
+                unwrapped_symbol
             ]
             market_cap_of_this_lp_token += log_market_cap * composition_of_this_lp_token
         return self._make_sure_eth_position_would_not_be_skipped(
@@ -220,3 +221,70 @@ class AllWeatherPortfolio(BasePortfolio):
                 self.market_cap_of_tokens[ZAPPER_SYMBOL_2_COINGECKO_MAPPING["ETH"]]
             )
         return market_cap_of_this_lp_token
+
+    def _apply_custom_logic_for_entire_suggestions(self, suggestions: list) -> list:
+        compromised_suggestion_dict = defaultdict(list)
+        compromised_suggestion_dict = self._calculate_target_balance_in_each_category(
+            suggestions, compromised_suggestion_dict
+        )
+        # TODO(david): 要確保算完 weighted arithmetic mean 之後，LP 還是能夠被 40% long term bond, 15% large cap us stokc 這樣的比例去整除
+        # 調整完，要確定真的還有符合 all weather portfolio 的比例
+        for (
+            symbol,
+            suggestions_for_single_position,
+        ) in compromised_suggestion_dict.items():
+            compromised_suggestion_dict[
+                symbol
+            ] = self._calculate_weighted_arithmetic_mean(
+                suggestions_for_single_position
+            )
+        suggestions = self._put_target_balance_back_to_suggestions(
+            suggestions, compromised_suggestion_dict
+        )
+        return suggestions
+
+    def _calculate_target_balance_in_each_category(
+        self, suggestions: list, compromised_suggestion_dict: dict
+    ) -> dict:
+        for suggestions_for_category in suggestions:
+            for suggestion in suggestions_for_category["suggestions_for_positions"]:
+                if suggestion["difference"] == 0:
+                    continue
+                symbol = suggestion["symbol"]
+                compromised_suggestion_dict[symbol].append(
+                    {
+                        "category": suggestions_for_category["category"],
+                        "targetBalance": suggestion["balanceUSD"]
+                        + suggestion["difference"],
+                    }
+                )
+        return compromised_suggestion_dict
+
+    def _calculate_weighted_arithmetic_mean(
+        self, suggestions_for_single_position: list
+    ) -> list:
+        targeted_balance = 0
+        total_weight = 0
+        for position in suggestions_for_single_position:
+            percentage_of_this_category_in_portfolio = self.target_asset_allocation[
+                position["category"]
+            ]
+            total_weight += percentage_of_this_category_in_portfolio
+            targeted_balance += (
+                position["targetBalance"] * percentage_of_this_category_in_portfolio
+            )
+        return {"targetBalance": targeted_balance / total_weight}
+
+    @staticmethod
+    def _put_target_balance_back_to_suggestions(
+        suggestions, compromised_suggestion_dict
+    ):
+        for suggestions_for_category in suggestions:
+            for suggestion in suggestions_for_category["suggestions_for_positions"]:
+                if suggestion["difference"] == 0:
+                    continue
+                symbol = suggestion["symbol"]
+                suggestion["targetBalance"] = compromised_suggestion_dict[symbol][
+                    "targetBalance"
+                ]
+        return suggestions
