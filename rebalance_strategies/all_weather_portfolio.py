@@ -5,12 +5,16 @@ from collections import defaultdict
 
 import requests
 
+from rebalance_server.handlers.utils import get_weighted_balanceUSD
 from rebalance_server.portfolio_config import (
     DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL,
     ZAPPER_SYMBOL_2_COINGECKO_MAPPING,
 )
 from rebalance_server.rebalance_strategies.base_portfolio import BasePortfolio
 from rebalance_server.utils.position import skip_rebalance_if_position_too_small
+
+# TODO(david): since using quadratic programming + object function to make the weight similar to market cap weight, and also obey all weather portfolio is too hard. So use a predefined ratio for easier rebalancing
+PREDEFINED_RATIO_FOR_EASIER_REBALANCING = 0.9
 
 
 class AllWeatherPortfolio(BasePortfolio):
@@ -43,6 +47,8 @@ class AllWeatherPortfolio(BasePortfolio):
             )
         except FileNotFoundError:
             self._update_market_cap()
+        self.lp_token_name_2_market_cap_dict = defaultdict(float)
+        self.lp_token_2_market_cap_percentage = {}
 
     def _update_market_cap(self):
         market_cap_resp = requests.get(
@@ -77,11 +83,6 @@ class AllWeatherPortfolio(BasePortfolio):
     def get_suggestions_for_positions(
         self, category, _, single_category_in_the_portfolio, net_worth
     ):
-        # 6. `symbol.split('-')`
-        # 7. calculate how many token you need to sell?
-        #     * for sell, just unstake your LP and then swap them to ETH
-        #     * for buying, use the investment shift to calculate how many token you need to buy for LP
-        # 8. populate those numbers to `zap in` page
         target_sum_of_this_category = net_worth * self.target_asset_allocation[category]
         result = []
         single_category_in_the_portfolio_without_living_expenses = (
@@ -92,7 +93,6 @@ class AllWeatherPortfolio(BasePortfolio):
         lp_token_name_2_market_cap_weighting_in_this_category_dict = self._calculate_proportion_for_positions_in_a_single_category_by_market_cap_weighting(
             single_category_in_the_portfolio_without_living_expenses
         )
-
         for (
             symbol,
             position_obj,
@@ -127,6 +127,7 @@ class AllWeatherPortfolio(BasePortfolio):
                     "balanceUSD": balanceUSD,
                     "apr": apr,
                     "difference": difference,
+                    "metadata": position_obj["metadata"],
                 }
             )
         return result
@@ -156,20 +157,20 @@ class AllWeatherPortfolio(BasePortfolio):
     def _calculate_proportion_for_positions_in_a_single_category_by_market_cap_weighting(
         self, single_category_in_the_portfolio_without_living_expenses: dict
     ) -> dict:
-        lp_token_name_2_market_cap_proportino_dict = defaultdict(float)
         for (
             symbol_consists_of_project_and_lp_token,
             position_obj,
         ) in single_category_in_the_portfolio_without_living_expenses[
             "portfolio"
         ].items():
-            lp_token_name_2_market_cap_proportino_dict[
+            self.lp_token_name_2_market_cap_dict[
                 symbol_consists_of_project_and_lp_token
             ] = self._calcualte_market_cap_of_this_lp_token(
                 symbol_consists_of_project_and_lp_token, position_obj
             )
+
         return self._calculate_proportion_via_market_cap_for_all_lp_positions_in_this_category(
-            lp_token_name_2_market_cap_proportino_dict
+            self.lp_token_name_2_market_cap_dict
         )
 
     def _calcualte_market_cap_of_this_lp_token(
@@ -180,11 +181,7 @@ class AllWeatherPortfolio(BasePortfolio):
             return 0
         # average the market cap of all tokens in the LP
         for token_metadata in position_obj["tokens_metadata"]:
-            # # since most of my LPs are paired with ETH, I don't want to include ETH in the calculation.
-            # # ETH's market cap is too big, it will skew the result
-            # if "eth" in token_metadata["symbol"].lower():
-            #     continue
-            log_market_cap = math.log(
+            log_transformation_market_cap = math.log(
                 self.market_cap_of_tokens[
                     ZAPPER_SYMBOL_2_COINGECKO_MAPPING[token_metadata["symbol"]]
                 ]
@@ -194,20 +191,23 @@ class AllWeatherPortfolio(BasePortfolio):
             composition_of_this_lp_token = position_obj["metadata"]["composition"][
                 unwrapped_symbol
             ]
-            market_cap_of_this_lp_token += log_market_cap * composition_of_this_lp_token
+            market_cap_of_this_lp_token += (
+                log_transformation_market_cap * composition_of_this_lp_token
+            )
         return self._make_sure_eth_position_would_not_be_skipped(
             market_cap_of_this_lp_token
         )
 
     @staticmethod
     def _calculate_proportion_via_market_cap_for_all_lp_positions_in_this_category(
-        lp_token_name_2_market_cap_proportino_dict: dict,
+        lp_token_name_2_market_cap_dict: dict,
     ) -> dict:
-        sum_of_market_cap = sum(lp_token_name_2_market_cap_proportino_dict.values())
+        lp_token_name_2_market_cap_proportino_dict = {}
+        sum_of_market_cap = sum(lp_token_name_2_market_cap_dict.values())
         for (
             symbol_consists_of_project_and_lp_token,
             market_cap,
-        ) in lp_token_name_2_market_cap_proportino_dict.items():
+        ) in lp_token_name_2_market_cap_dict.items():
             lp_token_name_2_market_cap_proportino_dict[
                 symbol_consists_of_project_and_lp_token
             ] = (market_cap / sum_of_market_cap)
@@ -223,68 +223,96 @@ class AllWeatherPortfolio(BasePortfolio):
         return market_cap_of_this_lp_token
 
     def _apply_custom_logic_for_entire_suggestions(self, suggestions: list) -> list:
-        compromised_suggestion_dict = defaultdict(list)
-        compromised_suggestion_dict = self._calculate_target_balance_in_each_category(
-            suggestions, compromised_suggestion_dict
+        net_worth = sum(
+            category["sum_of_this_category_in_the_portfolio"]
+            for category in suggestions
         )
-        # TODO(david): 要確保算完 weighted arithmetic mean 之後，LP 還是能夠被 40% long term bond, 15% large cap us stokc 這樣的比例去整除
-        # 調整完，要確定真的還有符合 all weather portfolio 的比例
-        for (
-            symbol,
-            suggestions_for_single_position,
-        ) in compromised_suggestion_dict.items():
-            compromised_suggestion_dict[
-                symbol
-            ] = self._calculate_weighted_arithmetic_mean(
-                suggestions_for_single_position
-            )
-        suggestions = self._put_target_balance_back_to_suggestions(
-            suggestions, compromised_suggestion_dict
+        target_sum_of_categories = {
+            category["category"]: category["target_sum_of_this_category"]
+            for category in suggestions
+        }
+        sacrafices_lp_token_count = 0
+        self.lp_token_2_market_cap_percentage = {
+            lp_token: market_cap / sum(self.lp_token_name_2_market_cap_dict.values())
+            for lp_token, market_cap in self.lp_token_name_2_market_cap_dict.items()
+        }
+        lp_tokens_sorted_lp_via_apr = sorted(
+            {
+                suggestion_of_this_position["symbol"]: suggestion_of_this_position
+                for suggestions_of_this_category in suggestions
+                for suggestion_of_this_position in suggestions_of_this_category[
+                    "suggestions_for_positions"
+                ]
+            }.items(),
+            key=lambda x: x[1]["apr"],
+            reverse=True,
         )
-        return suggestions
 
-    def _calculate_target_balance_in_each_category(
-        self, suggestions: list, compromised_suggestion_dict: dict
-    ) -> dict:
-        for suggestions_for_category in suggestions:
-            for suggestion in suggestions_for_category["suggestions_for_positions"]:
-                if suggestion["difference"] == 0:
-                    continue
-                symbol = suggestion["symbol"]
-                compromised_suggestion_dict[symbol].append(
-                    {
-                        "category": suggestions_for_category["category"],
-                        "targetBalance": suggestion["balanceUSD"]
-                        + suggestion["difference"],
-                    }
+        # empty the suggestions
+        for suggestion in suggestions:
+            suggestion["suggestions_for_positions"] = []
+        for lp_token, position_obj in lp_tokens_sorted_lp_via_apr:
+            for category in position_obj["metadata"]["categories"]:
+                market_cap_balance_for_this_lp_token_in_this_category = (
+                    get_weighted_balanceUSD(
+                        net_worth * self.lp_token_2_market_cap_percentage[lp_token],
+                        category,
+                        position_obj["metadata"],
+                        len(position_obj["metadata"]["categories"]),
+                    )
+                    * PREDEFINED_RATIO_FOR_EASIER_REBALANCING
                 )
-        return compromised_suggestion_dict
+                if (
+                    target_sum_of_categories[category]
+                    - market_cap_balance_for_this_lp_token_in_this_category
+                ) / net_worth > -self.REBALANCE_THRESHOLD:
+                    target_sum_of_categories[
+                        category
+                    ] -= market_cap_balance_for_this_lp_token_in_this_category
+                    self._update_suggestions_by_reference(
+                        suggestions,
+                        category,
+                        position_obj,
+                        market_cap_balance_for_this_lp_token_in_this_category,
+                    )
+                else:
+                    assert (
+                        sacrafices_lp_token_count < 3
+                    ), "only three lp token can be sacraficed"
+                    sacrafices_lp_token_count += 1
+                    print(
+                        f"no quota left for {lp_token} in {category}, need to sacrafice {sacrafices_lp_token_count} lp tokens"
+                    )
+                    self._update_suggestions_by_reference(
+                        suggestions,
+                        category,
+                        position_obj,
+                        market_cap_balance_for_this_lp_token_in_this_category,
+                    )
 
-    def _calculate_weighted_arithmetic_mean(
-        self, suggestions_for_single_position: list
-    ) -> list:
-        targeted_balance = 0
-        total_weight = 0
-        for position in suggestions_for_single_position:
-            percentage_of_this_category_in_portfolio = self.target_asset_allocation[
-                position["category"]
-            ]
-            total_weight += percentage_of_this_category_in_portfolio
-            targeted_balance += (
-                position["targetBalance"] * percentage_of_this_category_in_portfolio
-            )
-        return {"targetBalance": targeted_balance / total_weight}
+        return suggestions
 
     @staticmethod
-    def _put_target_balance_back_to_suggestions(
-        suggestions, compromised_suggestion_dict
-    ):
-        for suggestions_for_category in suggestions:
-            for suggestion in suggestions_for_category["suggestions_for_positions"]:
-                if suggestion["difference"] == 0:
-                    continue
-                symbol = suggestion["symbol"]
-                suggestion["targetBalance"] = compromised_suggestion_dict[symbol][
-                    "targetBalance"
-                ]
-        return suggestions
+    def _update_suggestions_by_reference(
+        suggestions: list,
+        category: str,
+        position_obj: dict,
+        market_cap_balance_for_this_lp_token_in_this_category: float,
+    ) -> list:
+        suggestions_for_this_category = [
+            suggestions_for_this_category
+            for suggestions_for_this_category in suggestions
+            if suggestions_for_this_category["category"] == category
+        ][0]
+        suggestions_for_this_category["suggestions_for_positions"].append(
+            {
+                "symbol": position_obj["symbol"],
+                "balanceUSD": position_obj["balanceUSD"],
+                "apr": position_obj["apr"],
+                "difference": 0
+                if market_cap_balance_for_this_lp_token_in_this_category
+                > position_obj["balanceUSD"]
+                else market_cap_balance_for_this_lp_token_in_this_category
+                - position_obj["balanceUSD"],
+            }
+        )

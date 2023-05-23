@@ -323,7 +323,7 @@ DEBANK_ADDRESS = {
         "categories": ["small_cap_us_stocks"],
         "project": "Equilibria",
         "symbol": "PENDLE",
-        "DEFAULT_APR": 10,
+        "DEFAULT_APR": 1.32,
         "tags": ["pendle"],
         "composition": {
             "pendle": 0.5,
