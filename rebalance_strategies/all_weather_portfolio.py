@@ -1,20 +1,5 @@
-import json
-import math
-import random
-from collections import defaultdict
-
-import requests
-
-from rebalance_server.handlers.utils import get_weighted_balanceUSD
-from rebalance_server.portfolio_config import (
-    DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL,
-    ZAPPER_SYMBOL_2_COINGECKO_MAPPING,
-)
 from rebalance_server.rebalance_strategies.base_portfolio import BasePortfolio
 from rebalance_server.utils.position import skip_rebalance_if_position_too_small
-
-# TODO(david): since using quadratic programming + object function to make the weight similar to market cap weight, and also obey all weather portfolio is too hard. So use a predefined ratio for easier rebalancing
-PREDEFINED_RATIO_FOR_EASIER_REBALANCING = 0.9
 
 
 class AllWeatherPortfolio(BasePortfolio):
@@ -33,65 +18,22 @@ class AllWeatherPortfolio(BasePortfolio):
             "non_us_developed_market_stocks": 0.06,
             "non_us_emerging_market_stocks": 0.03,
         }
-        self.token_set = set(ZAPPER_SYMBOL_2_COINGECKO_MAPPING.values())
-        assert len(self.token_set) < 100
-        self._market_cap_of_tokens = {}
-        if random.randint(0, DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL) == 0:
-            print(
-                f"Update coingecko's market cap data by (1/{DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL}) chance"
-            )
-            self._update_market_cap()
-        try:
-            self._market_cap_of_tokens = json.load(
-                open("./rebalance_server/coingecko/market_cap.json", "r")
-            )
-        except FileNotFoundError:
-            self._update_market_cap()
-        self.lp_token_name_2_market_cap_dict = defaultdict(float)
-        self.lp_token_2_market_cap_percentage = {}
-
-    def _update_market_cap(self):
-        market_cap_resp = requests.get(
-            f"https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids={','.join(self.token_set)}&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=1h&locale=en"
-        )
-        if market_cap_resp.status_code != 200:
-            print("Failed to get market cap data from coingecko, use the cached one")
-            self._market_cap_of_tokens = json.load(
-                open("./rebalance_server/market_cap.json", "r")
-            )
-        else:
-            raw_market_cap_data = market_cap_resp.json()
-            self._market_cap_of_tokens = {
-                token_obj["id"]: token_obj["market_cap"]
-                for token_obj in raw_market_cap_data
-            }
-            self._market_cap_of_tokens["jones-glp"] = 550385259
-        print("[TODO]: need to figure out a way to update jones-glp market cap")
-        json.dump(
-            self._market_cap_of_tokens,
-            open("./rebalance_server/coingecko/market_cap.json", "w"),
-        )
 
     @property
     def target_asset_allocation(self):
         return self._target_asset_allocation
 
-    @property
-    def market_cap_of_tokens(self):
-        return self._market_cap_of_tokens
-
     def get_suggestions_for_positions(
-        self, category, _, single_category_in_the_portfolio, net_worth
+        self, category, investment_shift, single_category_in_the_portfolio, net_worth
     ):
+        # if abs(investment_shift) < self.REBALANCE_THRESHOLD:
+        #     return []
         target_sum_of_this_category = net_worth * self.target_asset_allocation[category]
         result = []
         single_category_in_the_portfolio_without_living_expenses = (
             self._delete_special_positions_from_suggestions(
                 single_category_in_the_portfolio
             )
-        )
-        lp_token_name_2_market_cap_weighting_in_this_category_dict = self._calculate_proportion_for_positions_in_a_single_category_by_market_cap_weighting(
-            single_category_in_the_portfolio_without_living_expenses
         )
         for (
             symbol,
@@ -101,25 +43,15 @@ class AllWeatherPortfolio(BasePortfolio):
         ].items():
             balanceUSD = position_obj["worth"]
             apr = position_obj["APR"]
-            current_ratio_of_this_position_in_this_category = (
-                balanceUSD
-                / single_category_in_the_portfolio_without_living_expenses["sum"]
-            )
-            target_ratio_of_this_position_in_this_category = (
-                lp_token_name_2_market_cap_weighting_in_this_category_dict[symbol]
-            )
             difference = (
-                target_sum_of_this_category
-                * lp_token_name_2_market_cap_weighting_in_this_category_dict[symbol]
-                - balanceUSD
-            )
-            if (
-                abs(
-                    target_ratio_of_this_position_in_this_category
-                    - current_ratio_of_this_position_in_this_category
+                (
+                    target_sum_of_this_category
+                    - single_category_in_the_portfolio_without_living_expenses["sum"]
                 )
-                < self.REBALANCE_THRESHOLD
-            ) or skip_rebalance_if_position_too_small(abs(difference)):
+                * balanceUSD
+                / single_category_in_the_portfolio["sum"]
+            )
+            if skip_rebalance_if_position_too_small(abs(difference)):
                 difference = 0
             result.append(
                 {
@@ -128,6 +60,14 @@ class AllWeatherPortfolio(BasePortfolio):
                     "apr": apr,
                     "difference": difference,
                     "metadata": position_obj["metadata"],
+                    "for_dex": {
+                        token: difference * percentage
+                        for token, percentage in position_obj["metadata"][
+                            "composition"
+                        ].items()
+                    }
+                    if "glp" not in symbol.lower()
+                    else {"glp": difference},
                 }
             )
         return result
@@ -153,166 +93,3 @@ class AllWeatherPortfolio(BasePortfolio):
         for symbol in symbols_to_delete:
             del single_category_in_the_portfolio["portfolio"][symbol]
         return single_category_in_the_portfolio
-
-    def _calculate_proportion_for_positions_in_a_single_category_by_market_cap_weighting(
-        self, single_category_in_the_portfolio_without_living_expenses: dict
-    ) -> dict:
-        for (
-            symbol_consists_of_project_and_lp_token,
-            position_obj,
-        ) in single_category_in_the_portfolio_without_living_expenses[
-            "portfolio"
-        ].items():
-            self.lp_token_name_2_market_cap_dict[
-                symbol_consists_of_project_and_lp_token
-            ] = self._calcualte_market_cap_of_this_lp_token(
-                symbol_consists_of_project_and_lp_token, position_obj
-            )
-
-        return self._calculate_proportion_via_market_cap_for_all_lp_positions_in_this_category(
-            self.lp_token_name_2_market_cap_dict
-        )
-
-    def _calcualte_market_cap_of_this_lp_token(
-        self, symbol_consists_of_project_and_lp_token: str, position_obj: dict
-    ) -> float:
-        market_cap_of_this_lp_token = 0
-        if symbol_consists_of_project_and_lp_token in ["radiant:lending"]:
-            return 0
-        # average the market cap of all tokens in the LP
-        for token_metadata in position_obj["tokens_metadata"]:
-            log_transformation_market_cap = math.log(
-                self.market_cap_of_tokens[
-                    ZAPPER_SYMBOL_2_COINGECKO_MAPPING[token_metadata["symbol"]]
-                ]
-            )
-            lowered_token = token_metadata["symbol"].lower()
-            unwrapped_symbol = "eth" if "eth" in lowered_token else lowered_token
-            composition_of_this_lp_token = position_obj["metadata"]["composition"][
-                unwrapped_symbol
-            ]
-            market_cap_of_this_lp_token += (
-                log_transformation_market_cap * composition_of_this_lp_token
-            )
-        return self._make_sure_eth_position_would_not_be_skipped(
-            market_cap_of_this_lp_token
-        )
-
-    @staticmethod
-    def _calculate_proportion_via_market_cap_for_all_lp_positions_in_this_category(
-        lp_token_name_2_market_cap_dict: dict,
-    ) -> dict:
-        lp_token_name_2_market_cap_proportino_dict = {}
-        sum_of_market_cap = sum(lp_token_name_2_market_cap_dict.values())
-        for (
-            symbol_consists_of_project_and_lp_token,
-            market_cap,
-        ) in lp_token_name_2_market_cap_dict.items():
-            lp_token_name_2_market_cap_proportino_dict[
-                symbol_consists_of_project_and_lp_token
-            ] = (market_cap / sum_of_market_cap)
-        return lp_token_name_2_market_cap_proportino_dict
-
-    def _make_sure_eth_position_would_not_be_skipped(
-        self, market_cap_of_this_lp_token: float
-    ):
-        if market_cap_of_this_lp_token == 0:
-            return math.log(
-                self.market_cap_of_tokens[ZAPPER_SYMBOL_2_COINGECKO_MAPPING["ETH"]]
-            )
-        return market_cap_of_this_lp_token
-
-    def _apply_custom_logic_for_entire_suggestions(self, suggestions: list) -> list:
-        net_worth = sum(
-            category["sum_of_this_category_in_the_portfolio"]
-            for category in suggestions
-        )
-        target_sum_of_categories = {
-            category["category"]: category["target_sum_of_this_category"]
-            for category in suggestions
-        }
-        sacrafices_lp_token_count = 0
-        self.lp_token_2_market_cap_percentage = {
-            lp_token: market_cap / sum(self.lp_token_name_2_market_cap_dict.values())
-            for lp_token, market_cap in self.lp_token_name_2_market_cap_dict.items()
-        }
-        lp_tokens_sorted_lp_via_apr = sorted(
-            {
-                suggestion_of_this_position["symbol"]: suggestion_of_this_position
-                for suggestions_of_this_category in suggestions
-                for suggestion_of_this_position in suggestions_of_this_category[
-                    "suggestions_for_positions"
-                ]
-            }.items(),
-            key=lambda x: x[1]["apr"],
-            reverse=True,
-        )
-
-        # empty the suggestions
-        for suggestion in suggestions:
-            suggestion["suggestions_for_positions"] = []
-        for lp_token, position_obj in lp_tokens_sorted_lp_via_apr:
-            for category in position_obj["metadata"]["categories"]:
-                market_cap_balance_for_this_lp_token_in_this_category = (
-                    get_weighted_balanceUSD(
-                        net_worth * self.lp_token_2_market_cap_percentage[lp_token],
-                        category,
-                        position_obj["metadata"],
-                        len(position_obj["metadata"]["categories"]),
-                    )
-                    * PREDEFINED_RATIO_FOR_EASIER_REBALANCING
-                )
-                if (
-                    target_sum_of_categories[category]
-                    - market_cap_balance_for_this_lp_token_in_this_category
-                ) / net_worth > -self.REBALANCE_THRESHOLD:
-                    target_sum_of_categories[
-                        category
-                    ] -= market_cap_balance_for_this_lp_token_in_this_category
-                    self._update_suggestions_by_reference(
-                        suggestions,
-                        category,
-                        position_obj,
-                        market_cap_balance_for_this_lp_token_in_this_category,
-                    )
-                else:
-                    assert (
-                        sacrafices_lp_token_count < 3
-                    ), "only three lp token can be sacraficed"
-                    sacrafices_lp_token_count += 1
-                    print(
-                        f"no quota left for {lp_token} in {category}, need to sacrafice {sacrafices_lp_token_count} lp tokens"
-                    )
-                    self._update_suggestions_by_reference(
-                        suggestions,
-                        category,
-                        position_obj,
-                        market_cap_balance_for_this_lp_token_in_this_category,
-                    )
-
-        return suggestions
-
-    @staticmethod
-    def _update_suggestions_by_reference(
-        suggestions: list,
-        category: str,
-        position_obj: dict,
-        market_cap_balance_for_this_lp_token_in_this_category: float,
-    ) -> list:
-        suggestions_for_this_category = [
-            suggestions_for_this_category
-            for suggestions_for_this_category in suggestions
-            if suggestions_for_this_category["category"] == category
-        ][0]
-        suggestions_for_this_category["suggestions_for_positions"].append(
-            {
-                "symbol": position_obj["symbol"],
-                "balanceUSD": position_obj["balanceUSD"],
-                "apr": position_obj["apr"],
-                "difference": 0
-                if market_cap_balance_for_this_lp_token_in_this_category
-                > position_obj["balanceUSD"]
-                else market_cap_balance_for_this_lp_token_in_this_category
-                - position_obj["balanceUSD"],
-            }
-        )

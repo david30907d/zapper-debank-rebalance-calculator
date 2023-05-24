@@ -27,10 +27,7 @@ class BasePortfolio(ABC):
                 net_worth,
             )
             suggestions.append(suggestions_for_this_category)
-        transformed_suggestions = self._apply_custom_logic_for_entire_suggestions(
-            suggestions
-        )
-        return transformed_suggestions
+        return suggestions
 
     def _get_suggestions_for_this_category(
         self,
@@ -54,8 +51,4 @@ class BasePortfolio(ABC):
 
     @abstractmethod
     def get_suggestions_for_positions(self):
-        pass
-
-    @abstractmethod
-    def _apply_custom_logic_for_entire_suggestions(self, suggestions):
         pass
