@@ -205,7 +205,7 @@ DEBANK_ADDRESS = {
     },
     # "0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4": {
     "0xacf5a67f2fcfeda3946ccb1ad9d16d2eb65c3c96": {
-        "categories": ["long_term_bond", "intermediate_term_bond"],
+        "categories": ["long_term_bond", "intermediate_term_bond", "gold"],
         "project": "SpaceFi",
         "symbol": "USDC-ETH",
         "DEFAULT_APR": 0.31,
@@ -359,6 +359,17 @@ DEBANK_ADDRESS = {
         },
         "living-expenses": True,
     },
+    "0xeed247ba513a8d6f78be9318399f5ed1a4808f8e": {
+        "categories": ["intermediate_term_bond"],
+        "project": "tender_lending",
+        "symbol": "USDC",
+        "defillama-APY-pool-id": "f152ff88-dd31-4efb-a0a9-ad26b5536cc7",
+        "tags": ["usdc"],
+        "composition": {
+            "usdc": 1,
+        },
+        "living-expenses": True,
+    },
 }
 
 
@@ -416,7 +427,7 @@ NANSEN_ADDRESS = {
         "categories": ["non_us_developed_market_stocks", "long_term_bond"],
         "project": "Equilibre",
         "symbol": "KAVA-WETH",
-        "DEFAULT_APR": 0.1,
+        "DEFAULT_APR": 1.16,
         "tags": ["kava", "eth"],
         "composition": {
             "kava": 0.5,

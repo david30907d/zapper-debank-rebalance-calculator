@@ -74,6 +74,14 @@ def main(
     total_interest = calculate_interest(categorized_positions)
     portfolio_apr = 100 * total_interest / net_worth
     print(f"Portfolio's APR: {portfolio_apr:.2f}%")
+    top_n_lowest_apr_pools = sorted(
+        {
+            pool: metadata["APR"]
+            for category in categorized_positions.values()
+            for pool, metadata in category["portfolio"].items()
+        }.items(),
+        key=lambda x: x[1],
+    )[:10]
     # [TODO](david): uncomment sharpe ratio and max drawdown once we've migrated to standalone server not lambda or cloud run
     # adapter = get_networh_to_balance_adapter(adapter="coingecko")
     # categorized_positions_with_token_balance = adapter(categorized_positions)
@@ -103,6 +111,7 @@ def main(
         "portfolio_apr": portfolio_apr,
         # TODO(david): uncomment sharpe ratio and max drawdown once we've migrated to standalone server not lambda or cloud run
         # "sharpe_ratio": sharpe_ratio,
+        "top_n_lowest_apr_pools": top_n_lowest_apr_pools,
         "top_n_pool_consist_of_same_lp_token": top_n_with_metadata,
         "topn_stable_coins": topn_stable_coins,
         "aggregated_dex_routing_suggestions": aggregated_dex_routing_suggestions,
