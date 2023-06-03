@@ -76,9 +76,12 @@ def main(
     print(f"Portfolio's APR: {portfolio_apr:.2f}%")
     top_n_lowest_apr_pools = sorted(
         [
-            {"pool": pool, "apr": metadata["APR"]}
-            for category in categorized_positions.values()
-            for pool, metadata in category["portfolio"].items()
+            {"pool": pool, "apr": apr}
+            for pool, apr in {
+                pool: metadata["APR"]
+                for category in categorized_positions.values()
+                for pool, metadata in category["portfolio"].items()
+            }.items()
         ],
         key=lambda x: x["apr"],
     )[:10]
