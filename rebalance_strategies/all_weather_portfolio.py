@@ -26,8 +26,6 @@ class AllWeatherPortfolio(BasePortfolio):
     def get_suggestions_for_positions(
         self, category, investment_shift, single_category_in_the_portfolio, net_worth
     ):
-        if abs(investment_shift) < self.REBALANCE_THRESHOLD:
-            return []
         target_sum_of_this_category = net_worth * self.target_asset_allocation[category]
         result = []
         single_category_in_the_portfolio_without_living_expenses = (
