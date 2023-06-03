@@ -75,12 +75,12 @@ def main(
     portfolio_apr = 100 * total_interest / net_worth
     print(f"Portfolio's APR: {portfolio_apr:.2f}%")
     top_n_lowest_apr_pools = sorted(
-        {
-            pool: metadata["APR"]
+        [
+            {"pool": pool, "apr": metadata["APR"]}
             for category in categorized_positions.values()
             for pool, metadata in category["portfolio"].items()
-        }.items(),
-        key=lambda x: x[1],
+        ],
+        key=lambda x: x["apr"],
     )[:10]
     # [TODO](david): uncomment sharpe ratio and max drawdown once we've migrated to standalone server not lambda or cloud run
     # adapter = get_networh_to_balance_adapter(adapter="coingecko")

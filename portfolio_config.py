@@ -427,7 +427,7 @@ NANSEN_ADDRESS = {
         "categories": ["non_us_developed_market_stocks", "long_term_bond"],
         "project": "Equilibre",
         "symbol": "KAVA-WETH",
-        "DEFAULT_APR": 1.16,
+        "DEFAULT_APR": 1.1,
         "tags": ["kava", "eth"],
         "composition": {
             "kava": 0.5,
