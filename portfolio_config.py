@@ -21,14 +21,6 @@ DEBANK_ADDRESS = {
         "composition": {"eth": 0.5, "magic": 0.5},
         "project": "uniswap-v3",
     },
-    "0x5fbbef48ce0850e5a73bc3f4a6e903458b3c0af4": {
-        "categories": ["large_cap_us_stocks", "long_term_bond"],
-        "project": "trader-joe",
-        "symbol": "weth-gmx-TJ-LP-arb",
-        "DEFAULT_APR": 0,
-        "tags": ["eth", "gmx"],
-        "composition": {"eth": 0.5, "gmx": 0.5},
-    },
     "0x127963a74c07f72d862f2bdc225226c3251bd117": {
         "categories": ["intermediate_term_bond"],
         "symbol": "VST-FRAX",
@@ -75,14 +67,6 @@ DEBANK_ADDRESS = {
         "tags": ["dai", "eth"],
         "composition": {"eth": 0.5, "dai": 0.5},
         "project": "kyberswap-elastic",
-    },
-    "0x3d9819210a31b4961b30ef54be2aed79b9c9cd3b": {
-        "categories": ["intermediate_term_bond"],
-        "project": "compound",
-        "symbol": "compound USDT",
-        "DEFAULT_APR": 0.02,
-        "tags": ["cusdt"],
-        "composition": {"usdt": 1},
     },
     "0x41a5881c17185383e19df6fa4ec158a6f4851a69": {
         "categories": ["intermediate_term_bond"],
@@ -249,8 +233,7 @@ DEBANK_ADDRESS = {
     "0x2ec8c498ec997ad963969a2c93bf7150a1f5b213": {
         "categories": ["long_term_bond"],
         "symbol": "RETH-WETH",
-        # "defillama-APY-pool-id": "2811f0f5-18cf-4b72-a9d4-55c2c7ed577c",
-        "DEFAULT_APR": 0.209,
+        "defillama-APY-pool-id": "90205f92-bb2b-4e97-bbfd-e7a1c91a6fd1",
         "tags": ["eth"],
         "composition": {"eth": 1},
         "project": "pendle",
@@ -274,7 +257,7 @@ DEBANK_ADDRESS = {
     "0x72a19342e8f1838460ebfccef09f6585e32db86e": {
         "categories": ["small_cap_us_stocks", "commodities"],
         "symbol": "CVX",
-        "DEFAULT_APR": 0.2,
+        "DEFAULT_APR": 0.26,
         "tags": ["cvx"],
         "composition": {"cvx": 1},
         "project": "convex-finance",
