@@ -353,6 +353,14 @@ DEBANK_ADDRESS = {
         },
         "living-expenses": True,
     },
+    "0x556b9306565093c855aea9ae92a594704c2cd59e": {
+        "categories": ["long_term_bond"],
+        "symbol": "RETH-WETH",
+        "DEFAULT_APR": 0.27,
+        "tags": ["eth"],
+        "composition": {"eth": 1},
+        "project": "pancakeswap-amm-v3",
+    },
 }
 
 
