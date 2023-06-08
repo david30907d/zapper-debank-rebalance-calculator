@@ -2,7 +2,7 @@ MIN_REBALANCE_POSITION_THRESHOLD = 500
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
 BLACKLIST_CHAINS_FOR_STABLE_COIN = {"Ethereum"}
-BLACKLIST_PROTOCOL = {"rehold", "deri-protocol"}
+BLACKLIST_PROTOCOL = {"rehold", "deri-protocol", "acryptos"}
 STABLE_COIN_WHITELIST = {"USDT", "USDC"}
 DEBANK_ADDRESS = {
     "0x76ba3ec5f5adbf1c58c91e86502232317eea72de": {
@@ -187,12 +187,11 @@ DEBANK_ADDRESS = {
         "composition": {"eth": 0.5, "matic": 0.5},
         "project": "gamma",
     },
-    # "0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4": {
-    "0xacf5a67f2fcfeda3946ccb1ad9d16d2eb65c3c96": {
+    "0xacf5a67f2fcfeda3946ccb1ad9d16d2eb65c3c96:2": {
         "categories": ["long_term_bond", "intermediate_term_bond", "gold"],
         "project": "SpaceFi",
         "symbol": "USDC-ETH",
-        "DEFAULT_APR": 0.31,
+        "DEFAULT_APR": 0.23,
         "tags": ["usdc", "eth"],
         "composition": {"eth": 0.5, "usdc": 0.5},
         "forAirdrop": True,
@@ -246,7 +245,7 @@ DEBANK_ADDRESS = {
         "composition": {"dai": 1},
         "project": "gains-network",
     },
-    "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3": {
+    "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3:17": {
         "categories": ["small_cap_us_stocks", "long_term_bond"],
         "symbol": "DPX-WETH",
         "defillama-APY-pool-id": "97cb382d-8dc4-4e17-b0f6-b6b51994dbeb",
@@ -356,10 +355,50 @@ DEBANK_ADDRESS = {
     "0x556b9306565093c855aea9ae92a594704c2cd59e": {
         "categories": ["long_term_bond"],
         "symbol": "RETH-WETH",
-        "DEFAULT_APR": 0.27,
+        "DEFAULT_APR": 0.21,
         "tags": ["eth"],
         "composition": {"eth": 1},
         "project": "pancakeswap-amm-v3",
+    },
+    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:9": {
+        "categories": ["long_term_bond"],
+        "symbol": "RETH-WETH",
+        "DEFAULT_APR": 0.37,
+        "tags": ["eth"],
+        "composition": {"eth": 1},
+        "project": "equilibria",
+    },
+    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:3": {
+        "categories": ["intermediate_term_bond"],
+        "symbol": "USDT",
+        "DEFAULT_APR": 0.23,
+        "tags": ["usdt"],
+        "composition": {"usdt": 1},
+        "project": "equilibria",
+        "living-expenses": True,
+    },
+    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:1": {
+        "categories": [
+            "large_cap_us_stocks",
+            "long_term_bond",
+            "intermediate_term_bond",
+            "gold",
+        ],
+        "symbol": "GLP",
+        "DEFAULT_APR": 0.23,
+        "tags": ["glp"],
+        "composition": {
+            "eth": 0.3,
+            "wbtc": 0.25,
+            "link": 0.01,
+            "uni": 0.01,
+            "usdc": 0.34,
+            "usdt": 0.02,
+            "dai": 0.05,
+            "frax": 0.02,
+            "mim": 0,
+        },
+        "project": "equilibria",
     },
 }
 
@@ -418,7 +457,7 @@ NANSEN_ADDRESS = {
         "categories": ["non_us_developed_market_stocks", "long_term_bond"],
         "project": "Equilibre",
         "symbol": "KAVA-WETH",
-        "DEFAULT_APR": 1.1,
+        "DEFAULT_APR": 0.68,
         "tags": ["kava", "eth"],
         "composition": {
             "kava": 0.5,

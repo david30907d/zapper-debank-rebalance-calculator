@@ -44,15 +44,7 @@ def debank_handler(positions, result):
 
 
 def _get_correct_addr(portfolio):
-    addr = (
-        portfolio["pool"]["id"]
-        if len(portfolio["pool"]["id"].split(":")) == 1
-        else portfolio["pool"]["id"].split(":")[1]
-    )
-    if len(addr) != 42:
-        # TODO: use a function to handle
-        addr = portfolio["pool"]["controller"]
-    return addr
+    return portfolio["pool"]["id"]
 
 
 def _get_token_metadata(portfolio: dict):
