@@ -71,7 +71,13 @@ MIN_REBALANCE_POSITION_THRESHOLD = 500
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
 BLACKLIST_CHAINS_FOR_STABLE_COIN = {"Ethereum"}
-BLACKLIST_PROTOCOL = {"rehold", "deri-protocol", "acryptos", "filet-finance"}
+BLACKLIST_PROTOCOL = {
+    "rehold",
+    "deri-protocol",
+    "acryptos",
+    "filet-finance",
+    "yama-finance",
+}
 STABLE_COIN_WHITELIST = {"USDT", "USDC", "USDT.E", "USDC.E"}
 DEBANK_ADDRESS = {
     "0x76ba3ec5f5adbf1c58c91e86502232317eea72de": {
