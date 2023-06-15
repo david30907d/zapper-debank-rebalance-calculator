@@ -1,10 +1,7 @@
 import json
 
-from rebalance_server.apr_utils.apr_calculator import (
-    get_lowest_apy,
-    get_lowest_or_default_apr,
-)
-from rebalance_server.apr_utils.utils import convert_apy_to_apr
+from rebalance_server.apr_utils import convert_apy_to_apr
+from rebalance_server.apr_utils.apr_calculator import get_apy, get_lowest_or_default_apr
 from rebalance_server.portfolio_config import (
     BLACKLIST_CHAINS,
     BLACKLIST_CHAINS_FOR_STABLE_COIN,
@@ -21,7 +18,7 @@ from rebalance_server.utils.position import skip_rebalance_if_position_too_small
 MILLION = 10**6
 
 
-def search_better_stable_coin_pools(categorized_positions: dict, topn_int: int = 5):
+def search_better_stable_coin_pools(categorized_positions: dict, topn_int: int = 10):
     with open("rebalance_server/yield-llama.json", "r") as f:
         defillama = json.load(f)
     max_apy = _get_current_stable_max_apy_in_your_portfolio(
@@ -64,9 +61,7 @@ def search_top_n_pool_consist_of_same_lp_token(
                 # but we only need to search once
                 continue
             project_symbol_set.add(project_symbol)
-            apr = get_lowest_or_default_apr(
-                project_symbol, metadata["metadata"].get("defillama-APY-pool-id")
-            )
+            apr = get_lowest_or_default_apr(project_symbol, metadata["address"])
             top_n = _get_topn_candidate_pool(
                 apr,
                 metadata,
@@ -113,14 +108,14 @@ def _get_topn_candidate_pool(
             )
             > search_handler.similarity_threshold
             and pool_metadata["pool"] not in pool_ids_of_current_portfolio
-            and current_apr < convert_apy_to_apr(get_lowest_apy(pool_metadata))
+            and current_apr < convert_apy_to_apr(get_apy(pool_metadata))
             and pool_metadata["tvlUsd"] > MILLION * 0.7
         ):
             top_n.append(
                 {"pool_metadata": pool_metadata, "pool_similarity": pool_similarity}
             )
     # TODO(david): use harmonic mean of tvl and apr to sort
-    return sorted(top_n, key=lambda x: -get_lowest_apy(x["pool_metadata"]))[:topn_int]
+    return sorted(top_n, key=lambda x: -get_apy(x["pool_metadata"]))[:topn_int]
 
 
 def print_out_topn_candidate_pool(
@@ -135,12 +130,12 @@ def print_out_topn_candidate_pool(
         top_n,
         key=lambda x: (
             -x["pool_similarity"],
-            -convert_apy_to_apr(get_lowest_apy(x["pool_metadata"])),
+            -convert_apy_to_apr(get_apy(x["pool_metadata"])),
         ),
     )[:n]:
         metadata = metadata_with_similarity["pool_metadata"]
         print(
-            f" - Chain: {metadata['chain']}, Protocol: {metadata['project']+':'+metadata['poolMeta'] if metadata['poolMeta'] else metadata['project']}, Token: {metadata['symbol']}, lowest or default APR: {convert_apy_to_apr(get_lowest_apy(metadata)):.2f}"
+            f" - Chain: {metadata['chain']}, Protocol: {metadata['project']+':'+metadata['poolMeta'] if metadata['poolMeta'] else metadata['project']}, Token: {metadata['symbol']}, lowest or default APR: {convert_apy_to_apr(get_apy(metadata)):.2f}"
         )
 
 

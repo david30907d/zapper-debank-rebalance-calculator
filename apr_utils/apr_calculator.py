@@ -3,27 +3,26 @@ import random
 
 import requests
 
-from rebalance_server.apr_utils.utils import (
-    convert_apy_to_apr,
-    get_metadata_by_project_symbol,
-)
+from rebalance_server.apr_utils import convert_apy_to_apr
 from rebalance_server.portfolio_config import (
+    ADDRESS_2_CATEGORY,
     DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL,
     LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR,
+    get_metadata_by_project_symbol,
 )
 
 
-def get_lowest_or_default_apr(
-    project_symbol: str, defillama_pool_uuid: str, provider="defillama"
-):
-    if provider == "defillama":
-        if not defillama_pool_uuid:
-            default_apr = _get_default_apr(project_symbol)
-            if default_apr:
-                return default_apr
-            raise Exception(
-                f"{project_symbol}'s APR is 0, are you sure you want to continue?"
-            )
+def get_lowest_or_default_apr(project_symbol: str, addr: str):
+    apr = ADDRESS_2_CATEGORY.get(addr, {}).get("APR")
+    if apr is not None:
+        return apr
+    default_apr = _get_default_apr(project_symbol)
+    if default_apr != 0:
+        return default_apr
+    defillama_pool_uuid = ADDRESS_2_CATEGORY.get(addr, {}).get(
+        "defillama-APY-pool-id", ""
+    )
+    if defillama_pool_uuid:
         try:
             res_json = json.load(open("rebalance_server/yield-llama.json", "r"))
         except FileNotFoundError:
@@ -35,11 +34,10 @@ def get_lowest_or_default_apr(
             res_json = _get_data_from_defillama()
         for pool_metadata in res_json["data"]:
             if pool_metadata["pool"] == defillama_pool_uuid:
-                protocol_apy = get_lowest_apy(pool_metadata)
+                protocol_apy = get_apy(pool_metadata)
                 return convert_apy_to_apr(protocol_apy)
         raise FileNotFoundError(f"Cannot find {defillama_pool_uuid} in defillama's API")
-    else:
-        raise NotImplementedError(f"Unknown provider: {provider}")
+    raise NotImplementedError(f"No APR for {project_symbol} and {addr}")
 
 
 def _get_data_from_defillama():
@@ -53,16 +51,10 @@ def _get_default_apr(project_symbol: str):
     return get_metadata_by_project_symbol(project_symbol).get("DEFAULT_APR", 0)
 
 
-def get_lowest_apy(pool_metadata):
+def get_apy(pool_metadata):
     # use the lowest APY to calculate my revenue in case I spent too much money this month
-    lowest_apy = (
-        pool_metadata["apyMean30d"] / 100
-        if pool_metadata["apyMean30d"] < pool_metadata["apy"]
-        else pool_metadata["apy"] / 100
-    )
-    return _lower_the_apy_if_protocol_uses_liquidity_book(
-        pool_metadata["project"], lowest_apy
-    )
+    apy = pool_metadata["apy"] / 100
+    return _lower_the_apy_if_protocol_uses_liquidity_book(pool_metadata["project"], apy)
 
 
 def _lower_the_apy_if_protocol_uses_liquidity_book(project_name: str, apy: float):

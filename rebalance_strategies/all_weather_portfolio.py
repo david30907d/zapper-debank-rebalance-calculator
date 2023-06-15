@@ -82,10 +82,7 @@ class AllWeatherPortfolio(BasePortfolio):
         for symbol, position_obj in single_category_in_the_portfolio[
             "portfolio"
         ].items():
-            if (
-                position_obj["metadata"].get("living-expenses") is True
-                or position_obj["metadata"].get("forAirdrop") is True
-            ):
+            if position_obj["metadata"].get("forAirdrop") is True:
                 symbols_to_delete.append(symbol)
 
         for symbol in symbols_to_delete:

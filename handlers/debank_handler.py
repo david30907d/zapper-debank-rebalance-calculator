@@ -1,9 +1,9 @@
 from rebalance_server.apr_utils.apr_calculator import get_lowest_or_default_apr
-from rebalance_server.apr_utils.utils import get_metadata_by_project_symbol
 from rebalance_server.handlers.utils import place_value_into_categorized_portfolio_dict
 from rebalance_server.portfolio_config import (
     ADDRESS_2_CATEGORY,
     MIN_REBALANCE_POSITION_THRESHOLD,
+    get_metadata_by_project_symbol,
 )
 
 
@@ -23,10 +23,7 @@ def debank_handler(positions, result):
                 raise Exception(
                     f"Address {addr} no category, need to update your ADDRESS_2_CATEGORY, or update its APR"
                 )
-            defillama_pool_uuid = ADDRESS_2_CATEGORY.get(addr, {}).get(
-                "defillama-APY-pool-id", ""
-            )
-            apr = get_lowest_or_default_apr(project_symbol, defillama_pool_uuid)
+            apr = get_lowest_or_default_apr(project_symbol, addr)
             metadata = get_metadata_by_project_symbol(f"{project}:{symbol}")
             tokens_metadata = _get_token_metadata(portfolio)
             result = place_value_into_categorized_portfolio_dict(
@@ -35,6 +32,7 @@ def debank_handler(positions, result):
                 length_of_categories,
                 project,
                 symbol,
+                addr,
                 apr,
                 metadata,
                 tokens_metadata,

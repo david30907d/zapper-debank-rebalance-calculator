@@ -1,9 +1,9 @@
 from rebalance_server.apr_utils.apr_calculator import get_lowest_or_default_apr
-from rebalance_server.apr_utils.utils import get_metadata_by_project_symbol
 from rebalance_server.handlers.utils import place_value_into_categorized_portfolio_dict
 from rebalance_server.portfolio_config import (
     ADDRESS_2_CATEGORY,
     MIN_REBALANCE_POSITION_THRESHOLD,
+    get_metadata_by_project_symbol,
 )
 
 
@@ -25,12 +25,9 @@ def _nansen_farm_handler(positions, result):
         project = ADDRESS_2_CATEGORY[addr]["project"].lower()
         symbol = ADDRESS_2_CATEGORY[addr]["symbol"].lower()
         project_symbol = f"{project}:{symbol}"
-        defillama_pool_uuid = ADDRESS_2_CATEGORY.get(addr, {}).get(
-            "defillama-APY-pool-id", ""
-        )
 
         length_of_categories = len(categories)
-        apr = get_lowest_or_default_apr(project_symbol, defillama_pool_uuid)
+        apr = get_lowest_or_default_apr(project_symbol, addr)
         metadata = get_metadata_by_project_symbol(project_symbol)
         tokens_metadata = _get_token_metadata(farm)
         result = place_value_into_categorized_portfolio_dict(
@@ -39,6 +36,7 @@ def _nansen_farm_handler(positions, result):
             length_of_categories,
             project,
             symbol,
+            addr,
             apr,
             metadata,
             tokens_metadata,
@@ -69,6 +67,7 @@ def _nansen_stake_handler(positions, result):
             length_of_categories,
             project,
             symbol,
+            addr,
             apr,
             metadata,
             tokens_metadata,
