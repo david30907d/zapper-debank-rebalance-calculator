@@ -57,6 +57,67 @@ def fetch_quickswap_APR(pool_addr: str) -> float:
     raise Exception(f"Failed to find pool {pool_addr} in quickswap")
 
 
+def fetch_traderjoe_auto_pool_APR(pool_addr: str) -> float:
+    pool_res = requests.get("https://barn.traderjoexyz.com/v1/vaults/arbitrum")
+    if pool_res.status_code != 200:
+        raise Exception("Failed to fetch traderjoe auto pool APR")
+    pool_json = pool_res.json()
+    for pool in pool_json:
+        if pool["address"] == pool_addr:
+            return pool["apr1d"]
+    raise Exception(f"Failed to find pool {pool_addr} in traderjoe auto pool")
+
+
+def fetch_kava_sushiswap_APR(pool_addr: str) -> float:
+    pool_res = requests.get(f"https://pools.sushi.com/api/v0/2222/{pool_addr}")
+    if pool_res.status_code != 200:
+        raise Exception("Failed to fetch kava sushiswap APR")
+    accumulatedAPR = 0
+    pool_json = pool_res.json()
+    for incentive in pool_json["incentives"]:
+        accumulatedAPR += incentive["apr"]
+    accumulatedAPR += pool_json["feeApr1d"]
+    return accumulatedAPR
+
+
+def fetch_kava_lend_APY(pool_addr: str, token: str) -> float:
+    pool_res = requests.get("https://api.data.kava.io/kava/incentive/v1beta1/params")
+    supplied_coins = requests.get(
+        "https://api.data.kava.io/kava/hard/v1beta1/total-deposited"
+    )
+    price = requests.get("https://api.data.kava.io/kava/pricefeed/v1beta1/prices")
+    if (
+        pool_res.status_code != 200
+        or supplied_coins.status_code != 200
+        or price.status_code != 200
+    ):
+        raise Exception("Failed to fetch kava sushiswap APR")
+    pool_json = pool_res.json()
+    supplied_coins_json = supplied_coins.json()
+    price_json = price.json()
+    for pool in pool_json["params"]["hard_supply_reward_periods"]:
+        if pool["collateral_type"] == pool_addr:
+            targeted_pool_amount = list(
+                filter(
+                    lambda coin: coin["denom"] == pool_addr,
+                    supplied_coins_json["supplied_coins"],
+                )
+            )
+            assert len(targeted_pool_amount) == 1
+            targeted_price = list(
+                filter(lambda coin: coin["market_id"] == token, price_json["prices"])
+            )
+            assert len(targeted_price) == 1
+            return convert_apy_to_apr(
+                float(pool["rewards_per_second"][0]["amount"])
+                * 86400
+                * 365
+                / float(targeted_pool_amount[0]["amount"])
+                / float(targeted_price[0]["price"])
+            )
+    raise Exception(f"Failed to find pool {pool_addr} in kava lend")
+
+
 def get_metadata_by_project_symbol(project_symbol: str) -> dict:
     for metadata in ADDRESS_2_CATEGORY.values():
         if (
@@ -67,7 +128,7 @@ def get_metadata_by_project_symbol(project_symbol: str) -> dict:
     raise Exception(f"Cannot find {project_symbol} in your address mapping table")
 
 
-MIN_REBALANCE_POSITION_THRESHOLD = 500
+MIN_REBALANCE_POSITION_THRESHOLD = 250
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
 BLACKLIST_CHAINS_FOR_STABLE_COIN = {"Ethereum"}
@@ -88,13 +149,13 @@ DEBANK_ADDRESS = {
         "composition": {"eth": 0.2, "rdnt": 0.8},
         "project": "radiant",
     },
-    "0xb7e50106a5bd3cf21af210a755f9c8740890a8c9": {
+    "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3:13": {
         "categories": ["small_cap_us_stocks", "long_term_bond"],
         "symbol": "MAGIC-WETH",
-        "defillama-APY-pool-id": "afb71713-9c2e-4717-a8a3-9f959b966e49",
+        "defillama-APY-pool-id": "5f98842f-72cb-4579-807f-403ca2dfb993",
         "tags": ["magic", "eth"],
         "composition": {"eth": 0.5, "magic": 0.5},
-        "project": "uniswap-v3",
+        "project": "sushiswap",
     },
     "0x127963a74c07f72d862f2bdc225226c3251bd117": {
         "categories": ["intermediate_term_bond"],
@@ -143,7 +204,7 @@ DEBANK_ADDRESS = {
         "composition": {"eth": 0.5, "dai": 0.5},
         "project": "kyberswap-elastic",
     },
-    "0x41a5881c17185383e19df6fa4ec158a6f4851a69": {
+    "0x41a5881c17185383e19df6fa4ec158a6f4851a69:43": {
         "categories": ["intermediate_term_bond"],
         "symbol": "OHMFRAXBP-F",
         "defillama-APY-pool-id": "4f000353-5bb0-4e8c-ad03-194f0662680d",
@@ -254,10 +315,10 @@ DEBANK_ADDRESS = {
         "composition": {"eth": 0.5, "crv": 0.5},
         "project": "convex-finance",
     },
-    "0x20ec0d06f447d550fc6edee42121bc8c1817b97d": {
+    "0x1e2d8f84605d32a2cbf302e30bfd2387badf35dd:3": {
         "categories": ["long_term_bond", "commodities"],
         "symbol": "WMATIC-WETH",
-        "defillama-APY-pool-id": "1f23a6a9-84d0-4cf9-b978-aba431703757",
+        "defillama-APY-pool-id": "04b6b532-91dc-4bbb-85c8-fc8613f78b87",
         "tags": ["matic", "eth"],
         "composition": {"eth": 0.5, "matic": 0.5},
         "project": "gamma",
@@ -266,10 +327,17 @@ DEBANK_ADDRESS = {
         "categories": ["long_term_bond", "intermediate_term_bond", "gold"],
         "project": "SpaceFi",
         "symbol": "USDC-ETH",
-        "DEFAULT_APR": 0.23,
+        "DEFAULT_APR": 0.17,
         "tags": ["usdc", "eth"],
         "composition": {"eth": 0.5, "usdc": 0.5},
-        # "forAirdrop": True,
+    },
+    "0xacf5a67f2fcfeda3946ccb1ad9d16d2eb65c3c96:10": {
+        "categories": ["long_term_bond", "intermediate_term_bond", "gold"],
+        "project": "SpaceFi",
+        "symbol": "USDT-ETH",
+        "DEFAULT_APR": 0.23,
+        "tags": ["usdt", "eth"],
+        "composition": {"eth": 0.5, "usdt": 0.5},
     },
     "0x7d49e5adc0eaad9c027857767638613253ef125f": {
         "categories": [
@@ -376,22 +444,10 @@ DEBANK_ADDRESS = {
         "composition": {"usdc": 1},
         "project": "rehold",
     },
-    "0xfff4b05a10c5df1382272e554254ea8b097ec03e": {
-        "categories": ["small_cap_us_stocks"],
-        "project": "Equilibria",
-        "symbol": "PENDLE",
-        "APR": fetch_equilibria_APR(chain_id="42161", category="ePendle"),
-        "tags": ["pendle"],
-        "composition": {
-            "pendle": 1,
-        },
-    },
     "0x481fcfa00ee6b2384ff0b3c3b5b29ad911c1aaa7": {
         "categories": ["long_term_bond", "commodities"],
         "symbol": "WMATIC-WETH",
-        "APR": fetch_quickswap_APR(
-            pool_addr="0x81cec323bf8c4164c66ec066f53cc053a535f03d"
-        ),
+        "defillama-APY-pool-id": "04b6b532-91dc-4bbb-85c8-fc8613f78b87",
         "tags": ["matic", "eth"],
         "composition": {"eth": 0.5, "matic": 0.5},
         "project": "quickswap-dex",
@@ -480,6 +536,16 @@ DEBANK_ADDRESS = {
         },
         "project": "equilibria",
     },
+    "0x71e0ce200a10f0bbfb9f924fe466acf0b7401ebf": {
+        "categories": ["small_cap_us_stocks", "commodities"],
+        "symbol": "PENDLE-stake2",
+        "APR": fetch_equilibria_APR(chain_id="42161", category="ePendle"),
+        "tags": ["pendle"],
+        "composition": {
+            "pendle": 1,
+        },
+        "project": "equilibria",
+    },
     "0xd5dc65ec6948845c1c428fb60be38fe59b50bd13": {
         "categories": ["long_term_bond", "large_cap_us_stocks", "commodities"],
         "symbol": "CRV-FRXETH",
@@ -503,6 +569,16 @@ DEBANK_ADDRESS = {
             "usdc": 0.5,
         },
         "project": "joe-v2.1",
+    },
+    "0xfd421d60905d2f7cabd49e6a5703a3499367b8f4": {
+        "categories": ["long_term_bond", "intermediate_term_bond", "gold"],
+        "project": "joe-v2.1",
+        "symbol": "USDC-ETH",
+        # the reason why divided by 2 is because the APR is naively calculated by the fee/total_value_locked, and neglect the loss when rebalancing ETH to USDC, vice versa.
+        # "APR": fetch_traderjoe_auto_pool_APR(pool_addr="0xfd421d60905d2f7cabd49e6a5703a3499367b8f4")/2,
+        "DEFAULT_APR": 0.5,
+        "tags": ["usdc", "eth"],
+        "composition": {"eth": 0.5, "usdc": 0.5},
     },
 }
 
@@ -539,8 +615,8 @@ NANSEN_ADDRESS = {
     "27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2": {
         "categories": ["non_us_emerging_market_stocks"],
         "project": "Osmosis",
-        "symbol": "ATOM",
-        "DEFAULT_APR": 0.19,
+        "symbol": "ATOM-STATOM",
+        "DEFAULT_APR": 0.27,
         "tags": ["atom"],
         "composition": {
             "atom": 1,
@@ -560,11 +636,58 @@ NANSEN_ADDRESS = {
         "categories": ["non_us_developed_market_stocks", "long_term_bond"],
         "project": "Equilibre",
         "symbol": "KAVA-WETH",
-        "APR": fetch_equilibre_APR("vAMM-WKAVA/multiETH"),
+        "defillama-APY-pool-id": "4f6323c2-e6a2-4a1b-a5f9-b62740e7ee75",
         "tags": ["kava", "eth"],
         "composition": {
             "kava": 0.5,
             "eth": 0.5,
+        },
+    },
+    "0xb19e477b959751afd4a1c6880525e0390560681e": {
+        "categories": ["non_us_developed_market_stocks", "long_term_bond"],
+        "project": "Equilibre",
+        "symbol": "ETH-WKAVA",
+        "defillama-APY-pool-id": "e8a518dd-ccfc-43d9-b7e9-8ef3c0d4a68e",
+        "tags": ["kava", "eth"],
+        "composition": {
+            "kava": 0.5,
+            "eth": 0.5,
+        },
+    },
+    "0xf731202a3cf7efa9368c2d7bd613926f7a144db5:9": {
+        "categories": ["non_us_developed_market_stocks", "long_term_bond"],
+        "project": "sushiswap",
+        "symbol": "USDC-WKAVA",
+        "APR": fetch_kava_sushiswap_APR(
+            pool_addr="0xb379eb428a28a927a16ee7f95100ac6a5117aaa1"
+        ),
+        "tags": ["kava", "usdc"],
+        "composition": {
+            "kava": 0.5,
+            "usdc": 0.5,
+        },
+    },
+    "0xB9774bB2A18Af59Ec9bf86dCaeC07473A2D2F230": {
+        "categories": ["non_us_developed_market_stocks"],
+        "project": "scrub-invest",
+        "symbol": "WKAVA",
+        "defillama-APY-pool-id": "bc46cd9e-8c8f-443a-86a6-25047ab30b88",
+        "tags": ["kava"],
+        "composition": {
+            "kava": 1,
+        },
+    },
+    "0xB9774bB2A18Af59Ec9bf86dCaeC07473A2D2F211": {
+        "categories": ["non_us_emerging_market_stocks"],
+        "project": "kava-lend",
+        "symbol": "ATOM",
+        "APR": fetch_kava_lend_APY(
+            pool_addr="ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2",
+            token="atom:usd",
+        ),
+        "tags": ["atom"],
+        "composition": {
+            "atom": 1,
         },
     },
 }
