@@ -13,7 +13,10 @@ def fetch_equilibria_APR(chain_id: str, category: str, pool_token: str = "") -> 
             if pool["token"] == pool_token:
                 return convert_apy_to_apr(pool["apy"])
     elif category == "ePendle":
-        return convert_apy_to_apr(equilibria_chain_info_map[chain_id]["ePendle"]["apy"])
+        return convert_apy_to_apr(
+            equilibria_chain_info_map[chain_id]["ePendle"]["apy"]
+            + equilibria_chain_info_map[chain_id]["ePendle"]["pendleApy"]
+        )
     raise Exception(f"Failed to find pool {pool_token} in equilibria chain info map")
 
 
@@ -510,19 +513,38 @@ DEBANK_ADDRESS = {
         },
         "project": "equilibria",
     },
-    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:8": {
+    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:0": {
         "categories": [
             "long_term_bond",
         ],
-        "symbol": "RETH",
+        "symbol": "WBETH",
         "APR": fetch_equilibria_APR(
-            chain_id="42161",
+            chain_id="56",
             category="poolInfos",
-            pool_token="0xD5d1276B85A51F6D2B5eE26b9D7317bEa022ecbf",
+            pool_token="0x500D5E0D9d7337963ed6449E81CB52928184d3d6",
         ),
         "tags": ["eth"],
         "composition": {
             "eth": 1,
+        },
+        "project": "equilibria",
+    },
+    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:4": {
+        "categories": [
+            "long_term_bond",
+            "commodities",
+            "small_cap_us_stocks",
+        ],
+        "symbol": "PENDLE-WETH",
+        "APR": fetch_equilibria_APR(
+            chain_id="42161",
+            category="poolInfos",
+            pool_token="0x7a2d44931fA2953f812676e05039F488144763F4",
+        ),
+        "tags": ["eth", "pendle"],
+        "composition": {
+            "eth": 0.5,
+            "pendle": 0.5,
         },
         "project": "equilibria",
     },
@@ -537,6 +559,16 @@ DEBANK_ADDRESS = {
         "project": "equilibria",
     },
     "0x71e0ce200a10f0bbfb9f924fe466acf0b7401ebf": {
+        "categories": ["small_cap_us_stocks", "commodities"],
+        "symbol": "PENDLE-stake2",
+        "APR": fetch_equilibria_APR(chain_id="42161", category="ePendle"),
+        "tags": ["pendle"],
+        "composition": {
+            "pendle": 1,
+        },
+        "project": "equilibria",
+    },
+    "0xfff4b05a10c5df1382272e554254ea8b097ec03e": {
         "categories": ["small_cap_us_stocks", "commodities"],
         "symbol": "PENDLE-stake2",
         "APR": fetch_equilibria_APR(chain_id="42161", category="ePendle"),

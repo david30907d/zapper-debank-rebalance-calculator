@@ -13,9 +13,6 @@ from rebalance_server.apr_utils.apr_pool_optimizer import (
     search_top_n_pool_consist_of_same_lp_token,
     show_topn_stable_coins,
 )
-from rebalance_server.dex_routing_suggestions.utils import (
-    get_aggregated_dex_routing_suggestions,
-)
 from rebalance_server.handlers import get_data_source_handler
 
 # TODO(david): uncomment sharpe ratio and max drawdown once we've migrated to standalone server not lambda or cloud run
@@ -66,9 +63,6 @@ def main(
     suggestions = get_rebalancing_suggestions(
         categorized_positions, strategy_name, net_worth
     )
-    aggregated_dex_routing_suggestions = get_aggregated_dex_routing_suggestions(
-        suggestions
-    )
     print_rebalancing_suggestions(suggestions, net_worth)
     print(f"Current Net Worth: ${net_worth:.2f}")
     total_interest = calculate_interest(categorized_positions)
@@ -117,7 +111,6 @@ def main(
         "top_n_lowest_apr_pools": top_n_lowest_apr_pools,
         "top_n_pool_consist_of_same_lp_token": top_n_with_metadata,
         "topn_stable_coins": topn_stable_coins,
-        "aggregated_dex_routing_suggestions": aggregated_dex_routing_suggestions,
     }
 
 
