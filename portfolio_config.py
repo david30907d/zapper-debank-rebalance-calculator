@@ -20,17 +20,6 @@ def fetch_equilibria_APR(chain_id: str, category: str, pool_token: str = "") -> 
     raise Exception(f"Failed to find pool {pool_token} in equilibria chain info map")
 
 
-def fetch_equilibre_APR(symbol: str) -> float:
-    api_pairs = requests.get("https://api.equilibrefinance.com/api/v1/pairs")
-    if api_pairs.status_code != 200:
-        raise Exception("Failed to fetch equilibre chain info map")
-    api_pairs = api_pairs.json()
-    for pool in api_pairs["data"]:
-        if pool["symbol"] == symbol:
-            return pool["apr"] / 100
-    raise Exception(f"Failed to find symbol {symbol} in equilibre")
-
-
 def fetch_convex_locked_CVX_APR() -> float:
     api_cvx_locked = requests.get(
         "https://www.convexfinance.com/api/cvx/vlcvx-extra-incentives"
@@ -122,11 +111,9 @@ def fetch_kava_lend_APY(pool_addr: str, token: str) -> float:
 
 
 def get_metadata_by_project_symbol(project_symbol: str) -> dict:
+    project_id = project_symbol.split(":")[0]
     for metadata in ADDRESS_2_CATEGORY.values():
-        if (
-            f'{metadata["project"]}:{metadata["symbol"]}'.lower()
-            == project_symbol.lower()
-        ):
+        if f'{project_id}:{metadata["symbol"]}'.lower() == project_symbol.lower():
             return metadata
     raise Exception(f"Cannot find {project_symbol} in your address mapping table")
 
@@ -144,39 +131,28 @@ BLACKLIST_PROTOCOL = {
 }
 STABLE_COIN_WHITELIST = {"USDT", "USDC", "USDT.E", "USDC.E"}
 DEBANK_ADDRESS = {
-    "0x76ba3ec5f5adbf1c58c91e86502232317eea72de": {
+    "0x76ba3ec5f5adbf1c58c91e86502232317eea72de:arb_radiantcapital2": {
         "categories": ["large_cap_us_stocks", "long_term_bond"],
         "symbol": "RDNT-ETH",
         "defillama-APY-pool-id": "118281c6-3a4a-4324-b804-5664617df77d",
         "tags": ["rdnt", "eth"],
         "composition": {"eth": 0.2, "rdnt": 0.8},
-        "project": "radiant",
     },
-    "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3:13": {
+    "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3:13:arb_sushiswap": {
         "categories": ["small_cap_us_stocks", "long_term_bond"],
         "symbol": "MAGIC-WETH",
         "defillama-APY-pool-id": "5f98842f-72cb-4579-807f-403ca2dfb993",
         "tags": ["magic", "eth"],
         "composition": {"eth": 0.5, "magic": 0.5},
-        "project": "sushiswap",
     },
-    "0x127963a74c07f72d862f2bdc225226c3251bd117": {
+    "0x127963a74c07f72d862f2bdc225226c3251bd117:arb_frax": {
         "categories": ["intermediate_term_bond"],
         "symbol": "VST-FRAX",
         "defillama-APY-pool-id": "ca8b6649-b825-41c7-8955-47b955b37bb0",
         "tags": ["vst", "frax"],
         "composition": {"vst": 0.5, "frax": 0.5},
-        "project": "frax",
     },
-    "0x673cf5ab7b44caac43c80de5b99a37ed5b3e4cc6": {
-        "categories": ["intermediate_term_bond"],
-        "symbol": "DAI",
-        "defillama-APY-pool-id": "15c3e528-2825-4ca4-804b-406e8b8e2ebd",
-        "tags": ["gdai"],
-        "composition": {"dai": 1},
-        "project": "gains-network",
-    },
-    "0x4e971a87900b931ff39d1aad67697f49835400b6": {
+    "0x4e971a87900b931ff39d1aad67697f49835400b6:arb_gmx": {
         "categories": [
             "large_cap_us_stocks",
             "long_term_bond",
@@ -197,120 +173,50 @@ DEBANK_ADDRESS = {
             "frax": 0.02,
             "mim": 0,
         },
-        "project": "gmx",
     },
-    "0xbdec4a045446f583dc564c0a227ffd475b329bf0": {
-        "categories": ["gold", "long_term_bond", "intermediate_term_bond"],
-        "symbol": "WETH-DAI",
-        "defillama-APY-pool-id": "592db49f-ac12-4072-b659-4e4a29c2b197",
-        "tags": ["dai", "eth"],
-        "composition": {"eth": 0.5, "dai": 0.5},
-        "project": "kyberswap-elastic",
-    },
-    "0x41a5881c17185383e19df6fa4ec158a6f4851a69:43": {
+    "0x41a5881c17185383e19df6fa4ec158a6f4851a69:43:convex": {
         "categories": ["intermediate_term_bond"],
         "symbol": "OHMFRAXBP-F",
         "defillama-APY-pool-id": "4f000353-5bb0-4e8c-ad03-194f0662680d",
         "tags": ["ohm", "frax", "usdc"],
         "composition": {"ohm": 0.5, "frax": 0.25, "usdc": 0.25},
-        "project": "yearn-finance",
     },
-    "0xf562b2f33b3c90d5d273f88cdf0ced866e17092e": {
+    "0xf562b2f33b3c90d5d273f88cdf0ced866e17092e:frax": {
         "categories": ["intermediate_term_bond"],
         "symbol": "OHM-FRAX",
         "defillama-APY-pool-id": "41e4d018-b7df-422d-93af-d7d4ff94b300",
         "tags": ["frax", "ohm"],
         "composition": {"ohm": 0.5, "frax": 0.5},
-        "project": "frax",
     },
-    "0x4804357ace69330524ceb18f2a647c3c162e1f95": {
+    "0x4804357ace69330524ceb18f2a647c3c162e1f95:kava_mare": {
         "categories": ["non_us_developed_market_stocks"],
         "symbol": "WKAVA",
         "defillama-APY-pool-id": "d09a22df-779c-4917-b66f-9e57b2f379f6",
         "tags": ["kava"],
         "composition": {"kava": 1},
-        "project": "mare-finance",
     },
-    "0xf4b1486dd74d07706052a33d31d7c0aafd0659e1": {
+    "0xf4b1486dd74d07706052a33d31d7c0aafd0659e1:arb_radiantcapital2": {
         "categories": ["long_term_bond"],
-        "project": "radiant",
         "symbol": "Radiant-ETH-lending",
         "DEFAULT_APR": 0.09,
         "tags": ["eth"],
         "composition": {"eth": 1},
     },
-    "0x4fd9f7c5ca0829a656561486bada018505dfcb5e": {
+    "0x4fd9f7c5ca0829a656561486bada018505dfcb5e:bsc_radiantcapital2": {
         "categories": ["large_cap_us_stocks", "commodities"],
         "symbol": "RDNT-BNB",
         "defillama-APY-pool-id": "118281c6-3a4a-4324-b804-5664617df77d",
         "tags": ["rdnt", "bnb"],
         "composition": {"bnb": 0.5, "rdnt": 0.5},
-        "project": "radiant",
     },
-    "0xd50cf00b6e600dd036ba8ef475677d816d6c4281": {
+    "0xd50cf00b6e600dd036ba8ef475677d816d6c4281:bsc_radiantcapital2": {
         "categories": ["long_term_bond"],
-        "project": "radiant",
         "symbol": "lending",
         "DEFAULT_APR": 0.07,
         "tags": ["eth"],
         "composition": {"eth": 1},
     },
-    "0x21178dd2ba9caee9df37f2d5f89a097d69fb0a7d": {
-        "categories": ["small_cap_us_stocks", "long_term_bond"],
-        "symbol": "MAGIC-WETH",
-        "defillama-APY-pool-id": "98d1d43f-dacf-42c3-b2f9-259d34ec930d",
-        "tags": ["magic", "eth"],
-        "composition": {"eth": 0.5, "magic": 0.5},
-        "project": "gamma",
-    },
-    "0x9dbbbaecacedf53d5caa295b8293c1def2055adc": {
-        "categories": [
-            "large_cap_us_stocks",
-            "long_term_bond",
-            "intermediate_term_bond",
-            "gold",
-        ],
-        "symbol": "WETH-WBTC-LINK-UNI-USDC-USDT-DAI-FRAX",
-        "defillama-APY-pool-id": "79587734-a461-4f4c-b9e2-c85c70484cf8",
-        "tags": ["glp"],
-        "composition": {
-            "eth": 0.3,
-            "wbtc": 0.25,
-            "link": 0.01,
-            "uni": 0.01,
-            "usdc": 0.34,
-            "usdt": 0.02,
-            "dai": 0.05,
-            "frax": 0.02,
-            "mim": 0,
-        },
-        "project": "beefy",
-    },
-    "0x1f36f95a02c744f2b3cd196b5e44e749c153d3b9": {
-        "categories": ["small_cap_us_stocks"],
-        "symbol": "VELO-OP",
-        "defillama-APY-pool-id": "d268cba2-bf82-43c7-b4dc-1e8f2c37e150",
-        "tags": ["velo", "op"],
-        "composition": {"velo": 0.5, "op": 0.5},
-        "project": "velodrome",
-    },
-    "0x6b8edc43de878fd5cd5113c42747d32500db3873": {
-        "categories": ["small_cap_us_stocks", "intermediate_term_bond", "gold"],
-        "symbol": "VELO-USDC",
-        "defillama-APY-pool-id": "6e053f06-e90d-4f16-b31b-d615d33f26f5",
-        "tags": ["velo", "usdc"],
-        "composition": {"velo": 0.5, "usdc": 0.5},
-        "project": "pickle",
-    },
-    "0x9c7305eb78a432ced5c4d14cac27e8ed569a2e26": {
-        "categories": ["small_cap_us_stocks"],
-        "project": "velodrome",
-        "symbol": "velodrome-lock",
-        "DEFAULT_APR": 0.0001,
-        "tags": ["velo"],
-        "composition": {"velo": 1},
-    },
-    "0x085a2054c51ea5c91dbf7f90d65e728c0f2a270f": {
+    "0x085a2054c51ea5c91dbf7f90d65e728c0f2a270f:convex": {
         "categories": ["long_term_bond", "commodities", "large_cap_us_stocks"],
         "symbol": "WETH-CRV",
         "defillama-APY-pool-id": "caad8223-bae8-4ef4-bdf3-c12cc55c94e3",
@@ -318,56 +224,28 @@ DEBANK_ADDRESS = {
         "composition": {"eth": 0.5, "crv": 0.5},
         "project": "convex-finance",
     },
-    "0x1e2d8f84605d32a2cbf302e30bfd2387badf35dd:3": {
-        "categories": ["long_term_bond", "commodities"],
-        "symbol": "WMATIC-WETH",
-        "defillama-APY-pool-id": "04b6b532-91dc-4bbb-85c8-fc8613f78b87",
-        "tags": ["matic", "eth"],
-        "composition": {"eth": 0.5, "matic": 0.5},
-        "project": "gamma",
-    },
-    "0xacf5a67f2fcfeda3946ccb1ad9d16d2eb65c3c96:2": {
+    "0xacf5a67f2fcfeda3946ccb1ad9d16d2eb65c3c96:10:era_spacefi": {
         "categories": ["long_term_bond", "intermediate_term_bond", "gold"],
-        "project": "SpaceFi",
-        "symbol": "USDC-ETH",
-        "DEFAULT_APR": 0.17,
-        "tags": ["usdc", "eth"],
-        "composition": {"eth": 0.5, "usdc": 0.5},
-    },
-    "0xacf5a67f2fcfeda3946ccb1ad9d16d2eb65c3c96:10": {
-        "categories": ["long_term_bond", "intermediate_term_bond", "gold"],
-        "project": "SpaceFi",
         "symbol": "USDT-ETH",
         "DEFAULT_APR": 0.23,
         "tags": ["usdt", "eth"],
         "composition": {"eth": 0.5, "usdt": 0.5},
     },
-    "0x7d49e5adc0eaad9c027857767638613253ef125f": {
-        "categories": [
-            "large_cap_us_stocks",
-            "long_term_bond",
-            "intermediate_term_bond",
-            "gold",
-        ],
-        "symbol": "GLP",
-        "defillama-APY-pool-id": "24524d98-7fa5-47ca-b788-e7879319176c",
-        "tags": ["glp"],
-        "composition": {
-            "eth": 0.3,
-            "wbtc": 0.25,
-            "link": 0.01,
-            "uni": 0.01,
-            "usdc": 0.34,
-            "usdt": 0.02,
-            "dai": 0.05,
-            "frax": 0.02,
-            "mim": 0,
-            # putting pt token as 0% since PT token doesn't change the composition of this LP token
-            "pt-glp-28mar2024": 0,
-        },
-        "project": "pendle",
+    "0xacf5a67f2fcfeda3946ccb1ad9d16d2eb65c3c96:1:era_spacefi": {
+        "categories": ["long_term_bond", "intermediate_term_bond", "gold"],
+        "symbol": "USDT-ETH",
+        "DEFAULT_APR": 0.23,
+        "tags": ["usdt", "eth"],
+        "composition": {"eth": 0.5, "usdt": 0.5},
     },
-    "0xa0192f6567f8f5dc38c53323235fd08b318d2dca": {
+    "0xacf5a67f2fcfeda3946ccb1ad9d16d2eb65c3c96:0:era_spacefi": {
+        "categories": ["long_term_bond", "intermediate_term_bond", "gold"],
+        "symbol": "SPACE",
+        "DEFAULT_APR": 1,
+        "tags": ["space"],
+        "composition": {"space": 1},
+    },
+    "0xa0192f6567f8f5dc38c53323235fd08b318d2dca:arb_pendle2": {
         "categories": ["intermediate_term_bond"],
         "symbol": "GDAI",
         "defillama-APY-pool-id": "95c950d1-8479-42b3-852c-282ed30c1f6c",
@@ -375,31 +253,14 @@ DEBANK_ADDRESS = {
         "composition": {"dai": 1},
         "project": "pendle",
     },
-    "0x2ec8c498ec997ad963969a2c93bf7150a1f5b213": {
-        "categories": ["long_term_bond"],
-        "symbol": "RETH-WETH",
-        "defillama-APY-pool-id": "90205f92-bb2b-4e97-bbfd-e7a1c91a6fd1",
-        "tags": ["eth"],
-        "composition": {"eth": 1},
-        "project": "pendle",
-    },
-    "0xd85e038593d7a098614721eae955ec2022b9b91b": {
-        "categories": ["intermediate_term_bond"],
-        "symbol": "DAI",
-        "defillama-APY-pool-id": "15c3e528-2825-4ca4-804b-406e8b8e2ebd",
-        "tags": ["gdai"],
-        "composition": {"dai": 1},
-        "project": "gains-network",
-    },
-    "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3:17": {
+    "0xf4d73326c13a4fc5fd7a064217e12780e9bd62c3:17:arb_sushiswap": {
         "categories": ["small_cap_us_stocks", "long_term_bond"],
         "symbol": "DPX-WETH",
         "defillama-APY-pool-id": "97cb382d-8dc4-4e17-b0f6-b6b51994dbeb",
         "tags": ["dpx", "eth"],
         "composition": {"eth": 0.5, "dpx": 0.5},
-        "project": "sushiswap",
     },
-    "0x72a19342e8f1838460ebfccef09f6585e32db86e": {
+    "0x72a19342e8f1838460ebfccef09f6585e32db86e:convex": {
         "categories": ["small_cap_us_stocks", "commodities"],
         "symbol": "CVX",
         "APR": fetch_convex_locked_CVX_APR(),
@@ -407,15 +268,14 @@ DEBANK_ADDRESS = {
         "composition": {"cvx": 1},
         "project": "convex-finance",
     },
-    "0x2b95a1dcc3d405535f9ed33c219ab38e8d7e0884": {
+    "0x2b95a1dcc3d405535f9ed33c219ab38e8d7e0884:concentrator": {
         "categories": ["large_cap_us_stocks", "commodities"],
         "symbol": "CVXCRV",
         "defillama-APY-pool-id": "8d7633d8-be8c-4b65-ba87-76bc808c9aed",
         "tags": ["cvxcrv"],
         "composition": {"cvxcrv": 1},
-        "project": "convex-finance",
     },
-    "0xc96e1a26264d965078bd01eaceb129a65c09ffe7": {
+    "0xc96e1a26264d965078bd01eaceb129a65c09ffe7:frax": {
         "categories": ["intermediate_term_bond"],
         "symbol": "OHMFRAXBP-F",
         "defillama-APY-pool-id": "4f000353-5bb0-4e8c-ad03-194f0662680d",
@@ -423,15 +283,7 @@ DEBANK_ADDRESS = {
         "composition": {"ohm": 0.5, "frax": 0.25, "usdc": 0.25},
         "project": "yearn-finance",
     },
-    "0x34101fe647ba02238256b5c5a58aeaa2e532a049": {
-        "categories": ["intermediate_term_bond"],
-        "symbol": "USDT",
-        "defillama-APY-pool-id": "30d03a2d-f857-472d-91e7-d10d6264765c",
-        "tags": ["usdt"],
-        "composition": {"usdt": 1},
-        "project": "gmd-protocol",
-    },
-    "0x3db4b7da67dd5af61cb9b3c70501b1bdb24b2c22": {
+    "0x3db4b7da67dd5af61cb9b3c70501b1bdb24b2c22:arb_gmd": {
         "categories": ["intermediate_term_bond"],
         "symbol": "USDC",
         "defillama-APY-pool-id": "30d03a2d-f857-472d-91e7-d10d6264765c",
@@ -439,23 +291,7 @@ DEBANK_ADDRESS = {
         "composition": {"usdc": 1},
         "project": "gmd-protocol",
     },
-    "0x868a943ca49a63eb0456a00ae098d470915eea0d": {
-        "categories": ["intermediate_term_bond"],
-        "symbol": "USDC",
-        "defillama-APY-pool-id": "1acd3a3f-3ed6-4e24-9333-f1a9e41c3b17",
-        "tags": ["usdc"],
-        "composition": {"usdc": 1},
-        "project": "rehold",
-    },
-    "0x481fcfa00ee6b2384ff0b3c3b5b29ad911c1aaa7": {
-        "categories": ["long_term_bond", "commodities"],
-        "symbol": "WMATIC-WETH",
-        "defillama-APY-pool-id": "04b6b532-91dc-4bbb-85c8-fc8613f78b87",
-        "tags": ["matic", "eth"],
-        "composition": {"eth": 0.5, "matic": 0.5},
-        "project": "quickswap-dex",
-    },
-    "0x0fa70bd9b892c7b6d2a9ea8dd1ce446e52f86935": {
+    "0x0fa70bd9b892c7b6d2a9ea8dd1ce446e52f86935:fvm_stfil": {
         "categories": ["commodities"],
         "project": "stfil",
         "symbol": "FIL",
@@ -465,28 +301,7 @@ DEBANK_ADDRESS = {
             "fil": 1,
         },
     },
-    "0xc531570e9508fb73a2c223956fa21dbeafb60568": {
-        "categories": ["intermediate_term_bond"],
-        "project": "auragi-finance",
-        "symbol": "USDT-USDC",
-        "defillama-APY-pool-id": "a8ffb4ac-47ce-4f23-abee-c88832574c6d",
-        "tags": ["usdt", "usdc"],
-        "composition": {
-            "usdc": 0.5,
-            "usdt": 0.5,
-        },
-    },
-    "0xeed247ba513a8d6f78be9318399f5ed1a4808f8e": {
-        "categories": ["intermediate_term_bond"],
-        "project": "tender_lending",
-        "symbol": "USDC",
-        "defillama-APY-pool-id": "f152ff88-dd31-4efb-a0a9-ad26b5536cc7",
-        "tags": ["usdc"],
-        "composition": {
-            "usdc": 1,
-        },
-    },
-    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:1": {
+    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:1:arb_equilibria": {
         "categories": [
             "large_cap_us_stocks",
             "long_term_bond",
@@ -511,25 +326,25 @@ DEBANK_ADDRESS = {
             "frax": 0.02,
             "mim": 0,
         },
-        "project": "equilibria",
+        "project": "arb_equilibria",
     },
-    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:0": {
+    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:1:bsc_equilibria": {
         "categories": [
             "long_term_bond",
         ],
-        "symbol": "WBETH",
+        "symbol": "frxETH",
         "APR": fetch_equilibria_APR(
             chain_id="56",
             category="poolInfos",
-            pool_token="0x500D5E0D9d7337963ed6449E81CB52928184d3d6",
+            pool_token="0x55F140ABbf87EF957263F04Ed75d1691980433A8",
         ),
         "tags": ["eth"],
         "composition": {
             "eth": 1,
         },
-        "project": "equilibria",
+        "project": "bsc_equilibria",
     },
-    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:4": {
+    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:4:arb_equilibria": {
         "categories": [
             "long_term_bond",
             "commodities",
@@ -546,9 +361,9 @@ DEBANK_ADDRESS = {
             "eth": 0.5,
             "pendle": 0.5,
         },
-        "project": "equilibria",
+        "project": "arb_equilibria",
     },
-    "0xd8d51c42557343f8f1696eb63d9c3c96a2aae903": {
+    "0x71e0ce200a10f0bbfb9f924fe466acf0b7401ebf:arb_equilibria": {
         "categories": ["small_cap_us_stocks", "commodities"],
         "symbol": "PENDLE-stake2",
         "APR": fetch_equilibria_APR(chain_id="42161", category="ePendle"),
@@ -556,29 +371,8 @@ DEBANK_ADDRESS = {
         "composition": {
             "pendle": 1,
         },
-        "project": "equilibria",
     },
-    "0x71e0ce200a10f0bbfb9f924fe466acf0b7401ebf": {
-        "categories": ["small_cap_us_stocks", "commodities"],
-        "symbol": "PENDLE-stake2",
-        "APR": fetch_equilibria_APR(chain_id="42161", category="ePendle"),
-        "tags": ["pendle"],
-        "composition": {
-            "pendle": 1,
-        },
-        "project": "equilibria",
-    },
-    "0xfff4b05a10c5df1382272e554254ea8b097ec03e": {
-        "categories": ["small_cap_us_stocks", "commodities"],
-        "symbol": "PENDLE-stake2",
-        "APR": fetch_equilibria_APR(chain_id="42161", category="ePendle"),
-        "tags": ["pendle"],
-        "composition": {
-            "pendle": 1,
-        },
-        "project": "equilibria",
-    },
-    "0xd5dc65ec6948845c1c428fb60be38fe59b50bd13": {
+    "0xd5dc65ec6948845c1c428fb60be38fe59b50bd13:convex": {
         "categories": ["long_term_bond", "large_cap_us_stocks", "commodities"],
         "symbol": "CRV-FRXETH",
         "defillama-APY-pool-id": "b8c90f85-fcf5-4bcf-af8a-e361209dff0d",
@@ -589,28 +383,53 @@ DEBANK_ADDRESS = {
         },
         "project": "convex-finance",
     },
-    "0xe2b11d3002a2e49f1005e212e860f3b3ec73f985": {
-        "categories": [
-            "intermediate_term_bond",
-        ],
-        "symbol": "USDT.E-USDC",
-        "defillama-APY-pool-id": "51bbd6eb-b6ba-4202-b4ae-098273bbbb29",
-        "tags": ["usdc", "usdt"],
+    "0xb19e477b959751afd4a1c6880525e0390560681e:kava_equilibre": {
+        "categories": ["non_us_developed_market_stocks", "long_term_bond"],
+        "project": "Equilibre",
+        "symbol": "ETH-WKAVA",
+        "defillama-APY-pool-id": "e8a518dd-ccfc-43d9-b7e9-8ef3c0d4a68e",
+        "tags": ["kava", "eth"],
         "composition": {
+            "kava": 0.5,
+            "eth": 0.5,
+        },
+    },
+    "0xd15b22628ad39b4d5a0a574aaba9e910a1a2cdc6:kava_equilibre": {
+        "categories": ["non_us_emerging_market_stocks", "intermediate_term_bond"],
+        "project": "Equilibre",
+        "symbol": "ATOM-USDT",
+        "defillama-APY-pool-id": "3e5781f8-5240-4a55-955b-67abea1bcfeb",
+        "tags": ["atom", "usdt"],
+        "composition": {
+            "atom": 0.5,
             "usdt": 0.5,
+        },
+    },
+    "0xf731202a3cf7efa9368c2d7bd613926f7a144db5:9:kava_sushiswap": {
+        "categories": ["non_us_developed_market_stocks", "long_term_bond"],
+        "project": "sushiswap",
+        "symbol": "USDC-WKAVA",
+        "APR": fetch_kava_sushiswap_APR(
+            pool_addr="0xb379eb428a28a927a16ee7f95100ac6a5117aaa1"
+        ),
+        "tags": ["kava", "usdc"],
+        "composition": {
+            "kava": 0.5,
             "usdc": 0.5,
         },
-        "project": "joe-v2.1",
     },
-    "0xfd421d60905d2f7cabd49e6a5703a3499367b8f4": {
-        "categories": ["long_term_bond", "intermediate_term_bond", "gold"],
-        "project": "joe-v2.1",
-        "symbol": "USDC-ETH",
-        # the reason why divided by 2 is because the APR is naively calculated by the fee/total_value_locked, and neglect the loss when rebalancing ETH to USDC, vice versa.
-        # "APR": fetch_traderjoe_auto_pool_APR(pool_addr="0xfd421d60905d2f7cabd49e6a5703a3499367b8f4")/2,
-        "DEFAULT_APR": 0.5,
-        "tags": ["usdc", "eth"],
-        "composition": {"eth": 0.5, "usdc": 0.5},
+    "0xB9774bB2A18Af59Ec9bf86dCaeC07473A2D2F211:kava-lend": {
+        "categories": ["non_us_emerging_market_stocks"],
+        "project": "kava-lend",
+        "symbol": "ATOM",
+        "APR": fetch_kava_lend_APY(
+            pool_addr="ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2",
+            token="atom:usd",
+        ),
+        "tags": ["atom"],
+        "composition": {
+            "atom": 1,
+        },
     },
 }
 
@@ -659,64 +478,6 @@ NANSEN_ADDRESS = {
         "project": "Cosmos",
         "symbol": "ATOM",
         "DEFAULT_APR": 0.15,
-        "tags": ["atom"],
-        "composition": {
-            "atom": 1,
-        },
-    },
-    "0x371d33963fb89ec9542a11ccf955b3a90391f99f": {
-        "categories": ["non_us_developed_market_stocks", "long_term_bond"],
-        "project": "Equilibre",
-        "symbol": "KAVA-WETH",
-        "defillama-APY-pool-id": "4f6323c2-e6a2-4a1b-a5f9-b62740e7ee75",
-        "tags": ["kava", "eth"],
-        "composition": {
-            "kava": 0.5,
-            "eth": 0.5,
-        },
-    },
-    "0xb19e477b959751afd4a1c6880525e0390560681e": {
-        "categories": ["non_us_developed_market_stocks", "long_term_bond"],
-        "project": "Equilibre",
-        "symbol": "ETH-WKAVA",
-        "defillama-APY-pool-id": "e8a518dd-ccfc-43d9-b7e9-8ef3c0d4a68e",
-        "tags": ["kava", "eth"],
-        "composition": {
-            "kava": 0.5,
-            "eth": 0.5,
-        },
-    },
-    "0xf731202a3cf7efa9368c2d7bd613926f7a144db5:9": {
-        "categories": ["non_us_developed_market_stocks", "long_term_bond"],
-        "project": "sushiswap",
-        "symbol": "USDC-WKAVA",
-        "APR": fetch_kava_sushiswap_APR(
-            pool_addr="0xb379eb428a28a927a16ee7f95100ac6a5117aaa1"
-        ),
-        "tags": ["kava", "usdc"],
-        "composition": {
-            "kava": 0.5,
-            "usdc": 0.5,
-        },
-    },
-    "0xB9774bB2A18Af59Ec9bf86dCaeC07473A2D2F230": {
-        "categories": ["non_us_developed_market_stocks"],
-        "project": "scrub-invest",
-        "symbol": "WKAVA",
-        "defillama-APY-pool-id": "bc46cd9e-8c8f-443a-86a6-25047ab30b88",
-        "tags": ["kava"],
-        "composition": {
-            "kava": 1,
-        },
-    },
-    "0xB9774bB2A18Af59Ec9bf86dCaeC07473A2D2F211": {
-        "categories": ["non_us_emerging_market_stocks"],
-        "project": "kava-lend",
-        "symbol": "ATOM",
-        "APR": fetch_kava_lend_APY(
-            pool_addr="ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2",
-            token="atom:usd",
-        ),
         "tags": ["atom"],
         "composition": {
             "atom": 1,

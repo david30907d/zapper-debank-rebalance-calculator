@@ -4,7 +4,7 @@ def place_value_into_categorized_portfolio_dict(
     length_of_categories: int,
     project: str,
     symbol: str,
-    address: str,
+    unique_id: str,
     apr: float,
     metadata: dict,
     tokens_metadata: list,
@@ -17,7 +17,7 @@ def place_value_into_categorized_portfolio_dict(
         result[category]["portfolio"][f"{project}:{symbol}"][
             "worth"
         ] += weighted_balanceUSD
-        result[category]["portfolio"][f"{project}:{symbol}"]["address"] = address
+        result[category]["portfolio"][f"{project}:{symbol}"]["address"] = unique_id
         result[category]["portfolio"][f"{project}:{symbol}"]["APR"] = apr
         result[category]["portfolio"][f"{project}:{symbol}"]["metadata"] = metadata
         result[category]["portfolio"][f"{project}:{symbol}"][
