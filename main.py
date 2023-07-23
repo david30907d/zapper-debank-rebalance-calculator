@@ -119,7 +119,7 @@ def load_raw_positions(data_format: str) -> dict:
 
 
 def load_evm_raw_positions(data_format: str, addresses: list[str]) -> dict:
-    if os.getenv("DEBUG", "").lower() == "true":
+    if os.getenv("DEBUG", "").lower() == "true" or addresses == ["demo"]:
         return json.load(open(f"./rebalance_server/dashboard/{data_format}.json"))
     merged_data = []
     for address in addresses:

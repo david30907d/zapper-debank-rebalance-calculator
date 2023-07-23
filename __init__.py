@@ -32,3 +32,16 @@ def get_suggestions():
     )
     resp = jsonify(response)
     return resp
+
+
+@app.route("/demo", methods=["GET"])
+@cache.cached(timeout=300)
+def get_demo():
+    response = main(
+        defi_portfolio_service_name="debank",
+        optimize_apr_mode="new_pool",
+        strategy_name="all_weather_portfolio",
+        addresses=["demo"],
+    )
+    resp = jsonify(response)
+    return resp
