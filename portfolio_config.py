@@ -110,6 +110,17 @@ def fetch_kava_lend_APY(pool_addr: str, token: str) -> float:
     raise Exception(f"Failed to find pool {pool_addr} in kava lend")
 
 
+def fetch_equilibre_APR(symbol: str) -> float:
+    api_pairs = requests.get("https://api.equilibrefinance.com/api/v1/pairs")
+    if api_pairs.status_code != 200:
+        raise Exception("Failed to fetch equilibre chain info map")
+    api_pairs = api_pairs.json()
+    for pool in api_pairs["data"]:
+        if pool["symbol"] == symbol:
+            return pool["apr"] / 100
+    raise Exception(f"Failed to find symbol {symbol} in equilibre")
+
+
 def get_metadata_by_project_symbol(project_symbol: str) -> dict:
     project_id = project_symbol.split(":")[0]
     for metadata in ADDRESS_2_CATEGORY.values():
@@ -413,9 +424,9 @@ DEBANK_ADDRESS = {
             "atom": 1,
         },
     },
-    "0x7e9c61362cf7547107adc0a4157808406cc5d99e:kava_beefy": {
+    "0x99b966b099ed886a3dc465b56b874ea12813c498:kava_beefy": {
         "categories": ["non_us_developed_market_stocks", "intermediate_term_bond"],
-        "project": "kava_beefy-",
+        "project": "kava_beefy",
         "symbol": "KAVA-USDT",
         "DEFAULT_APR": 0.6,
         "tags": ["kava", "usdt"],
@@ -443,6 +454,31 @@ DEBANK_ADDRESS = {
         "composition": {
             "eth": 0.5,
             "velo": 0.5,
+        },
+    },
+    "0xca0d15b4bb6ad730fe40592f9e25a2e052842c92:kava_equilibre": {
+        "categories": [
+            "non_us_emerging_market_stocks",
+            "non_us_developed_market_stocks",
+        ],
+        "project": "kava_equilibre",
+        "symbol": "KAVA-VARA",
+        "APR": fetch_equilibre_APR("vAMM-WKAVA/VARA"),
+        "tags": ["kava", "vara"],
+        "composition": {
+            "kava": 0.5,
+            "vara": 0.5,
+        },
+    },
+    "0x46ec4bb184528c3aee6f1419e11b28a97f33d483:linea_syncswap": {
+        "categories": ["long_term_bond", "commodities"],
+        "project": "linea_syncswap",
+        "symbol": "ETH-MATIC",
+        "DEFAULT_APR": 0.4,
+        "tags": ["eth", "matic"],
+        "composition": {
+            "eth": 0.5,
+            "matic": 0.5,
         },
     },
 }
