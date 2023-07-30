@@ -268,13 +268,6 @@ DEBANK_ADDRESS = {
         "composition": {"cvx": 1},
         "project": "convex-finance",
     },
-    "0x2b95a1dcc3d405535f9ed33c219ab38e8d7e0884:concentrator": {
-        "categories": ["large_cap_us_stocks", "commodities"],
-        "symbol": "CVXCRV",
-        "defillama-APY-pool-id": "8d7633d8-be8c-4b65-ba87-76bc808c9aed",
-        "tags": ["cvxcrv"],
-        "composition": {"cvxcrv": 1},
-    },
     "0xc96e1a26264d965078bd01eaceb129a65c09ffe7:frax": {
         "categories": ["intermediate_term_bond"],
         "symbol": "OHMFRAXBP-F",
@@ -372,17 +365,6 @@ DEBANK_ADDRESS = {
             "pendle": 1,
         },
     },
-    "0xd5dc65ec6948845c1c428fb60be38fe59b50bd13:convex": {
-        "categories": ["long_term_bond", "large_cap_us_stocks", "commodities"],
-        "symbol": "CRV-FRXETH",
-        "defillama-APY-pool-id": "b8c90f85-fcf5-4bcf-af8a-e361209dff0d",
-        "tags": ["crv", "eth"],
-        "composition": {
-            "eth": 0.5,
-            "crv": 0.5,
-        },
-        "project": "convex-finance",
-    },
     "0xb19e477b959751afd4a1c6880525e0390560681e:kava_equilibre": {
         "categories": ["non_us_developed_market_stocks", "long_term_bond"],
         "project": "Equilibre",
@@ -429,6 +411,38 @@ DEBANK_ADDRESS = {
         "tags": ["atom"],
         "composition": {
             "atom": 1,
+        },
+    },
+    "0x7e9c61362cf7547107adc0a4157808406cc5d99e:kava_beefy": {
+        "categories": ["non_us_developed_market_stocks", "intermediate_term_bond"],
+        "project": "kava_beefy-",
+        "symbol": "KAVA-USDT",
+        "DEFAULT_APR": 0.6,
+        "tags": ["kava", "usdt"],
+        "composition": {
+            "kava": 0.5,
+            "usdt": 0.5,
+        },
+    },
+    "0x6b252eed6c28c076fa22c0f006d1d7161e0705ca:kava_acryptos": {
+        "categories": ["non_us_developed_market_stocks"],
+        "project": "kava_acryptos",
+        "symbol": "KAVA",
+        "defillama-APY-pool-id": "bb13f544-ae5c-44ff-aa94-67269e20414c",
+        "tags": ["kava"],
+        "composition": {
+            "kava": 1,
+        },
+    },
+    "0x8329c9c93b63db8a56a3b9a0c44c2edabd6572a8:op_velodrome2": {
+        "categories": ["long_term_bond", "commodities"],
+        "project": "op_velodrome2",
+        "symbol": "ETH-VELO",
+        "defillama-APY-pool-id": "09921e93-8c35-46fb-94ba-9fe0580a2a88",
+        "tags": ["eth", "velo"],
+        "composition": {
+            "eth": 0.5,
+            "velo": 0.5,
         },
     },
 }
