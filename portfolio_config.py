@@ -351,7 +351,6 @@ DEBANK_ADDRESS = {
     "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:4:arb_equilibria": {
         "categories": [
             "long_term_bond",
-            "commodities",
             "small_cap_us_stocks",
         ],
         "symbol": "PENDLE-WETH",
@@ -368,7 +367,7 @@ DEBANK_ADDRESS = {
         "project": "arb_equilibria",
     },
     "0x71e0ce200a10f0bbfb9f924fe466acf0b7401ebf:arb_equilibria": {
-        "categories": ["small_cap_us_stocks", "commodities"],
+        "categories": ["small_cap_us_stocks"],
         "symbol": "PENDLE-stake2",
         "APR": fetch_equilibria_APR(chain_id="42161", category="ePendle"),
         "tags": ["pendle"],
@@ -439,7 +438,7 @@ DEBANK_ADDRESS = {
         },
     },
     "0x8329c9c93b63db8a56a3b9a0c44c2edabd6572a8:op_velodrome2": {
-        "categories": ["long_term_bond", "commodities", "small_cap_us_stocks"],
+        "categories": ["long_term_bond", "small_cap_us_stocks"],
         "project": "op_velodrome2",
         "symbol": "ETH-VELO",
         "defillama-APY-pool-id": "09921e93-8c35-46fb-94ba-9fe0580a2a88",
