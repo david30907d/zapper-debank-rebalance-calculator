@@ -122,9 +122,9 @@ def fetch_equilibre_APR(symbol: str) -> float:
 
 
 def get_metadata_by_project_symbol(project_symbol: str) -> dict:
-    project_id = project_symbol.split(":")[0]
-    for metadata in ADDRESS_2_CATEGORY.values():
-        if f'{project_id}:{metadata["symbol"]}'.lower() == project_symbol.lower():
+    for address_and_project, metadata in ADDRESS_2_CATEGORY.items():
+        project = address_and_project.split(":")[-1]
+        if f'{project}:{metadata["symbol"]}'.lower() == project_symbol.lower():
             return metadata
     raise Exception(f"Cannot find {project_symbol} in your address mapping table")
 
@@ -377,7 +377,11 @@ DEBANK_ADDRESS = {
         },
     },
     "0xb19e477b959751afd4a1c6880525e0390560681e:kava_equilibre": {
-        "categories": ["non_us_developed_market_stocks", "long_term_bond"],
+        "categories": [
+            "non_us_developed_market_stocks",
+            "long_term_bond",
+            "commodities",
+        ],
         "project": "Equilibre",
         "symbol": "ETH-WKAVA",
         "defillama-APY-pool-id": "e8a518dd-ccfc-43d9-b7e9-8ef3c0d4a68e",
@@ -388,7 +392,11 @@ DEBANK_ADDRESS = {
         },
     },
     "0xd15b22628ad39b4d5a0a574aaba9e910a1a2cdc6:kava_equilibre": {
-        "categories": ["non_us_emerging_market_stocks", "intermediate_term_bond"],
+        "categories": [
+            "non_us_developed_market_stocks",
+            "intermediate_term_bond",
+            "commodities",
+        ],
         "project": "Equilibre",
         "symbol": "ATOM-USDT",
         "defillama-APY-pool-id": "3e5781f8-5240-4a55-955b-67abea1bcfeb",
@@ -399,7 +407,11 @@ DEBANK_ADDRESS = {
         },
     },
     "0xf731202a3cf7efa9368c2d7bd613926f7a144db5:9:kava_sushiswap": {
-        "categories": ["non_us_developed_market_stocks", "long_term_bond"],
+        "categories": [
+            "non_us_developed_market_stocks",
+            "intermediate_term_bond",
+            "commodities",
+        ],
         "project": "sushiswap",
         "symbol": "USDC-WKAVA",
         "APR": fetch_kava_sushiswap_APR(
@@ -411,21 +423,12 @@ DEBANK_ADDRESS = {
             "usdc": 0.5,
         },
     },
-    "0xB9774bB2A18Af59Ec9bf86dCaeC07473A2D2F211:kava-lend": {
-        "categories": ["non_us_emerging_market_stocks"],
-        "project": "kava-lend",
-        "symbol": "ATOM",
-        "APR": fetch_kava_lend_APY(
-            pool_addr="ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2",
-            token="atom:usd",
-        ),
-        "tags": ["atom"],
-        "composition": {
-            "atom": 1,
-        },
-    },
     "0x99b966b099ed886a3dc465b56b874ea12813c498:kava_beefy": {
-        "categories": ["non_us_developed_market_stocks", "intermediate_term_bond"],
+        "categories": [
+            "non_us_developed_market_stocks",
+            "intermediate_term_bond",
+            "commodities",
+        ],
         "project": "kava_beefy",
         "symbol": "KAVA-USDT",
         "DEFAULT_APR": 0.6,
@@ -435,18 +438,8 @@ DEBANK_ADDRESS = {
             "usdt": 0.5,
         },
     },
-    "0x6b252eed6c28c076fa22c0f006d1d7161e0705ca:kava_acryptos": {
-        "categories": ["non_us_developed_market_stocks"],
-        "project": "kava_acryptos",
-        "symbol": "KAVA",
-        "defillama-APY-pool-id": "bb13f544-ae5c-44ff-aa94-67269e20414c",
-        "tags": ["kava"],
-        "composition": {
-            "kava": 1,
-        },
-    },
     "0x8329c9c93b63db8a56a3b9a0c44c2edabd6572a8:op_velodrome2": {
-        "categories": ["long_term_bond", "commodities"],
+        "categories": ["long_term_bond", "commodities", "small_cap_us_stocks"],
         "project": "op_velodrome2",
         "symbol": "ETH-VELO",
         "defillama-APY-pool-id": "09921e93-8c35-46fb-94ba-9fe0580a2a88",
@@ -460,6 +453,7 @@ DEBANK_ADDRESS = {
         "categories": [
             "non_us_emerging_market_stocks",
             "non_us_developed_market_stocks",
+            "commodities",
         ],
         "project": "kava_equilibre",
         "symbol": "KAVA-VARA",
@@ -481,41 +475,23 @@ DEBANK_ADDRESS = {
             "matic": 0.5,
         },
     },
+    "0xfcd7d41d5cff03c7f6d573c9732b0506c72f5c72:kava_mare": {
+        "categories": ["non_us_developed_market_stocks", "commodities"],
+        "project": "kava_mare",
+        "symbol": "ATOM",
+        "DEFAULT_APR": 0.32,
+        "tags": ["atom"],
+        "composition": {
+            "atom": 1,
+        },
+    },
 }
 
 
 NANSEN_ADDRESS = {
-    "EA1D43981D5C9A1C4AAEA9C23BB1D4FA126BA9BC7020A25E0AE4AA841EA25DC5": {
-        "categories": [
-            "non_us_emerging_market_stocks",
-            "long_term_bond",
-        ],
-        "project": "Osmosis",
-        "symbol": "OSMO-WETH",
-        "defillama-APY-pool-id": "5fe464d2-3575-4b70-bc69-cc52d2857e4a",
-        "tags": ["osmo", "eth"],
-        "composition": {
-            "eth": 0.5,
-            "osmo": 0.5,
-        },
-    },
-    "57AA1A70A4BC9769C525EBF6386F7A21536E04A79D62E1981EFCEF9428EBB205": {
-        "categories": [
-            "non_us_emerging_market_stocks",
-            "non_us_developed_market_stocks",
-        ],
-        "project": "Osmosis",
-        "symbol": "OSMO-KAVA",
-        "defillama-APY-pool-id": "f6efb5eb-b6fc-4ada-8fe2-05702f38d606",
-        "tags": ["osmo", "kava"],
-        "composition": {
-            "kava": 0.5,
-            "osmo": 0.5,
-        },
-    },
-    "27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2": {
-        "categories": ["non_us_emerging_market_stocks"],
-        "project": "Osmosis",
+    "27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2:osmosis": {
+        "categories": ["non_us_developed_market_stocks", "commodities"],
+        "project": "osmosis",
         "symbol": "ATOM-STATOM",
         "DEFAULT_APR": 0.27,
         "tags": ["atom"],
@@ -523,8 +499,8 @@ NANSEN_ADDRESS = {
             "atom": 1,
         },
     },
-    "DEC41A02E47658D40FC71E5A35A9C807111F5A6662A3FB5DA84C4E6F53E616B3": {
-        "categories": ["non_us_emerging_market_stocks", "commodities"],
+    "DEC41A02E47658D40FC71E5A35A9C807111F5A6662A3FB5DA84C4E6F53E616B3:cosmos": {
+        "categories": ["non_us_developed_market_stocks", "commodities"],
         "project": "Cosmos",
         "symbol": "ATOM",
         "DEFAULT_APR": 0.15,
