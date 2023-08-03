@@ -49,8 +49,6 @@ def main(
     no_evm_posistions = _load_no_evm_posistions(
         data_sources={
             "binance": "debank",
-            "nansen-cosmos": "nansen",
-            "nansen-osmo": "nansen",
         }
     )
     no_evm_categorized_positions_array = _categorize_no_evm_categorized_positions_array(

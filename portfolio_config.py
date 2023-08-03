@@ -295,11 +295,11 @@ DEBANK_ADDRESS = {
         "composition": {"usdc": 1},
         "project": "gmd-protocol",
     },
-    "0x0fa70bd9b892c7b6d2a9ea8dd1ce446e52f86935:fvm_stfil": {
+    "0x0fa70bd9b892c7b6d2a9ea8dd1ce446e52f86935:fvm_hashking": {
         "categories": ["commodities"],
-        "project": "stfil",
+        "project": "hashking",
         "symbol": "FIL",
-        "defillama-APY-pool-id": "03cdc005-9fb7-4e0a-9f11-e0155ee4c8bf",
+        "defillama-APY-pool-id": "58c3d410-1d51-4c59-bb89-494e042f79ca",
         "tags": ["fil"],
         "composition": {
             "fil": 1,
@@ -502,32 +502,8 @@ DEBANK_ADDRESS = {
 }
 
 
-NANSEN_ADDRESS = {
-    "27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2:osmosis": {
-        "categories": ["non_us_developed_market_stocks", "commodities"],
-        "project": "osmosis",
-        "symbol": "ATOM-STATOM",
-        "DEFAULT_APR": 0.27,
-        "tags": ["atom"],
-        "composition": {
-            "atom": 1,
-        },
-    },
-    "DEC41A02E47658D40FC71E5A35A9C807111F5A6662A3FB5DA84C4E6F53E616B3:cosmos": {
-        "categories": ["non_us_developed_market_stocks", "commodities"],
-        "project": "Cosmos",
-        "symbol": "ATOM",
-        "DEFAULT_APR": 0.15,
-        "tags": ["atom"],
-        "composition": {
-            "atom": 1,
-        },
-    },
-}
-
 ADDRESS_2_CATEGORY = {
     **DEBANK_ADDRESS,
-    **NANSEN_ADDRESS,
 }
 
 # TODO(david): use this one to implement advanced search algorithm. Search for new compositions.
