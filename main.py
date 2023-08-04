@@ -7,6 +7,9 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 
+from rebalance_server.adapters.networth_to_balance_adapter import (
+    get_networh_to_balance_adapter,
+)
 from rebalance_server.apr_utils.apr_calculator import get_lowest_or_default_apr
 from rebalance_server.apr_utils.apr_pool_optimizer import (
     print_out_topn_candidate_pool,
@@ -15,13 +18,8 @@ from rebalance_server.apr_utils.apr_pool_optimizer import (
     show_topn_stable_coins,
 )
 from rebalance_server.handlers import get_data_source_handler
-
-# TODO(david): uncomment sharpe ratio and max drawdown once we've migrated to standalone server not lambda or cloud run
-# from rebalance_server.adapters.networth_to_balance_adapter import (
-#     get_networh_to_balance_adapter,
-# )
-# from rebalance_server.metrics.max_drawdown import calculate_max_drawdown
-# from rebalance_server.metrics.sharpe_ratio import calculate_portfolio_sharpe_ratio
+from rebalance_server.metrics.max_drawdown import calculate_max_drawdown
+from rebalance_server.metrics.sharpe_ratio import calculate_portfolio_sharpe_ratio
 from rebalance_server.rebalance_strategies import (
     get_rebalancing_suggestions,
     print_rebalancing_suggestions,
@@ -66,7 +64,6 @@ def main(
         categorized_positions, strategy_name, net_worth
     )
     print_rebalancing_suggestions(suggestions, net_worth)
-    print(f"Current Net Worth: ${net_worth:.2f}")
     total_interest = calculate_interest(categorized_positions)
     portfolio_apr = 100 * total_interest / net_worth if net_worth != 0 else 0
     print(f"Portfolio's APR: {portfolio_apr:.2f}%")
@@ -80,21 +77,13 @@ def main(
             }.items()
         ],
         key=lambda x: x["apr"],
-    )
-    # [TODO](david): uncomment sharpe ratio and max drawdown once we've migrated to standalone server not lambda or cloud run
-    # adapter = get_networh_to_balance_adapter(adapter="coingecko")
-    # categorized_positions_with_token_balance = adapter(categorized_positions)
+    )[:10]
+    adapter = get_networh_to_balance_adapter(adapter="coingecko")
+    categorized_positions_with_token_balance = adapter(categorized_positions)
 
-    # since some alpha tokens only have few data points, making the data very less. In other words, sharpe ratio is not reliable at this point until those alpha tokens has a few years worth of data
-    # sharpe_ratio = calculate_portfolio_sharpe_ratio(
-    #     categorized_positions_with_token_balance
-    # )
-    # print(
-    #     f"Portfolio's Sharpe Ratio (Useless until we have enough data points): {sharpe_ratio:.2f}"
-    # )
-    # print(
-    #     f"Portfolio's Max Drawdown: {calculate_max_drawdown(categorized_positions_with_token_balance):.2f}"
-    # )
+    sharpe_ratio = calculate_portfolio_sharpe_ratio(
+        categorized_positions_with_token_balance
+    )
     if optimize_apr_mode:
         top_n_with_metadata = search_top_n_pool_consist_of_same_lp_token(
             categorized_positions, optimize_apr_mode
@@ -108,8 +97,10 @@ def main(
         "suggestions": suggestions,
         "total_interest": total_interest,
         "portfolio_apr": portfolio_apr,
-        # TODO(david): uncomment sharpe ratio and max drawdown once we've migrated to standalone server not lambda or cloud run
-        # "sharpe_ratio": sharpe_ratio,
+        "sharpe_ratio": sharpe_ratio,
+        "max_drawdown": calculate_max_drawdown(
+            categorized_positions_with_token_balance
+        ),
         "top_n_lowest_apr_pools": top_n_lowest_apr_pools,
         "top_n_pool_consist_of_same_lp_token": top_n_with_metadata,
         "topn_stable_coins": topn_stable_coins,

@@ -30,6 +30,10 @@ def calculate_historical_price_of_lp_token(
                 base_token["symbol"]
             )
         )
+        if symbol_for_reader is None:
+            # [TODO] needs to figure out a way to get historical data for lp token
+            # for instance: PT-PENDLE-ETH_Camelot-27JUN2024
+            continue
         price_pd = historical_price_reader.get_token_historical_price(symbol_for_reader)
         if len(series) == 0:
             series = price_pd * tokenBalance
