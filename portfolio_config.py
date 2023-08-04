@@ -121,15 +121,7 @@ def fetch_equilibre_APR(symbol: str) -> float:
     raise Exception(f"Failed to find symbol {symbol} in equilibre")
 
 
-def get_metadata_by_project_symbol(project_symbol: str) -> dict:
-    for address_and_project, metadata in ADDRESS_2_CATEGORY.items():
-        project = address_and_project.split(":")[-1]
-        if f'{project}:{metadata["symbol"]}'.lower() == project_symbol.lower():
-            return metadata
-    raise Exception(f"Cannot find {project_symbol} in your address mapping table")
-
-
-MIN_REBALANCE_POSITION_THRESHOLD = 250
+MIN_REBALANCE_POSITION_THRESHOLD = 1000
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
 BLACKLIST_CHAINS_FOR_STABLE_COIN = {"Ethereum"}
