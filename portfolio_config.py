@@ -296,7 +296,7 @@ DEBANK_ADDRESS = {
         "project": "gmd-protocol",
     },
     "0x0fa70bd9b892c7b6d2a9ea8dd1ce446e52f86935:fvm_hashking": {
-        "categories": ["commodities"],
+        "categories": ["non_us_emerging_market_stocks"],
         "project": "hashking",
         "symbol": "FIL",
         "defillama-APY-pool-id": "58c3d410-1d51-4c59-bb89-494e042f79ca",
@@ -379,7 +379,6 @@ DEBANK_ADDRESS = {
         "categories": [
             "non_us_developed_market_stocks",
             "long_term_bond",
-            "commodities",
         ],
         "project": "kava_equilibre",
         "symbol": "ETH-WKAVA",
@@ -390,26 +389,10 @@ DEBANK_ADDRESS = {
             "eth": 0.5,
         },
     },
-    "0xd15b22628ad39b4d5a0a574aaba9e910a1a2cdc6:kava_equilibre": {
-        "categories": [
-            "non_us_developed_market_stocks",
-            "intermediate_term_bond",
-            "commodities",
-        ],
-        "project": "kava_equilibre",
-        "symbol": "ATOM-USDT",
-        "defillama-APY-pool-id": "3e5781f8-5240-4a55-955b-67abea1bcfeb",
-        "tags": ["atom", "usdt"],
-        "composition": {
-            "atom": 0.5,
-            "usdt": 0.5,
-        },
-    },
     "0x5383deb37479599a33584f7bbc346ab299e30ff0:kava_equilibre": {
         "categories": [
             "non_us_developed_market_stocks",
             "intermediate_term_bond",
-            "commodities",
         ],
         "project": "kava_equilibre",
         "symbol": "KAVA-USDT",
@@ -424,7 +407,6 @@ DEBANK_ADDRESS = {
         "categories": [
             "non_us_developed_market_stocks",
             "intermediate_term_bond",
-            "commodities",
         ],
         "project": "sushiswap",
         "symbol": "USDC-WKAVA",
@@ -441,7 +423,6 @@ DEBANK_ADDRESS = {
         "categories": [
             "non_us_developed_market_stocks",
             "intermediate_term_bond",
-            "commodities",
         ],
         "project": "kava_beefy",
         "symbol": "KAVA-USDT",
@@ -465,9 +446,7 @@ DEBANK_ADDRESS = {
     },
     "0xca0d15b4bb6ad730fe40592f9e25a2e052842c92:kava_equilibre": {
         "categories": [
-            "non_us_emerging_market_stocks",
             "non_us_developed_market_stocks",
-            "commodities",
         ],
         "project": "kava_equilibre",
         "symbol": "KAVA-VARA",
@@ -489,14 +468,15 @@ DEBANK_ADDRESS = {
             "matic": 0.5,
         },
     },
-    "0xfcd7d41d5cff03c7f6d573c9732b0506c72f5c72:kava_mare": {
-        "categories": ["non_us_developed_market_stocks", "commodities"],
-        "project": "kava_mare",
-        "symbol": "ATOM",
-        "DEFAULT_APR": 0.32,
-        "tags": ["atom"],
+    "0x0f30716960f0618983ac42be2982ffec181af265:op_velodrome2": {
+        "categories": ["commodities", "small_cap_us_stocks"],
+        "project": "linea_syncswap",
+        "symbol": "OP-VELO",
+        "defillama-APY-pool-id": "366c295f-4366-475b-bea3-287292cb5b7a",
+        "tags": ["op", "velo"],
         "composition": {
-            "atom": 1,
+            "op": 0.5,
+            "velo": 0.5,
         },
     },
 }
