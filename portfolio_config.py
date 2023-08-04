@@ -545,6 +545,13 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "BTCB": "bitcoin",
     "BUSD": "binance-usd",
     "PENDLE": "pendle",
+    "wstETH": "wrapped-steth",
+    "ARB": "arbitrum",
+    "PT-PENDLE-ETH_Camelot-27JUN2024": None,
+    "PT-Thena frxETH-ETH-27JUN2024": "ethereum",
+    "USDt": "tether",
+    "ePendle": None,
+    "VARA": "equilibre",
 }
 
 LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {
