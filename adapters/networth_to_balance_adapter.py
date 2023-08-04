@@ -46,11 +46,13 @@ def coingecko_net_worth_2_balance_adapter(categorized_positions: dict) -> float:
             dedupe_symbol_set.add(symbol)
             for tokens in position_obj["tokens_metadata"]:
                 token_array = []
+                splitted_addr = position_obj["address"].split(":")
+                addr_with_metadata = ":".join(splitted_addr[:-1])
                 if "tokens" not in tokens:
-                    result[symbol].append(tokens)
+                    result[f"{addr_with_metadata}:{symbol}"].append(tokens)
                 else:
                     _get_basic_token_in_backtracking_way(token_array, tokens["tokens"])
-                    result[symbol] += token_array
+                    result[f"{addr_with_metadata}:{symbol}"] += token_array
     return result
 
 

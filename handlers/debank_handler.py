@@ -3,8 +3,8 @@ from rebalance_server.handlers.utils import place_value_into_categorized_portfol
 from rebalance_server.portfolio_config import (
     ADDRESS_2_CATEGORY,
     MIN_REBALANCE_POSITION_THRESHOLD,
-    get_metadata_by_project_symbol,
 )
+from rebalance_server.utils.position import get_metadata_by_project_symbol
 
 
 def debank_handler(positions, result):

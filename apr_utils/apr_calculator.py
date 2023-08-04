@@ -8,8 +8,8 @@ from rebalance_server.portfolio_config import (
     ADDRESS_2_CATEGORY,
     DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL,
     LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR,
-    get_metadata_by_project_symbol,
 )
+from rebalance_server.utils.position import get_metadata_by_project_symbol
 
 
 def get_lowest_or_default_apr(project_symbol: str, addr: str):
