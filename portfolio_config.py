@@ -349,6 +349,18 @@ DEBANK_ADDRESS = {
         "composition": {"eth": 1},
         "project": "bsc_equilibria",
     },
+    "0x0f2743016ae7d9dc8b627b211cd0f5d98d5bb430:op_velodrome2": {
+        "categories": [
+            "long_term_bond",
+        ],
+        "symbol": "ETH-rETH",
+        "defillama-APY-pool-id": "b975e90f-cf1f-43a0-88e4-fc5dbc28a72d",
+        "tags": ["eth"],
+        "composition": {
+            "eth": 1,
+        },
+        "project": "op_velodrome2",
+    },
     "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:4:arb_equilibria": {
         "categories": ["long_term_bond", "large_cap_us_stocks"],
         "symbol": "PENDLE-WETH",
@@ -787,6 +799,7 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "USDt": "tether",
     "ePendle": None,
     "VARA": "equilibre",
+    "rETH": "reth",
 }
 
 LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {
