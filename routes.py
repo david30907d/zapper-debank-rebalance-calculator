@@ -2,8 +2,9 @@ from rebalance_server.main import load_evm_raw_positions
 
 
 def get_debank_data():
+    # should hard code the contract addresses of vault contracts
     evm_positions = load_evm_raw_positions(
-        "debank", "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"
+        "debank", "0x0000000000000000000000000000000000000000"
     )
     token_metadata_table: dict[str, dict] = {}
     for position in evm_positions["data"]["result"]["data"]:
