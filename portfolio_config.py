@@ -139,6 +139,7 @@ BLACKLIST_PROTOCOL = {
     "acryptos",
     "filet-finance",
     "yama-finance",
+    "neutra-finance",
 }
 STABLE_COIN_WHITELIST = {"USDT", "USDC", "USDT.E", "USDC.E"}
 DEBANK_ADDRESS = {
@@ -419,20 +420,6 @@ DEBANK_ADDRESS = {
             "usdc": 0.5,
         },
     },
-    "0x99b966b099ed886a3dc465b56b874ea12813c498:kava_beefy": {
-        "categories": [
-            "non_us_developed_market_stocks",
-            "intermediate_term_bond",
-        ],
-        "project": "kava_beefy",
-        "symbol": "KAVA-USDT",
-        "DEFAULT_APR": 0.6,
-        "tags": ["kava", "usdt"],
-        "composition": {
-            "kava": 0.5,
-            "usdt": 0.5,
-        },
-    },
     "0x8329c9c93b63db8a56a3b9a0c44c2edabd6572a8:op_velodrome2": {
         "categories": ["long_term_bond", "small_cap_us_stocks"],
         "project": "op_velodrome2",
@@ -461,7 +448,7 @@ DEBANK_ADDRESS = {
         "categories": ["long_term_bond", "commodities"],
         "project": "linea_syncswap",
         "symbol": "ETH-MATIC",
-        "DEFAULT_APR": 0.4,
+        "DEFAULT_APR": 0.22,
         "tags": ["eth", "matic"],
         "composition": {
             "eth": 0.5,

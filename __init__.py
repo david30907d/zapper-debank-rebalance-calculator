@@ -6,6 +6,7 @@ from flask_caching import Cache
 from flask_cors import CORS
 
 from rebalance_server.main import main
+from rebalance_server.routes import get_debank_data
 
 config = {
     "DEBUG": True,  # some Flask specific configs
@@ -83,5 +84,13 @@ def get_demo():
         strategy_name="all_weather_portfolio",
         addresses=["demo"],
     )
+    resp = jsonify(response)
+    return resp
+
+
+@app.route("/debank", methods=["GET"])
+@cache.cached(timeout=300)
+def debank():
+    response = get_debank_data()
     resp = jsonify(response)
     return resp
