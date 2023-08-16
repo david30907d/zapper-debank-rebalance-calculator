@@ -6,7 +6,7 @@ from flask_caching import Cache
 from flask_cors import CORS
 
 from rebalance_server.main import main
-from rebalance_server.routes import get_debank_data
+from rebalance_server.routes import get_APR_composition, get_debank_data
 
 config = {
     "DEBUG": True,  # some Flask specific configs
@@ -92,5 +92,13 @@ def get_demo():
 @cache.cached(timeout=300)
 def debank():
     response = get_debank_data()
+    resp = jsonify(response)
+    return resp
+
+
+@app.route("/apr_composition", methods=["GET"])
+# @cache.cached(timeout=300)
+def apr_composition():
+    response = get_APR_composition(1, "permanent_portfolio")
     resp = jsonify(response)
     return resp
