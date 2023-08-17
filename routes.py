@@ -35,13 +35,22 @@ def get_APR_composition(sum_of_APR: float, portfolio_name: str):
     apr_composition = {}
     if portfolio_name == "permanent_portfolio":
         equilibria_market_addrs = {
-            "Equilibria-GDAI": "0xa0192f6567f8f5DC38C53323235FD08b318D2dcA",
-            "Equilibria-GLP": "0x7D49E5Adc0EAAD9C027857767638613253eF125f",
-            "Equilibria-RETH": "0x14FbC760eFaF36781cB0eb3Cb255aD976117B9Bd",
+            "Equilibria-GDAI": {
+                "pool_addr": "0xa0192f6567f8f5DC38C53323235FD08b318D2dcA",
+                "ratio": 0.25,
+            },
+            "Equilibria-GLP": {
+                "pool_addr": "0x7D49E5Adc0EAAD9C027857767638613253eF125f",
+                "ratio": 0.25,
+            },
+            "Equilibria-RETH": {
+                "pool_addr": "0x14FbC760eFaF36781cB0eb3Cb255aD976117B9Bd",
+                "ratio": 0.25,
+            },
         }
-        for key, pool_addr in equilibria_market_addrs.items():
+        for key, pool_metadata in equilibria_market_addrs.items():
             apr_composition[key] = _fetch_equilibria_APR_composition(
-                pool_addr, ratio=0.25
+                pool_metadata["pool_addr"], ratio=pool_metadata["ratio"]
             )
         apr_composition["SushSwap-DpxETH"] = _fetch_sushiswap_APR_composition(
             "0x0c1cf6883efa1b496b01f654e247b9b419873054", ratio=0.25
