@@ -49,27 +49,35 @@ def _fetch_equilibria_APR_composition(pool_addr: str) -> float:
     if equilibria_chain_info_map.status_code != 200:
         raise Exception("Failed to fetch equilibria chain info map")
     equilibria_chain_info_map = equilibria_chain_info_map.json()
-    result["underlyingAPY"]["token"] = []
+    result["Underlying APY"]["token"] = []
+    pool_info = [
+        pl
+        for pl in equilibria_chain_info_map["42161"]["poolInfos"]
+        if pl["market"] == pool_addr and pl["shutdown"] is False
+    ][0]
     for category, keys in {
         "Swap Fee": ["swapFeeApy"],
-        "underlyingAPY": ["underlyingApy", "lpRewardApy"],
-        "PENDLE": ["aggregatedApy"],
+        "Underlying APY": ["underlyingApy", "lpRewardApy"],
+        "PENDLE": ["pendleApy"],
     }.items():
         for key in keys:
-            result[category]["APR"] += convert_apy_to_apr(
-                equilibria_chain_info_map["42161"]["marketMap"][pool_addr][key]
-            )
+            result[category]["APR"] += convert_apy_to_apr(pool_info["marketInfo"][key])
         if category == "PENDLE":
-            result[category]["token"] = "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8"
-        elif category == "underlyingAPY":
-            for reward in equilibria_chain_info_map["42161"]["marketMap"][pool_addr][
-                "underlyingRewardApyBreakdown"
-            ]:
+            result["PENDLE"]["token"] = "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8"
+            result["PENDLE"]["APR"] = convert_apy_to_apr(
+                pool_info["pendleBoostedApy"]
+                - pool_info["pendleApy"]
+                + pool_info["pendleBaseBoostableApy"]
+            )
+            result["EQB"]["token"] = "0xBfbCFe8873fE28Dfa25f1099282b088D52bbAD9C"
+            result["EQB"]["APR"] = convert_apy_to_apr(pool_info["eqbApy"])
+            result["xEQB"]["token"] = "0x96C4A48Abdf781e9c931cfA92EC0167Ba219ad8E"
+            result["xEQB"]["APR"] = convert_apy_to_apr(pool_info["xEqbApy"])
+        elif category == "Underlying APY":
+            for reward in pool_info["marketInfo"]["underlyingRewardApyBreakdown"]:
                 result[category]["token"].append(reward["asset"]["address"])
             result[category]["token"].append(
-                equilibria_chain_info_map["42161"]["marketMap"][pool_addr][
-                    "basePricingAsset"
-                ]["address"]
+                pool_info["marketInfo"]["basePricingAsset"]["address"]
             )
     return result
 
