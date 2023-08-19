@@ -1,6 +1,6 @@
 import json
 
-from rebalance_server.apr_utils import convert_apy_to_apr
+from rebalance_server.apr_utils import convert_apr_to_apy, convert_apy_to_apr
 from rebalance_server.apr_utils.apr_calculator import get_apy, get_lowest_or_default_apr
 from rebalance_server.portfolio_config import (
     BLACKLIST_CHAINS,
@@ -18,7 +18,7 @@ from rebalance_server.utils.position import skip_rebalance_if_position_too_small
 MILLION = 10**6
 
 
-def search_better_stable_coin_pools(categorized_positions: dict, topn_int: int = 10):
+def search_better_stable_coin_pools(categorized_positions: dict, topn_int: int = 5):
     with open("rebalance_server/yield-llama.json", "r") as f:
         defillama = json.load(f)
     max_apy = _get_current_stable_max_apy_in_your_portfolio(
@@ -155,14 +155,18 @@ def _get_current_stable_max_apy_in_your_portfolio(
     for portfolio in categorized_positions["intermediate_term_bond"][
         "portfolio"
     ].values():
-        defillama_APY_pool_id = portfolio["metadata"].get("defillama-APY-pool-id")
-        if not defillama_APY_pool_id:
-            continue
-        if (
-            defillama_APY_pool_id in defillama_APY_pool_id_to_apy
-            and defillama_APY_pool_id_to_apy[defillama_APY_pool_id] > max_apy
-        ):
-            max_apy = defillama_APY_pool_id_to_apy[defillama_APY_pool_id]
+        for key in ["defillama-APY-pool-id", "DEFAULT_APR", "APR"]:
+            potential_defillama_key = portfolio["metadata"].get(key)
+            if potential_defillama_key is None:
+                continue
+            apy = 0
+            if key == "defillama-APY-pool-id":
+                if potential_defillama_key in defillama_APY_pool_id_to_apy:
+                    apy = defillama_APY_pool_id_to_apy[potential_defillama_key]
+            else:
+                apy = convert_apr_to_apy(float(potential_defillama_key))
+            if apy > max_apy:
+                max_apy = apy
     return max_apy
 
 

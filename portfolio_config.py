@@ -466,6 +466,37 @@ DEBANK_ADDRESS = {
             "velo": 0.5,
         },
     },
+    "0x131d56758351c9885862ada09a6a7071735c83b3:linea_velocore": {
+        "categories": ["intermediate_term_bond"],
+        "project": "linea_velocore",
+        "symbol": "USDT",
+        "DEFAULT_APR": 0.4,
+        "tags": ["usdt"],
+        "composition": {
+            "usdt": 1,
+        },
+    },
+    "0x1d0188c4b276a09366d05d6be06af61a73bc7535:0xe2c67a9b15e9e7ff8a9cb0dfb8fee5609923e5db:linea_velocore": {
+        "categories": ["intermediate_term_bond", "long_term_bond", "gold"],
+        "project": "linea_velocore",
+        "symbol": "USDT-ETH",
+        "DEFAULT_APR": 0.35,
+        "tags": ["usdt", "eth"],
+        "composition": {
+            "usdt": 0.5,
+            "eth": 0.5,
+        },
+    },
+    "0x0c485feb9e6fee816652ea8f3bed2a8f59296e40:op_pendle2": {
+        "categories": ["long_term_bond"],
+        "project": "op_pendle2",
+        "symbol": "rETH",
+        "DEFAULT_APR": 0.26,
+        "tags": ["eth"],
+        "composition": {
+            "eth": 1,
+        },
+    },
 }
 
 

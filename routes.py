@@ -61,7 +61,7 @@ def get_APR_composition(sum_of_APR: float, portfolio_name: str):
     raise NotImplementedError(f"Portfolio {portfolio_name} is not implemented")
 
 
-@retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
+@retry(stop=stop_after_attempt(5), wait=wait_fixed(5))
 def fetch_1inch_swap_data(
     chain_id: int,
     from_token_address: str,
