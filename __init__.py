@@ -109,7 +109,6 @@ def apr_composition():
 
 
 @app.route("/one_1inch_swap_data", methods=["GET"])
-@cache.cached(timeout=300)
 def one_1inch_swap_data():
     chainId = request.args.get("chainId")
     fromTokenAddress = request.args.get("fromTokenAddress")
