@@ -6,7 +6,11 @@ from flask_caching import Cache
 from flask_cors import CORS
 
 from rebalance_server.main import main
-from rebalance_server.routes import get_APR_composition, get_debank_data
+from rebalance_server.routes import (
+    fetch_1inch_swap_data,
+    get_APR_composition,
+    get_debank_data,
+)
 
 config = {
     "DEBUG": True,  # some Flask specific configs
@@ -97,8 +101,24 @@ def debank():
 
 
 @app.route("/apr_composition", methods=["GET"])
-# @cache.cached(timeout=300)
+@cache.cached(timeout=300)
 def apr_composition():
     response = get_APR_composition(1, "permanent_portfolio")
+    resp = jsonify(response)
+    return resp
+
+
+@app.route("/one_1inch_swap_data", methods=["GET"])
+@cache.cached(timeout=300)
+def one_1inch_swap_data():
+    chainId = request.args.get("chainId")
+    fromTokenAddress = request.args.get("fromTokenAddress")
+    toTokenAddress = request.args.get("toTokenAddress")
+    amount = request.args.get("amount")
+    fromAddress = request.args.get("fromAddress")
+    slippage = request.args.get("slippage")
+    response = fetch_1inch_swap_data(
+        chainId, fromTokenAddress, toTokenAddress, amount, fromAddress, slippage
+    )
     resp = jsonify(response)
     return resp

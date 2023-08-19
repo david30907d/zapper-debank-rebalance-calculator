@@ -1,6 +1,8 @@
+import os
 from collections import defaultdict
 
 import requests
+from tenacity import retry, stop_after_attempt, wait_fixed
 
 from rebalance_server.apr_utils import convert_apy_to_apr
 from rebalance_server.main import load_evm_raw_positions
@@ -57,6 +59,25 @@ def get_APR_composition(sum_of_APR: float, portfolio_name: str):
         )
         return apr_composition
     raise NotImplementedError(f"Portfolio {portfolio_name} is not implemented")
+
+
+@retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
+def fetch_1inch_swap_data(
+    chain_id: int,
+    from_token_address: str,
+    to_token_address: str,
+    amount: str,
+    from_address: str,
+    slippage: int,
+):
+    url = f"https://api.1inch.dev/swap/v5.2/{chain_id}/swap?src={from_token_address}&dst={to_token_address}&amount={amount}&from={from_address}&slippage={slippage}&disableEstimate=true"
+    headers = {
+        "Authorization": f"Bearer {os.getenv('1INCH_API_KEY')}",
+        "Accept": "application/json",
+    }
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()  # Will trigger a retry if HTTP error
+    return response.json()
 
 
 def _fetch_equilibria_APR_composition(pool_addr: str, ratio: float) -> float:

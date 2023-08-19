@@ -448,7 +448,7 @@ DEBANK_ADDRESS = {
         "categories": ["long_term_bond", "commodities"],
         "project": "linea_syncswap",
         "symbol": "ETH-MATIC",
-        "DEFAULT_APR": 0.22,
+        "DEFAULT_APR": 0.03,
         "tags": ["eth", "matic"],
         "composition": {
             "eth": 0.5,
