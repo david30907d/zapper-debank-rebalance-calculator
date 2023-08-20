@@ -72,7 +72,7 @@ def fetch_1inch_swap_data(
 ):
     url = f"https://api.1inch.dev/swap/v5.2/{chain_id}/swap?src={from_token_address}&dst={to_token_address}&amount={amount}&from={from_address}&slippage={slippage}&disableEstimate=true"
     headers = {
-        "Authorization": f"Bearer {os.getenv('1INCH_API_KEY')}",
+        "Authorization": f"Bearer {os.getenv('ONE_INCH_API_KEY')}",
         "Accept": "application/json",
     }
     response = requests.get(url, headers=headers)
