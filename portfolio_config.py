@@ -129,7 +129,7 @@ def get_metadata_by_project_symbol(project_symbol: str) -> dict:
     raise Exception(f"Cannot find {project_symbol} in your address mapping table")
 
 
-MIN_REBALANCE_POSITION_THRESHOLD = 250
+MIN_REBALANCE_POSITION_THRESHOLD = 0
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
 BLACKLIST_CHAINS_FOR_STABLE_COIN = {"Ethereum"}
@@ -302,9 +302,7 @@ DEBANK_ADDRESS = {
         "symbol": "FIL",
         "defillama-APY-pool-id": "58c3d410-1d51-4c59-bb89-494e042f79ca",
         "tags": ["fil"],
-        "composition": {
-            "fil": 1,
-        },
+        "composition": {"fil": 1},
     },
     "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:1:arb_equilibria": {
         "categories": [
@@ -334,9 +332,7 @@ DEBANK_ADDRESS = {
         "project": "arb_equilibria",
     },
     "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:1:bsc_equilibria": {
-        "categories": [
-            "long_term_bond",
-        ],
+        "categories": ["long_term_bond"],
         "symbol": "frxETH",
         "APR": fetch_equilibria_APR(
             chain_id="56",
@@ -344,16 +340,11 @@ DEBANK_ADDRESS = {
             pool_token="0x55F140ABbf87EF957263F04Ed75d1691980433A8",
         ),
         "tags": ["eth"],
-        "composition": {
-            "eth": 1,
-        },
+        "composition": {"eth": 1},
         "project": "bsc_equilibria",
     },
     "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:4:arb_equilibria": {
-        "categories": [
-            "long_term_bond",
-            "small_cap_us_stocks",
-        ],
+        "categories": ["long_term_bond", "small_cap_us_stocks"],
         "symbol": "PENDLE-WETH",
         "APR": fetch_equilibria_APR(
             chain_id="42161",
@@ -361,10 +352,7 @@ DEBANK_ADDRESS = {
             pool_token="0x7a2d44931fA2953f812676e05039F488144763F4",
         ),
         "tags": ["eth", "pendle"],
-        "composition": {
-            "eth": 0.5,
-            "pendle": 0.5,
-        },
+        "composition": {"eth": 0.5, "pendle": 0.5},
         "project": "arb_equilibria",
     },
     "0x71e0ce200a10f0bbfb9f924fe466acf0b7401ebf:arb_equilibria": {
@@ -372,53 +360,33 @@ DEBANK_ADDRESS = {
         "symbol": "PENDLE-stake2",
         "APR": fetch_equilibria_APR(chain_id="42161", category="ePendle"),
         "tags": ["pendle"],
-        "composition": {
-            "pendle": 1,
-        },
+        "composition": {"pendle": 1},
     },
     "0xb19e477b959751afd4a1c6880525e0390560681e:kava_equilibre": {
-        "categories": [
-            "non_us_developed_market_stocks",
-            "long_term_bond",
-        ],
+        "categories": ["non_us_developed_market_stocks", "long_term_bond"],
         "project": "kava_equilibre",
         "symbol": "ETH-WKAVA",
         "defillama-APY-pool-id": "e8a518dd-ccfc-43d9-b7e9-8ef3c0d4a68e",
         "tags": ["kava", "eth"],
-        "composition": {
-            "kava": 0.5,
-            "eth": 0.5,
-        },
+        "composition": {"kava": 0.5, "eth": 0.5},
     },
     "0x5383deb37479599a33584f7bbc346ab299e30ff0:kava_equilibre": {
-        "categories": [
-            "non_us_developed_market_stocks",
-            "intermediate_term_bond",
-        ],
+        "categories": ["non_us_developed_market_stocks", "intermediate_term_bond"],
         "project": "kava_equilibre",
         "symbol": "KAVA-USDT",
         "defillama-APY-pool-id": "3e5781f8-5240-4a55-955b-67abea1bcfeb",
         "tags": ["kava", "usdt"],
-        "composition": {
-            "kava": 0.5,
-            "usdt": 0.5,
-        },
+        "composition": {"kava": 0.5, "usdt": 0.5},
     },
     "0xf731202a3cf7efa9368c2d7bd613926f7a144db5:9:kava_sushiswap": {
-        "categories": [
-            "non_us_developed_market_stocks",
-            "intermediate_term_bond",
-        ],
+        "categories": ["non_us_developed_market_stocks", "intermediate_term_bond"],
         "project": "sushiswap",
         "symbol": "USDC-WKAVA",
         "APR": fetch_kava_sushiswap_APR(
             pool_addr="0xb379eb428a28a927a16ee7f95100ac6a5117aaa1"
         ),
         "tags": ["kava", "usdc"],
-        "composition": {
-            "kava": 0.5,
-            "usdc": 0.5,
-        },
+        "composition": {"kava": 0.5, "usdc": 0.5},
     },
     "0x8329c9c93b63db8a56a3b9a0c44c2edabd6572a8:op_velodrome2": {
         "categories": ["long_term_bond", "small_cap_us_stocks"],
@@ -426,23 +394,15 @@ DEBANK_ADDRESS = {
         "symbol": "ETH-VELO",
         "defillama-APY-pool-id": "09921e93-8c35-46fb-94ba-9fe0580a2a88",
         "tags": ["eth", "velo"],
-        "composition": {
-            "eth": 0.5,
-            "velo": 0.5,
-        },
+        "composition": {"eth": 0.5, "velo": 0.5},
     },
     "0xca0d15b4bb6ad730fe40592f9e25a2e052842c92:kava_equilibre": {
-        "categories": [
-            "non_us_developed_market_stocks",
-        ],
+        "categories": ["non_us_developed_market_stocks"],
         "project": "kava_equilibre",
         "symbol": "KAVA-VARA",
         "APR": fetch_equilibre_APR("vAMM-WKAVA/VARA"),
         "tags": ["kava", "vara"],
-        "composition": {
-            "kava": 0.5,
-            "vara": 0.5,
-        },
+        "composition": {"kava": 0.5, "vara": 0.5},
     },
     "0x46ec4bb184528c3aee6f1419e11b28a97f33d483:linea_syncswap": {
         "categories": ["long_term_bond", "commodities"],
@@ -450,10 +410,7 @@ DEBANK_ADDRESS = {
         "symbol": "ETH-MATIC",
         "DEFAULT_APR": 0.03,
         "tags": ["eth", "matic"],
-        "composition": {
-            "eth": 0.5,
-            "matic": 0.5,
-        },
+        "composition": {"eth": 0.5, "matic": 0.5},
     },
     "0x0f30716960f0618983ac42be2982ffec181af265:op_velodrome2": {
         "categories": ["commodities", "small_cap_us_stocks"],
@@ -461,10 +418,7 @@ DEBANK_ADDRESS = {
         "symbol": "OP-VELO",
         "defillama-APY-pool-id": "366c295f-4366-475b-bea3-287292cb5b7a",
         "tags": ["op", "velo"],
-        "composition": {
-            "op": 0.5,
-            "velo": 0.5,
-        },
+        "composition": {"op": 0.5, "velo": 0.5},
     },
     "0x131d56758351c9885862ada09a6a7071735c83b3:linea_velocore": {
         "categories": ["intermediate_term_bond"],
@@ -472,9 +426,7 @@ DEBANK_ADDRESS = {
         "symbol": "USDT",
         "DEFAULT_APR": 0.4,
         "tags": ["usdt"],
-        "composition": {
-            "usdt": 1,
-        },
+        "composition": {"usdt": 1},
     },
     "0x1d0188c4b276a09366d05d6be06af61a73bc7535:0xe2c67a9b15e9e7ff8a9cb0dfb8fee5609923e5db:linea_velocore": {
         "categories": ["intermediate_term_bond", "long_term_bond", "gold"],
@@ -482,10 +434,7 @@ DEBANK_ADDRESS = {
         "symbol": "USDT-ETH",
         "DEFAULT_APR": 0.35,
         "tags": ["usdt", "eth"],
-        "composition": {
-            "usdt": 0.5,
-            "eth": 0.5,
-        },
+        "composition": {"usdt": 0.5, "eth": 0.5},
     },
     "0x0c485feb9e6fee816652ea8f3bed2a8f59296e40:op_pendle2": {
         "categories": ["long_term_bond"],
@@ -493,9 +442,39 @@ DEBANK_ADDRESS = {
         "symbol": "rETH",
         "DEFAULT_APR": 0.26,
         "tags": ["eth"],
-        "composition": {
-            "eth": 1,
-        },
+        "composition": {"eth": 1},
+    },
+    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:2:arb_equilibria": {
+        "categories": ["intermediate_term_bond"],
+        "project": "arb_equilibria",
+        "symbol": "gDAI",
+        "APR": fetch_equilibria_APR(
+            chain_id="42161",
+            category="poolInfos",
+            pool_token="0x183b30706ff2655e7aB0aB37867DD7AF8Cb75e78",
+        ),
+        "tags": ["dai"],
+        "composition": {"dai": 1},
+    },
+    "0x6af43486cb84be0e3eddcef93d3c43ef0c5f63b1:era_spacefi": {
+        "categories": ["small_cap_us_stocks"],
+        "project": "era_spacefi",
+        "symbol": "SPACE",
+        "DEFAULT_APR": 0.6,
+        "tags": ["space"],
+        "composition": {"space": 1},
+    },
+    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:8:arb_equilibria": {
+        "categories": ["long_term_bond"],
+        "project": "arb_equilibria",
+        "symbol": "rETH",
+        "APR": fetch_equilibria_APR(
+            chain_id="42161",
+            category="poolInfos",
+            pool_token="0xD5d1276B85A51F6D2B5eE26b9D7317bEa022ecbf",
+        ),
+        "tags": ["eth"],
+        "composition": {"eth": 1},
     },
 }
 

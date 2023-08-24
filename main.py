@@ -46,16 +46,16 @@ def main(
     # 2. Nansen
     # because some of my sizes are located in Binance, and Nansen(cosmos ecosystem), which is not included in either debank or zapper
     # therefore, these 2 data sources need to be loaded everytime (ps. they're all manually updated in debank data format)
-    no_evm_posistions = _load_no_evm_posistions(
-        data_sources={
-            "binance": "debank",
-        }
-    )
-    no_evm_categorized_positions_array = _categorize_no_evm_categorized_positions_array(
-        no_evm_posistions
-    )
+    non_evm_posistions = _load_non_evm_posistions(data_sources={"binance": "debank"})
+    if os.getenv("DEBUG", "").lower() == "true":
+        # this block is for David's portfolio
+        non_evm_categorized_positions_array = _categorize_non_evm_categorized_positions_array(
+            non_evm_posistions
+        )
+    else:
+        non_evm_categorized_positions_array = []
     categorized_positions = _merge_categorized_positions(
-        evm_categorized_positions, no_evm_categorized_positions_array
+        evm_categorized_positions, non_evm_categorized_positions_array
     )
     net_worth = _get_networth(categorized_positions)
     suggestions = get_rebalancing_suggestions(
@@ -116,9 +116,19 @@ def load_raw_positions(data_format: str) -> dict:
     return json.load(open(f"./rebalance_server/dashboard/{data_format}.json"))
 
 
-def load_evm_raw_positions(data_format: str, addresses: list[str]) -> dict:
+def load_evm_raw_positions(
+    data_format: str, addresses: list[str], useCache: bool = False
+) -> dict:
     if os.getenv("DEBUG", "").lower() == "true" or addresses == ["demo"]:
         return json.load(open(f"./rebalance_server/dashboard/{data_format}.json"))
+    file_name_for_production = "production-cache.json"
+    if (
+        useCache
+        and Path(f"./rebalance_server/dashboard/{file_name_for_production}").exists()
+    ):
+        return json.load(
+            open(f"./rebalance_server/dashboard/{file_name_for_production}")
+        )
     merged_data = []
     for address in addresses:
         data = requests.get(
@@ -126,7 +136,12 @@ def load_evm_raw_positions(data_format: str, addresses: list[str]) -> dict:
             headers={"AccessKey": os.getenv("ACCESSKEY")},
         ).json()
         merged_data += data
-    return {"data": {"result": {"data": merged_data}}}
+    merged_result = {"data": {"result": {"data": merged_data}}}
+    json.dump(
+        merged_result,
+        open(f"./rebalance_server/dashboard/{file_name_for_production}", "w"),
+    )
+    return merged_result
 
 
 def categorize_positions(defi_portfolio_service_name, positions) -> dict:
@@ -183,23 +198,23 @@ def calculate_interest(categorized_positions):
     return total_interest
 
 
-def _load_no_evm_posistions(data_sources: dict) -> list[dict]:
+def _load_non_evm_posistions(data_sources: dict) -> list[dict]:
     result = []
     for data_source, handler in data_sources.items():
         result.append((load_raw_positions(data_source), handler))
     return result
 
 
-def _categorize_no_evm_categorized_positions_array(
-    no_evm_posistions: list[dict],
+def _categorize_non_evm_categorized_positions_array(
+    non_evm_posistions: list[dict],
 ) -> list[dict]:
-    no_evm_categorized_positions_array = []
-    for no_evm_posistion, handler in no_evm_posistions:
-        no_evm_categorized_position = categorize_positions(
-            defi_portfolio_service_name=handler, positions=no_evm_posistion
+    non_evm_categorized_positions_array = []
+    for non_evm_posistion, handler in non_evm_posistions:
+        non_evm_categorized_position = categorize_positions(
+            defi_portfolio_service_name=handler, positions=non_evm_posistion
         )
-        no_evm_categorized_positions_array.append(no_evm_categorized_position)
-    return no_evm_categorized_positions_array
+        non_evm_categorized_positions_array.append(non_evm_categorized_position)
+    return non_evm_categorized_positions_array
 
 
 def _get_networth(categorized_positions: dict):
@@ -207,11 +222,11 @@ def _get_networth(categorized_positions: dict):
 
 
 def _merge_categorized_positions(
-    evm_categorized_positions: dict, no_evm_categorized_positions_array: list[dict]
+    evm_categorized_positions: dict, non_evm_categorized_positions_array: list[dict]
 ) -> dict:
     result = evm_categorized_positions
-    for no_evm_categorized_positions in no_evm_categorized_positions_array:
-        for category, portfolio_metadata in no_evm_categorized_positions.items():
+    for non_evm_categorized_positions in non_evm_categorized_positions_array:
+        for category, portfolio_metadata in non_evm_categorized_positions.items():
             result[category]["sum"] += portfolio_metadata["sum"]
             result[category]["portfolio"] = {
                 **evm_categorized_positions[category]["portfolio"],
