@@ -49,8 +49,8 @@ def main(
     non_evm_posistions = _load_non_evm_posistions(data_sources={"binance": "debank"})
     if os.getenv("DEBUG", "").lower() == "true":
         # this block is for David's portfolio
-        non_evm_categorized_positions_array = _categorize_non_evm_categorized_positions_array(
-            non_evm_posistions
+        non_evm_categorized_positions_array = (
+            _categorize_non_evm_categorized_positions_array(non_evm_posistions)
         )
     else:
         non_evm_categorized_positions_array = []
@@ -64,7 +64,7 @@ def main(
     print_rebalancing_suggestions(suggestions, net_worth)
     print(f"Current Net Worth: ${net_worth:.2f}")
     total_interest = calculate_interest(categorized_positions)
-    portfolio_apr = 100 * total_interest / net_worth
+    portfolio_apr = 100 * total_interest / net_worth if net_worth != 0 else 0
     print(f"Portfolio's APR: {portfolio_apr:.2f}%")
     top_n_lowest_apr_pools = sorted(
         [

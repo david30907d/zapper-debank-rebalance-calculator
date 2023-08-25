@@ -12,6 +12,8 @@ class BasePortfolio(ABC):
         self, categorized_positions, net_worth
     ) -> list:
         suggestions = []
+        if net_worth == 0:
+            return suggestions
         for category, single_category_in_the_portfolio in categorized_positions.items():
             target_sum_of_this_category = (
                 net_worth * self.target_asset_allocation[category]
