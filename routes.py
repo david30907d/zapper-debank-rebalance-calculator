@@ -1,4 +1,5 @@
 import os
+import random
 from collections import defaultdict
 
 import requests
@@ -17,7 +18,7 @@ def get_debank_data():
             "0x549caec2C863a04853Fb829aac4190E1B50df0Cc",
             "0xE66c4EA218Cdb8DCbCf3f605ed1aC29461CBa4b8",
         ],
-        useCache=True,
+        useCache=True if random.random() > 0.2 else False,
     )
     token_metadata_table: dict[str, dict] = {}
     for position in evm_positions["data"]["result"]["data"]:
