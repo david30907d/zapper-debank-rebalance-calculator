@@ -137,10 +137,11 @@ def load_evm_raw_positions(
         ).json()
         merged_data += data
     merged_result = {"data": {"result": {"data": merged_data}}}
-    json.dump(
-        merged_result,
-        open(f"./rebalance_server/dashboard/{file_name_for_production}", "w"),
-    )
+    if merged_result:
+        json.dump(
+            merged_result,
+            open(f"./rebalance_server/dashboard/{file_name_for_production}", "w"),
+        )
     return merged_result
 
 
