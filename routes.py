@@ -41,7 +41,7 @@ def get_debank_data():
                         "img"
                     ] = "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
                     token_metadata_table[
-                        f"{token['chain']}:{'0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'}"
+                        f"{token['chain']}:0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
                     ] = ethPayload
     return token_metadata_table
 
@@ -117,7 +117,7 @@ def _fetch_equilibria_APR_composition(pool_addr: str, ratio: float) -> float:
         if category == "PENDLE":
             result["PENDLE"][
                 "token"
-            ] = "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8".lower()
+            ] = "arb:0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8".lower()
             result["PENDLE"]["APR"] = (
                 convert_apy_to_apr(
                     pool_info["pendleBoostedApy"]
@@ -128,16 +128,18 @@ def _fetch_equilibria_APR_composition(pool_addr: str, ratio: float) -> float:
             )
             result["EQB"][
                 "token"
-            ] = "0xBfbCFe8873fE28Dfa25f1099282b088D52bbAD9C".lower()
+            ] = "arb:0xBfbCFe8873fE28Dfa25f1099282b088D52bbAD9C".lower()
             result["EQB"]["APR"] = convert_apy_to_apr(pool_info["eqbApy"]) * ratio
             # TODO(david): uncomment xEQB once we can redeem xEQB for user
             # result["xEQB"]["token"] = "0x96C4A48Abdf781e9c931cfA92EC0167Ba219ad8E".lower()
             # result["xEQB"]["APR"] = convert_apy_to_apr(pool_info["xEqbApy"])
         elif category == "Underlying APY":
             for reward in pool_info["marketInfo"]["underlyingRewardApyBreakdown"]:
-                result[category]["token"].append(reward["asset"]["address"].lower())
+                result[category]["token"].append(
+                    f'arb:{reward["asset"]["address"].lower()}'
+                )
             result[category]["token"].append(
-                pool_info["marketInfo"]["basePricingAsset"]["address"]
+                f'arb:{pool_info["marketInfo"]["basePricingAsset"]["address"]}'
             )
     return result
 
@@ -151,7 +153,9 @@ def _fetch_sushiswap_APR_composition(pool_addr: str, ratio: float) -> float:
     for incentive in pool_json["incentives"]:
         if incentive["apr"] > 0:
             symbol = incentive["rewardToken"]["symbol"]
-            result[symbol]["token"] = incentive["rewardToken"]["address"].lower()
+            result[symbol][
+                "token"
+            ] = f'arb:{incentive["rewardToken"]["address"].lower()}'
             result[symbol]["APR"] = incentive["apr"] * ratio
 
     result["Swap Fee"]["APR"] = pool_json["feeApr1d"] * ratio
