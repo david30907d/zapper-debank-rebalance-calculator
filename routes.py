@@ -1,3 +1,4 @@
+import copy
 import os
 import random
 from collections import defaultdict
@@ -32,15 +33,20 @@ def get_debank_data():
                     "symbol": token["symbol"],
                     "chain": token["chain"],
                 }
-                token_metadata_table[token["id"]] = payload
-                if token["symbol"] == "ETH" and token["chain"] != "bsc":
+                token_metadata_table[f'{token["chain"]}:{token["id"]}'] = payload
+                if token["symbol"] == "WETH" and token["chain"] != "bsc":
+                    ethPayload = copy.copy(payload)
+                    ethPayload["symbol"] = "ETH"
+                    ethPayload[
+                        "img"
+                    ] = "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
                     token_metadata_table[
-                        "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-                    ] = payload
+                        f"{token['chain']}:{'0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'}"
+                    ] = ethPayload
     return token_metadata_table
 
 
-def get_APR_composition(sum_of_APR: float, portfolio_name: str):
+def get_APR_composition(portfolio_name: str):
     apr_composition = {}
     if portfolio_name == "permanent_portfolio":
         equilibria_market_addrs = {

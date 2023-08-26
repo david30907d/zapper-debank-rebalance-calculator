@@ -103,7 +103,7 @@ def debank():
 @app.route("/apr_composition", methods=["GET"])
 @cache.cached(timeout=300)
 def apr_composition():
-    response = get_APR_composition(1, "permanent_portfolio")
+    response = get_APR_composition("permanent_portfolio")
     resp = jsonify(response)
     return resp
 
