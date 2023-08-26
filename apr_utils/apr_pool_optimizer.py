@@ -155,6 +155,8 @@ def _get_current_stable_max_apy_in_your_portfolio(
     for portfolio in categorized_positions["intermediate_term_bond"][
         "portfolio"
     ].values():
+        if len(portfolio["metadata"]["categories"]) > 1:
+            continue
         for key in ["defillama-APY-pool-id", "DEFAULT_APR", "APR"]:
             potential_defillama_key = portfolio["metadata"].get(key)
             if potential_defillama_key is None:

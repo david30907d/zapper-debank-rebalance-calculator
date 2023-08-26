@@ -17,6 +17,8 @@ def fetch_equilibria_APR(chain_id: str, category: str, pool_token: str = "") -> 
             equilibria_chain_info_map[chain_id]["ePendle"]["apy"]
             + equilibria_chain_info_map[chain_id]["ePendle"]["pendleApy"]
         )
+    elif category == "vlEqb":
+        return convert_apy_to_apr(equilibria_chain_info_map[chain_id]["vlEqb"]["apy"])
     raise Exception(f"Failed to find pool {pool_token} in equilibria chain info map")
 
 
@@ -129,7 +131,7 @@ def get_metadata_by_project_symbol(project_symbol: str) -> dict:
     raise Exception(f"Cannot find {project_symbol} in your address mapping table")
 
 
-MIN_REBALANCE_POSITION_THRESHOLD = 0
+MIN_REBALANCE_POSITION_THRESHOLD = 10
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
 BLACKLIST_CHAINS_FOR_STABLE_COIN = {"Ethereum"}
@@ -141,7 +143,7 @@ BLACKLIST_PROTOCOL = {
     "yama-finance",
     "neutra-finance",
 }
-STABLE_COIN_WHITELIST = {"USDT", "USDC", "USDT.E", "USDC.E"}
+STABLE_COIN_WHITELIST = {"USDT", "USDC", "USDT.E", "USDC.E", "DAI", "FRAX"}
 DEBANK_ADDRESS = {
     "0x76ba3ec5f5adbf1c58c91e86502232317eea72de:arb_radiantcapital2": {
         "categories": ["large_cap_us_stocks", "long_term_bond"],
@@ -229,7 +231,7 @@ DEBANK_ADDRESS = {
         "composition": {"eth": 1},
     },
     "0x085a2054c51ea5c91dbf7f90d65e728c0f2a270f:convex": {
-        "categories": ["long_term_bond", "commodities", "large_cap_us_stocks"],
+        "categories": ["long_term_bond", "large_cap_us_stocks"],
         "symbol": "WETH-CRV",
         "defillama-APY-pool-id": "caad8223-bae8-4ef4-bdf3-c12cc55c94e3",
         "tags": ["crv", "eth"],
@@ -400,7 +402,7 @@ DEBANK_ADDRESS = {
         "categories": ["non_us_developed_market_stocks"],
         "project": "kava_equilibre",
         "symbol": "KAVA-VARA",
-        "APR": fetch_equilibre_APR("vAMM-WKAVA/VARA"),
+        "defillama-APY-pool-id": "bd810f63-17a1-4c0d-b81c-4623d66d702e",
         "tags": ["kava", "vara"],
         "composition": {"kava": 0.5, "vara": 0.5},
     },
@@ -432,7 +434,7 @@ DEBANK_ADDRESS = {
         "categories": ["intermediate_term_bond", "long_term_bond", "gold"],
         "project": "linea_velocore",
         "symbol": "USDT-ETH",
-        "DEFAULT_APR": 0.35,
+        "DEFAULT_APR": 0.3,
         "tags": ["usdt", "eth"],
         "composition": {"usdt": 0.5, "eth": 0.5},
     },
@@ -475,6 +477,93 @@ DEBANK_ADDRESS = {
         ),
         "tags": ["eth"],
         "composition": {"eth": 1},
+    },
+    "0x6af43486cb84be0e3eddcef93d3c43ef0c5f63b1:vesting:era_spacefi": {
+        "categories": ["small_cap_us_stocks"],
+        "project": "era_spacefi",
+        "symbol": "SPACE",
+        "DEFAULT_APR": 0.01,
+        "tags": ["space"],
+        "composition": {"space": 1},
+    },
+    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:3:arb_equilibria": {
+        "categories": ["intermediate_term_bond"],
+        "project": "arb_equilibria",
+        "symbol": "USDT",
+        "APR": fetch_equilibria_APR(
+            chain_id="42161",
+            category="poolInfos",
+            pool_token="0x3672abD8b9c70e0F2ED8210cE8663d3dbC5E491a",
+        ),
+        "tags": ["usdt"],
+        "composition": {"usdt": 1},
+    },
+    "0xfaf8fd17d9840595845582fcb047df13f006787d:op_velodrome2": {
+        "categories": ["small_cap_us_stocks"],
+        "project": "op_velodrome2",
+        "symbol": "VELO",
+        "DEFAULT_APR": 0.14,
+        "tags": ["velo"],
+        "composition": {"velo": 1},
+    },
+    "0x442e773ffb0043551417d5a37e10c17990fb075c:convex": {
+        "categories": ["long_term_bond"],
+        "project": "convex",
+        "symbol": "msETH-ETH",
+        "defillama-APY-pool-id": "c130b363-10fa-46d9-8221-3b23ed8027b4",
+        "tags": ["eth"],
+        "composition": {"eth": 1},
+    },
+    "0xd5dc65ec6948845c1c428fb60be38fe59b50bd13:convex": {
+        "categories": ["long_term_bond", "large_cap_us_stocks"],
+        "project": "convex",
+        "symbol": "frxETH-CRV",
+        "DEFAULT_APR": 0.001,
+        "tags": ["eth", "crv"],
+        "composition": {"eth": 0.5, "crv": 0.5},
+    },
+    "0xc8418af6358ffdda74e09ca9cc3fe03ca6adc5b0:frax": {
+        "categories": ["large_cap_us_stocks"],
+        "project": "frax",
+        "symbol": "FXS",
+        "DEFAULT_APR": 0.002,
+        "tags": ["fxs"],
+        "composition": {"fxs": 1},
+    },
+    "0x378ba9b73309be80bf4c2c027aad799766a7ed5a:votium": {
+        "categories": ["small_cap_us_stocks"],
+        "project": "votium",
+        "symbol": "CVX",
+        "DEFAULT_APR": 0.0001,
+        "tags": ["cvx"],
+        "composition": {"cvx": 1},
+    },
+    "0x96c4a48abdf781e9c931cfa92ec0167ba219ad8e:locked:arb_equilibria": {
+        "categories": ["small_cap_us_stocks"],
+        "project": "arb_equilibria",
+        "symbol": "EQB",
+        "APR": fetch_equilibria_APR(
+            chain_id="42161",
+            category="vlEqb",
+        ),
+        "tags": ["eqb"],
+        "composition": {"eqb": 1},
+    },
+    "0xfbd849e6007f9bc3cc2d6eb159c045b8dc660268:arb_stargate": {
+        "categories": ["small_cap_us_stocks"],
+        "project": "arb_stargate",
+        "symbol": "STG",
+        "DEFAULT_APR": 0.01,
+        "tags": ["stb"],
+        "composition": {"stb": 1},
+    },
+    "0x35361c9c2a324f5fb8f3aed2d7ba91ce1410893a:kava_equilibre": {
+        "categories": ["small_cap_us_stocks"],
+        "project": "kava_equilibre",
+        "symbol": "VARA",
+        "DEFAULT_APR": 0.0001,
+        "tags": ["vara"],
+        "composition": {"vara": 1},
     },
 }
 

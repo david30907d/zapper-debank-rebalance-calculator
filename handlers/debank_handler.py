@@ -66,7 +66,7 @@ def _get_token_metadata(portfolio: dict):
                 "symbol",
             ]
         }
-        for token in portfolio["detail"]["supply_token_list"]
+        for token in portfolio["detail"].get("supply_token_list", [])
     ]
     # rename amount to balance
     for token_metadata in token_metadatas:
