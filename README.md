@@ -2,10 +2,9 @@
 ## Run
 
 1. as API server: `flask --app rebalance_server --debug run -p 3001 --host=0.0.0.0` (making sure you're current location is at its parent folder)
-2. standalone script:
-`python main.py -h`
-`python main.py -d <zapper/debank> -op <new_pool/new_combination>`
-
+2. docker;
+    1. `docker build  -t rebalance-server .`
+    2. `docker run --rm -it -p 3001:5000 rebalance-server`
 ## Install
 
 * Without Docker:

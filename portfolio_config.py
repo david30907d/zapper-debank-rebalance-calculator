@@ -426,7 +426,7 @@ DEBANK_ADDRESS = {
         "categories": ["intermediate_term_bond"],
         "project": "linea_velocore",
         "symbol": "USDT",
-        "DEFAULT_APR": 0.4,
+        "DEFAULT_APR": 0.13,
         "tags": ["usdt"],
         "composition": {"usdt": 1},
     },

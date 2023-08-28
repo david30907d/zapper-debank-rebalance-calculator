@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
 case "$1" in
-  "server") flask --app rebalance_server --debug run -p 5000 --host=0.0.0.0 ;;
+  "server") gunicorn -b 0.0.0.0:5000 --workers 2 --threads 8 rebalance_server:app;;
   *) exec "$@" ;;
 esac
