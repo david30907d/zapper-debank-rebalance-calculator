@@ -67,7 +67,7 @@ def get_APR_composition(portfolio_name: str):
             apr_composition[key] = _fetch_equilibria_APR_composition(
                 pool_metadata["pool_addr"], ratio=pool_metadata["ratio"]
             )
-        apr_composition["SushSwap-DpxETH"] = _fetch_sushiswap_APR_composition(
+        apr_composition["SushiSwap-DpxETH"] = _fetch_sushiswap_APR_composition(
             "0x0c1cf6883efa1b496b01f654e247b9b419873054", ratio=0.25
         )
         return apr_composition

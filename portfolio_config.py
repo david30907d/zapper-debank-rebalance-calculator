@@ -346,7 +346,7 @@ DEBANK_ADDRESS = {
         "project": "bsc_equilibria",
     },
     "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:4:arb_equilibria": {
-        "categories": ["long_term_bond", "small_cap_us_stocks"],
+        "categories": ["long_term_bond", "large_cap_us_stocks"],
         "symbol": "PENDLE-WETH",
         "APR": fetch_equilibria_APR(
             chain_id="42161",
@@ -358,7 +358,7 @@ DEBANK_ADDRESS = {
         "project": "arb_equilibria",
     },
     "0x71e0ce200a10f0bbfb9f924fe466acf0b7401ebf:arb_equilibria": {
-        "categories": ["small_cap_us_stocks"],
+        "categories": ["large_cap_us_stocks"],
         "symbol": "PENDLE-stake2",
         "APR": fetch_equilibria_APR(chain_id="42161", category="ePendle"),
         "tags": ["pendle"],
@@ -434,7 +434,7 @@ DEBANK_ADDRESS = {
         "categories": ["intermediate_term_bond", "long_term_bond", "gold"],
         "project": "linea_velocore",
         "symbol": "USDT-ETH",
-        "DEFAULT_APR": 0.3,
+        "DEFAULT_APR": 0.19,
         "tags": ["usdt", "eth"],
         "composition": {"usdt": 0.5, "eth": 0.5},
     },
@@ -564,6 +564,30 @@ DEBANK_ADDRESS = {
         "DEFAULT_APR": 0.0001,
         "tags": ["vara"],
         "composition": {"vara": 1},
+    },
+    "0xebf418fe2512e7e6bd9b87a8f0f294acdc67e6b4:base_aerodrome": {
+        "categories": ["small_cap_us_stocks"],
+        "project": "base_aerodrome",
+        "symbol": "AERO",
+        "DEFAULT_APR": 0.83,
+        "tags": ["aero"],
+        "composition": {"aero": 1},
+    },
+    "0x18a492ad4e4f6b3ed1c16d78322c6c2800c954b6:op_velodrome2": {
+        "categories": ["intermediate_term_bond", "non_us_developed_market_stocks"],
+        "project": "op_velodrome2",
+        "symbol": "LYRA-USDC",
+        "defillama-APY-pool-id": "e8c4c16b-12e1-46b2-bb00-5651fa5a8611",
+        "tags": ["usdc", "lyra"],
+        "composition": {"usdc": 0.5, "lyra": 0.5},
+    },
+    "0xcc53cd0a8ec812d46f0e2c7cc5aadd869b6f0292:op_velodrome2": {
+        "categories": ["long_term_bond", "commodities"],
+        "project": "op_velodrome2",
+        "symbol": "WETH-OP",
+        "defillama-APY-pool-id": "e4a96a27-9ad1-458b-8a27-5752bb35839a",
+        "tags": ["eth", "op"],
+        "composition": {"eth": 0.5, "op": 0.5},
     },
 }
 
