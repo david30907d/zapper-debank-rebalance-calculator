@@ -241,14 +241,14 @@ DEBANK_ADDRESS = {
     "0xacf5a67f2fcfeda3946ccb1ad9d16d2eb65c3c96:10:era_spacefi": {
         "categories": ["long_term_bond", "intermediate_term_bond", "gold"],
         "symbol": "USDT-ETH",
-        "DEFAULT_APR": 0.23,
+        "DEFAULT_APR": 0.22,
         "tags": ["usdt", "eth"],
         "composition": {"eth": 0.5, "usdt": 0.5},
     },
     "0xacf5a67f2fcfeda3946ccb1ad9d16d2eb65c3c96:1:era_spacefi": {
         "categories": ["long_term_bond", "intermediate_term_bond", "gold"],
         "symbol": "USDT-ETH",
-        "DEFAULT_APR": 0.23,
+        "DEFAULT_APR": 0.22,
         "tags": ["usdt", "eth"],
         "composition": {"eth": 0.5, "usdt": 0.5},
     },
@@ -430,10 +430,10 @@ DEBANK_ADDRESS = {
         "tags": ["usdt"],
         "composition": {"usdt": 1},
     },
-    "0x1d0188c4b276a09366d05d6be06af61a73bc7535:0xe2c67a9b15e9e7ff8a9cb0dfb8fee5609923e5db:linea_velocore": {
+    "0xe2c67a9b15e9e7ff8a9cb0dfb8fee5609923e5db:linea_velocore": {
         "categories": ["intermediate_term_bond", "long_term_bond", "gold"],
         "project": "linea_velocore",
-        "symbol": "USDT-ETH",
+        "symbol": "USDC-ETH",
         "DEFAULT_APR": 0.19,
         "tags": ["usdt", "eth"],
         "composition": {"usdt": 0.5, "eth": 0.5},
@@ -465,6 +465,14 @@ DEBANK_ADDRESS = {
         "DEFAULT_APR": 0.6,
         "tags": ["space"],
         "composition": {"space": 1},
+    },
+    "0x4c615e78c5fca1ad31e4d66eb0d8688d84307463:era_pancakeswap3": {
+        "categories": ["intermediate_term_bond"],
+        "project": "era_pancakeswap3",
+        "symbol": "USDT-USDC",
+        "defillama-APY-pool-id": "a95f02da-5e23-46b9-b904-c1ae756e42f6",
+        "tags": ["usdc", "usdt"],
+        "composition": {"usdc": 0.5, "usdt": 0.5},
     },
     "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:8:arb_equilibria": {
         "categories": ["long_term_bond"],
@@ -542,10 +550,7 @@ DEBANK_ADDRESS = {
         "categories": ["small_cap_us_stocks"],
         "project": "arb_equilibria",
         "symbol": "EQB",
-        "APR": fetch_equilibria_APR(
-            chain_id="42161",
-            category="vlEqb",
-        ),
+        "APR": fetch_equilibria_APR(chain_id="42161", category="vlEqb",),
         "tags": ["eqb"],
         "composition": {"eqb": 1},
     },
