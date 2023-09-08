@@ -131,7 +131,7 @@ def get_metadata_by_project_symbol(project_symbol: str) -> dict:
     raise Exception(f"Cannot find {project_symbol} in your address mapping table")
 
 
-MIN_REBALANCE_POSITION_THRESHOLD = 10
+MIN_REBALANCE_POSITION_THRESHOLD = 4
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
 BLACKLIST_CHAINS_FOR_STABLE_COIN = {"Ethereum"}
@@ -148,7 +148,7 @@ DEBANK_ADDRESS = {
     "0x76ba3ec5f5adbf1c58c91e86502232317eea72de:arb_radiantcapital2": {
         "categories": ["large_cap_us_stocks", "long_term_bond"],
         "symbol": "RDNT-ETH",
-        "defillama-APY-pool-id": "118281c6-3a4a-4324-b804-5664617df77d",
+        "APR": 0.4,
         "tags": ["rdnt", "eth"],
         "composition": {"eth": 0.2, "rdnt": 0.8},
     },

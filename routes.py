@@ -34,7 +34,6 @@ def get_debank_data():
     token_metadata_table: dict[str, dict] = {}
     for position in evm_positions["data"]["result"]["data"]:
         for portfolio_item in position["portfolio_item_list"]:
-            protocol_name = position["name"]
             for token in portfolio_item["detail"].get(
                 "reward_token_list", []
             ) + portfolio_item["detail"].get("supply_token_list", []):
@@ -58,12 +57,7 @@ def get_debank_data():
                     token_metadata_table = _handle_native_token_for_each_chain(
                         token, payload, token_metadata_table
                     )
-                elif protocol_name == "Radiant Capital V2":
-                    print("here", token)
-                    token_metadata_table = _get_price_of_radiant_rToken(
-                        token, token_metadata_table
-                    )
-
+    token_metadata_table = _get_price_of_radiant_rToken(token, token_metadata_table)
     return token_metadata_table
 
 
@@ -207,11 +201,14 @@ def _get_price_of_radiant_rToken(token: dict, token_metadata_table: dict) -> dic
         "0x912ce59144191c1204e64559fe8253a0e49e6548": "0x2dade5b7df9da3a7e1c9748d169cd6dff77e3d01",
         "0x3082cc23568ea640225c2467653db90e9250aaa0": "0x3082cc23568ea640225c2467653db90e9250aaa0",
         "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f": "0x727354712bdfcd8596a3852fd2065b3c34f4f770",
+        "0x82af49447d8a07e3bd95bd0d56f35241523fbab1": "0x0df5dfd95966753f01cb80e76dc20ea958238c46",
     }
-    native_token_addr = token["id"]
-    rtoken_addr = mapping_from_native_token_to_rtoken[native_token_addr]
-    if native_token_addr in mapping_from_native_token_to_rtoken:
-        token_metadata_table[f'{token["chain"]}:{rtoken_addr}'] = token_metadata_table[
-            f'{token["chain"]}:{native_token_addr}'
-        ]
+    for native_token_addr in mapping_from_native_token_to_rtoken:
+        rtoken_addr = mapping_from_native_token_to_rtoken[native_token_addr]
+        if native_token_addr in mapping_from_native_token_to_rtoken:
+            token_metadata_table[
+                f'{token["chain"]}:{rtoken_addr}'
+            ] = token_metadata_table[f'{token["chain"]}:{native_token_addr}']
+        else:
+            raise NotImplementedError(f"{native_token_addr} not found")
     return token_metadata_table
