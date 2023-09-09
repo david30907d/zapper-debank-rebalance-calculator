@@ -1,3 +1,5 @@
+import os
+
 import requests
 
 from rebalance_server.apr_utils import convert_apy_to_apr
@@ -131,7 +133,7 @@ def get_metadata_by_project_symbol(project_symbol: str) -> dict:
     raise Exception(f"Cannot find {project_symbol} in your address mapping table")
 
 
-MIN_REBALANCE_POSITION_THRESHOLD = 4
+MIN_REBALANCE_POSITION_THRESHOLD = 2 if os.getenv("DEBUG") == "false" else 50
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
 BLACKLIST_CHAINS_FOR_STABLE_COIN = {"Ethereum"}
@@ -241,14 +243,14 @@ DEBANK_ADDRESS = {
     "0xacf5a67f2fcfeda3946ccb1ad9d16d2eb65c3c96:10:era_spacefi": {
         "categories": ["long_term_bond", "intermediate_term_bond", "gold"],
         "symbol": "USDT-ETH",
-        "DEFAULT_APR": 0.22,
+        "DEFAULT_APR": 0.17,
         "tags": ["usdt", "eth"],
         "composition": {"eth": 0.5, "usdt": 0.5},
     },
     "0xacf5a67f2fcfeda3946ccb1ad9d16d2eb65c3c96:1:era_spacefi": {
         "categories": ["long_term_bond", "intermediate_term_bond", "gold"],
         "symbol": "USDT-ETH",
-        "DEFAULT_APR": 0.22,
+        "DEFAULT_APR": 0.17,
         "tags": ["usdt", "eth"],
         "composition": {"eth": 0.5, "usdt": 0.5},
     },
@@ -363,6 +365,14 @@ DEBANK_ADDRESS = {
         "APR": fetch_equilibria_APR(chain_id="42161", category="ePendle"),
         "tags": ["pendle"],
         "composition": {"pendle": 1},
+    },
+    "0x14fbc760efaf36781cb0eb3cb255ad976117b9bd:arb_pendle2": {
+        "categories": ["long_term_bond"],
+        "symbol": "rETH",
+        "defillama-APY-pool-id": "35fe5f76-3b7d-42c8-9e54-3da70fbcb3a9",
+        "APR": fetch_equilibria_APR(chain_id="42161", category="ePendle"),
+        "tags": ["eth"],
+        "composition": {"eth": 1},
     },
     "0xb19e477b959751afd4a1c6880525e0390560681e:kava_equilibre": {
         "categories": ["non_us_developed_market_stocks", "long_term_bond"],
@@ -550,7 +560,10 @@ DEBANK_ADDRESS = {
         "categories": ["small_cap_us_stocks"],
         "project": "arb_equilibria",
         "symbol": "EQB",
-        "APR": fetch_equilibria_APR(chain_id="42161", category="vlEqb",),
+        "APR": fetch_equilibria_APR(
+            chain_id="42161",
+            category="vlEqb",
+        ),
         "tags": ["eqb"],
         "composition": {"eqb": 1},
     },

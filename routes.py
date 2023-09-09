@@ -5,10 +5,14 @@ from collections import defaultdict
 
 import requests
 from tenacity import retry, stop_after_attempt, wait_fixed
+from web3 import Web3
 
 from rebalance_server.apr_utils import convert_apy_to_apr
 from rebalance_server.main import load_evm_raw_positions
 
+RADIANT_USER_ADDRESS = "0x43cd745Bd5FbFc8CfD79ebC855f949abc79a1E0C"
+RADIANT_MULTI_FEE_DISTRIBUTION = "0x76ba3eC5f5adBf1C58c91e86502232317EeA72dE"
+W3 = Web3(Web3.HTTPProvider(os.getenv("WEB3_PROVIDER_URL")))
 # v1
 # [
 #     "0xC6a58A8494E61fc4EF04F6075c4541C9664ADcC9",
@@ -57,7 +61,7 @@ def get_debank_data():
                     token_metadata_table = _handle_native_token_for_each_chain(
                         token, payload, token_metadata_table
                     )
-    token_metadata_table = _get_price_of_radiant_rToken(token, token_metadata_table)
+    token_metadata_table = _get_price_of_radiant_rToken(token_metadata_table)
     return token_metadata_table
 
 
@@ -67,23 +71,30 @@ def get_APR_composition(portfolio_name: str):
         equilibria_market_addrs = {
             "Equilibria-GDAI": {
                 "pool_addr": "0xa0192f6567f8f5DC38C53323235FD08b318D2dcA",
-                "ratio": 0.25,
+                "ratio": 0.12,
             },
             "Equilibria-GLP": {
                 "pool_addr": "0x7D49E5Adc0EAAD9C027857767638613253eF125f",
-                "ratio": 0.25,
+                "ratio": 0.35,
             },
             "Equilibria-RETH": {
                 "pool_addr": "0x14FbC760eFaF36781cB0eb3Cb255aD976117B9Bd",
-                "ratio": 0.25,
+                "ratio": 0.06,
+            },
+            "Equilibria-PENDLE": {
+                "pool_addr": "0x24e4Df37ea00C4954d668e3ce19fFdcffDEc2cF6",
+                "ratio": 0.24,
             },
         }
         for key, pool_metadata in equilibria_market_addrs.items():
             apr_composition[key] = _fetch_equilibria_APR_composition(
                 pool_metadata["pool_addr"], ratio=pool_metadata["ratio"]
             )
-        apr_composition["SushiSwap-DpxETH"] = _fetch_sushiswap_APR_composition(
-            "0x0c1cf6883efa1b496b01f654e247b9b419873054", ratio=0.25
+        apr_composition["SushiSwap-MagicETH"] = _fetch_sushiswap_APR_composition(
+            "0xb7e50106a5bd3cf21af210a755f9c8740890a8c9", ratio=0.08
+        )
+        apr_composition["RadiantArbitrum-DLP"] = _fetch_radiant_APR_composition(
+            ratio=0.15
         )
         return apr_composition
     raise NotImplementedError(f"Portfolio {portfolio_name} is not implemented")
@@ -177,6 +188,40 @@ def _fetch_sushiswap_APR_composition(pool_addr: str, ratio: float) -> float:
     return result
 
 
+def _fetch_radiant_APR_composition(ratio: float) -> float:
+    abi = '[{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"claimableRewards","outputs":[{"components":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"internalType":"struct IFeeDistribution.RewardData[]","name":"rewardsData","type":"tuple[]"}],"stateMutability":"view","type":"function"}]'
+    radiant_contract = W3.eth.contract(address=RADIANT_MULTI_FEE_DISTRIBUTION, abi=abi)
+
+    token_metadata = get_debank_data()
+    claimableRewards = radiant_contract.functions.claimableRewards(
+        RADIANT_USER_ADDRESS
+    ).call()
+    claimableRewardsDict = {}
+    for token_addr, balance in claimableRewards:
+        if balance == 0:
+            continue
+        normalized_token_addr = token_addr.lower()
+        token_addr_with_chain_info = f"arb:{normalized_token_addr}"
+        if token_addr_with_chain_info not in token_metadata:
+            raise Exception(f"token {token_addr_with_chain_info} not found")
+        claimableRewardsDict[token_addr_with_chain_info] = (
+            balance
+            / _get_decimal_per_token(normalized_token_addr)
+            * token_metadata[token_addr_with_chain_info]["price"]
+        )
+    sum_of_claimable_rewards = sum(claimableRewardsDict.values())
+
+    radiant_apr_composition_dict = {}
+    for token_addr in claimableRewardsDict:
+        usd_denominated_value = claimableRewardsDict[token_addr]
+        symbol = token_metadata[token_addr]["symbol"]
+        radiant_apr_composition_dict[symbol] = {
+            "APR": usd_denominated_value / sum_of_claimable_rewards * ratio,
+            "token": token_addr,
+        }
+    return radiant_apr_composition_dict
+
+
 def _handle_native_token_for_each_chain(
     token: dict, payload: dict, token_metadata_table: dict
 ) -> dict:
@@ -191,7 +236,7 @@ def _handle_native_token_for_each_chain(
     return token_metadata_table
 
 
-def _get_price_of_radiant_rToken(token: dict, token_metadata_table: dict) -> dict:
+def _get_price_of_radiant_rToken(token_metadata_table: dict) -> dict:
     mapping_from_native_token_to_rtoken = {
         "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9": "0xd69d402d1bdb9a2b8c3d88d98b9ceaf9e4cd72d9",
         "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8": "0x48a29e756cc1c097388f3b2f3b570ed270423b3d",
@@ -206,9 +251,25 @@ def _get_price_of_radiant_rToken(token: dict, token_metadata_table: dict) -> dic
     for native_token_addr in mapping_from_native_token_to_rtoken:
         rtoken_addr = mapping_from_native_token_to_rtoken[native_token_addr]
         if native_token_addr in mapping_from_native_token_to_rtoken:
-            token_metadata_table[
-                f'{token["chain"]}:{rtoken_addr}'
-            ] = token_metadata_table[f'{token["chain"]}:{native_token_addr}']
+            token_metadata_table[f"arb:{rtoken_addr}"] = token_metadata_table[
+                f"arb:{native_token_addr}"
+            ]
         else:
             raise NotImplementedError(f"{native_token_addr} not found")
     return token_metadata_table
+
+
+def _get_decimal_per_token(token_addr: str) -> int:
+    if token_addr in [
+        "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+        "0xd69d402d1bdb9a2b8c3d88d98b9ceaf9e4cd72d9",
+        "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+        "0x48a29e756cc1c097388f3b2f3b570ed270423b3d",
+    ]:
+        return 10e6
+    elif token_addr in [
+        "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+        "0x727354712bdfcd8596a3852fd2065b3c34f4f770",
+    ]:
+        return 10e8
+    return 10e18
