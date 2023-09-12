@@ -76,7 +76,7 @@ def main(
             }.items()
         ],
         key=lambda x: x["apr"],
-    )[:10]
+    )
     # [TODO](david): uncomment sharpe ratio and max drawdown once we've migrated to standalone server not lambda or cloud run
     # adapter = get_networh_to_balance_adapter(adapter="coingecko")
     # categorized_positions_with_token_balance = adapter(categorized_positions)

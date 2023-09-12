@@ -144,13 +144,15 @@ BLACKLIST_PROTOCOL = {
     "filet-finance",
     "yama-finance",
     "neutra-finance",
+    "sommelier",
+    "gamma",
 }
 STABLE_COIN_WHITELIST = {"USDT", "USDC", "USDT.E", "USDC.E", "DAI", "FRAX"}
 DEBANK_ADDRESS = {
     "0x76ba3ec5f5adbf1c58c91e86502232317eea72de:arb_radiantcapital2": {
         "categories": ["large_cap_us_stocks", "long_term_bond"],
         "symbol": "RDNT-ETH",
-        "APR": 0.4,
+        "APR": 0.46,
         "tags": ["rdnt", "eth"],
         "composition": {"eth": 0.2, "rdnt": 0.8},
     },
@@ -221,7 +223,7 @@ DEBANK_ADDRESS = {
     "0x4fd9f7c5ca0829a656561486bada018505dfcb5e:bsc_radiantcapital2": {
         "categories": ["large_cap_us_stocks", "commodities"],
         "symbol": "RDNT-BNB",
-        "defillama-APY-pool-id": "118281c6-3a4a-4324-b804-5664617df77d",
+        "DEFAULT_APR": 0.46,
         "tags": ["rdnt", "bnb"],
         "composition": {"bnb": 0.5, "rdnt": 0.5},
     },
@@ -467,6 +469,18 @@ DEBANK_ADDRESS = {
         ),
         "tags": ["dai"],
         "composition": {"dai": 1},
+    },
+    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:19:equilibria": {
+        "categories": ["long_term_bond"],
+        "project": "equilibria",
+        "symbol": "oETH",
+        "APR": fetch_equilibria_APR(
+            chain_id="1",
+            category="poolInfos",
+            pool_token="0x3Dbd7e5018e720507a16f2Ad87731995C71B0707",
+        ),
+        "tags": ["eth"],
+        "composition": {"eth": 1},
     },
     "0x6af43486cb84be0e3eddcef93d3c43ef0c5f63b1:era_spacefi": {
         "categories": ["small_cap_us_stocks"],
