@@ -152,7 +152,7 @@ DEBANK_ADDRESS = {
     "0x76ba3ec5f5adbf1c58c91e86502232317eea72de:arb_radiantcapital2": {
         "categories": ["large_cap_us_stocks", "long_term_bond"],
         "symbol": "RDNT-ETH",
-        "APR": 0.46,
+        "APR": 0.4,
         "tags": ["rdnt", "eth"],
         "composition": {"eth": 0.2, "rdnt": 0.8},
     },
@@ -223,7 +223,7 @@ DEBANK_ADDRESS = {
     "0x4fd9f7c5ca0829a656561486bada018505dfcb5e:bsc_radiantcapital2": {
         "categories": ["large_cap_us_stocks", "commodities"],
         "symbol": "RDNT-BNB",
-        "DEFAULT_APR": 0.46,
+        "DEFAULT_APR": 0.4,
         "tags": ["rdnt", "bnb"],
         "composition": {"bnb": 0.5, "rdnt": 0.5},
     },
@@ -620,6 +620,43 @@ DEBANK_ADDRESS = {
         "defillama-APY-pool-id": "e4a96a27-9ad1-458b-8a27-5752bb35839a",
         "tags": ["eth", "op"],
         "composition": {"eth": 0.5, "op": 0.5},
+    },
+    "0x4d32c8ff2facc771ec7efc70d6a8468bc30c26bf:11:arb_equilibria": {
+        "categories": [
+            "large_cap_us_stocks",
+            "long_term_bond",
+            "intermediate_term_bond",
+            "gold",
+        ],
+        "symbol": "HLP",
+        "APR": fetch_equilibria_APR(
+            chain_id="42161",
+            category="poolInfos",
+            pool_token="0xbAa2B0aa1DEf4F278d7D6CD9f7C8483d6e256470",
+        ),
+        "tags": ["glp"],
+        "composition": {
+            "eth": 0.3,
+            "wbtc": 0.25,
+            "link": 0.01,
+            "uni": 0.01,
+            "usdc": 0.34,
+            "usdt": 0.02,
+            "dai": 0.05,
+            "frax": 0.02,
+            "mim": 0,
+        },
+    },
+    "0x70f61901658aafb7ae57da0c30695ce4417e72b9:arb_equilibria": {
+        "categories": ["small_cap_us_stocks"],
+        "project": "arb_equilibria",
+        "symbol": "EQB",
+        "APR": fetch_equilibria_APR(
+            chain_id="42161",
+            category="vlEqb",
+        ),
+        "tags": ["eqb"],
+        "composition": {"eqb": 1},
     },
 }
 
