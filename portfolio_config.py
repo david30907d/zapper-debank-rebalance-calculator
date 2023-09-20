@@ -668,6 +668,22 @@ DEBANK_ADDRESS = {
         "tags": ["eqb"],
         "composition": {"eqb": 1},
     },
+    "0x15507737f44446eb0a86147e2c72aa6a111a64b2:convex": {
+        "categories": ["long_term_bond"],
+        "project": "convex",
+        "symbol": "msETH-frxETH",
+        "defillama-APY-pool-id": "b59b13d0-ee09-451c-a7f8-dd608f56e0e9",
+        "tags": ["eth"],
+        "composition": {"eth": 1},
+    },
+    "0x486af39519b4dc9a7fccd318217352830e8ad9b4:avax_benqi": {
+        "categories": ["small_cap_us_stocks"],
+        "project": "avax_benqi",
+        "symbol": "AVAX",
+        "defillama-APY-pool-id": "da5e182c-b440-4b80-ab54-c1bc94a4ffd4",
+        "tags": ["avax"],
+        "composition": {"avax": 1},
+    },
 }
 
 
