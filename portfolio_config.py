@@ -146,8 +146,18 @@ BLACKLIST_PROTOCOL = {
     "neutra-finance",
     "sommelier",
     "gamma",
+    "sturdy",
 }
-STABLE_COIN_WHITELIST = {"USDT", "USDC", "USDT.E", "USDC.E", "DAI", "FRAX"}
+STABLE_COIN_WHITELIST = {
+    "USDT",
+    "USDC",
+    "USDT.E",
+    "USDC.E",
+    "DAI",
+    "FRAX",
+    "LUSD",
+    "EUSD",
+}
 DEBANK_ADDRESS = {
     "0x76ba3ec5f5adbf1c58c91e86502232317eea72de:arb_radiantcapital2": {
         "categories": ["large_cap_us_stocks", "long_term_bond"],
