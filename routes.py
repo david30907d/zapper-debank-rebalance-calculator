@@ -8,7 +8,7 @@ from tenacity import retry, stop_after_attempt, wait_fixed
 from web3 import Web3
 
 from rebalance_server.apr_utils import convert_apy_to_apr
-from rebalance_server.main import load_evm_raw_positions
+from rebalance_server.main import load_evm_raw_positions, main
 
 RADIANT_USER_ADDRESS = "0x43cd745Bd5FbFc8CfD79ebC855f949abc79a1E0C"
 RADIANT_MULTI_FEE_DISTRIBUTION = "0x76ba3eC5f5adBf1C58c91e86502232317EeA72dE"
@@ -20,19 +20,20 @@ W3 = Web3(Web3.HTTPProvider(os.getenv("WEB3_PROVIDER_URL")))
 #     "0x549caec2C863a04853Fb829aac4190E1B50df0Cc",
 #     "0xE66c4EA218Cdb8DCbCf3f605ed1aC29461CBa4b8",
 # ]
+CONTRACT_ADDRESS = [
+    "0xA3CDd5a4b9f5a69C5C3a297A428A10B742F1c6E1",
+    "0xBb4D0819089879d83ae13fEe71aBeAa345629389",
+    "0x0F658FC0C72A729F1B8F8444601D657D3F30Db41",
+    "0x5073bf9aE65963A5881F36560072adf5d4c6e870",
+    "0x4999AE9fDD361Ca6278B0295dd65776b4587E1aA",
+    "0x99E9cE14C807e95329a2A35aDD52683528e53231",
+]
 
 
 def get_debank_data():
     evm_positions = load_evm_raw_positions(
         "debank",
-        [
-            "0xA3CDd5a4b9f5a69C5C3a297A428A10B742F1c6E1",
-            "0xBb4D0819089879d83ae13fEe71aBeAa345629389",
-            "0x0F658FC0C72A729F1B8F8444601D657D3F30Db41",
-            "0x5073bf9aE65963A5881F36560072adf5d4c6e870",
-            "0x4999AE9fDD361Ca6278B0295dd65776b4587E1aA",
-            "0x99E9cE14C807e95329a2A35aDD52683528e53231",
-        ],
+        CONTRACT_ADDRESS,
         useCache=True if random.random() > 0.2 else False,
     )
     token_metadata_table: dict[str, dict] = {}
@@ -66,6 +67,13 @@ def get_debank_data():
 
 
 def get_APR_composition(portfolio_name: str):
+    portfolio_apr = main(
+        defi_portfolio_service_name="debank",
+        optimize_apr_mode="new_pool",
+        strategy_name="all_weather_portfolio",
+        addresses=CONTRACT_ADDRESS,
+    )["portfolio_apr"]
+
     apr_composition = {}
     if portfolio_name == "permanent_portfolio":
         equilibria_market_addrs = {
@@ -96,7 +104,9 @@ def get_APR_composition(portfolio_name: str):
         apr_composition["RadiantArbitrum-DLP"] = _fetch_radiant_APR_composition(
             ratio=0.15
         )
-        return apr_composition
+        return _calculate_aggr_apr_composition(
+            apr_composition, portfolio_apr=portfolio_apr
+        )
     raise NotImplementedError(f"Portfolio {portfolio_name} is not implemented")
 
 
@@ -273,3 +283,36 @@ def _get_decimal_per_token(token_addr: str) -> int:
     ]:
         return 10e8
     return 10e18
+
+
+def _calculate_aggr_apr_composition(
+    apr_composition: dict, portfolio_apr: float
+) -> dict:
+    aggregated_result = defaultdict(lambda: defaultdict(float))
+    for metadata_of_tokens in apr_composition.values():
+        for token_symbol, metadata in metadata_of_tokens.items():
+            aggregated_result[token_symbol]["APR"] += metadata["APR"]
+            aggregated_result[token_symbol]["token"] = metadata["token"]
+    apr_composition["aggregated_apr_composition"] = aggregated_result
+    ratio_of_apr_from_each_protocol_to_defillama_apr = (
+        _normalize_the_ratio_for_APR_from_each_protocol_API_to_defillama_apr(
+            apr_composition, portfolio_apr
+        )
+    )
+    for metadata in apr_composition["aggregated_apr_composition"].values():
+        metadata["APR"] *= ratio_of_apr_from_each_protocol_to_defillama_apr
+    return apr_composition
+
+
+def _normalize_the_ratio_for_APR_from_each_protocol_API_to_defillama_apr(
+    apr_composition: dict, portfolio_apr: float
+) -> dict:
+    # there's discrepancy between defillama APR and APR from each protocol's API
+    # to make it consistent, we need to normalize the APR from each protocol's API to defillama APR
+    sum_of_apr_from_each_protocol = sum(
+        [
+            metadata["APR"]
+            for metadata in apr_composition["aggregated_apr_composition"].values()
+        ]
+    )
+    return portfolio_apr / 100 / sum_of_apr_from_each_protocol
