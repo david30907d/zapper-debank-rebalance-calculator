@@ -64,18 +64,6 @@ def fetch_traderjoe_auto_pool_APR(pool_addr: str) -> float:
     raise Exception(f"Failed to find pool {pool_addr} in traderjoe auto pool")
 
 
-def fetch_kava_sushiswap_APR(pool_addr: str) -> float:
-    pool_res = requests.get(f"https://pools.sushi.com/api/v0/2222/{pool_addr}")
-    if pool_res.status_code != 200:
-        raise Exception("Failed to fetch kava sushiswap APR")
-    accumulatedAPR = 0
-    pool_json = pool_res.json()
-    for incentive in pool_json["incentives"]:
-        accumulatedAPR += incentive["apr"]
-    accumulatedAPR += pool_json["feeApr1d"]
-    return accumulatedAPR
-
-
 def fetch_kava_lend_APY(pool_addr: str, token: str) -> float:
     pool_res = requests.get("https://api.data.kava.io/kava/incentive/v1beta1/params")
     supplied_coins = requests.get(
@@ -135,6 +123,8 @@ def get_metadata_by_project_symbol(project_symbol: str) -> dict:
 
 MIN_REBALANCE_POSITION_THRESHOLD = 2 if os.getenv("DEBUG") == "false" else 50
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
+MILLION = 10**6
+TVL_THRESHOLD_FOR_BETTER_POOL = MILLION * 0.6
 BLACKLIST_CHAINS = {"Avalanche", "BSC", "Solana"}
 BLACKLIST_CHAINS_FOR_STABLE_COIN = {"Ethereum"}
 BLACKLIST_PROTOCOL = {
@@ -162,7 +152,7 @@ DEBANK_ADDRESS = {
     "0x76ba3ec5f5adbf1c58c91e86502232317eea72de:arb_radiantcapital2": {
         "categories": ["large_cap_us_stocks", "long_term_bond"],
         "symbol": "RDNT-ETH",
-        "APR": 0.4,
+        "APR": 0.36,
         "tags": ["rdnt", "eth"],
         "composition": {"eth": 0.2, "rdnt": 0.8},
     },
@@ -233,7 +223,7 @@ DEBANK_ADDRESS = {
     "0x4fd9f7c5ca0829a656561486bada018505dfcb5e:bsc_radiantcapital2": {
         "categories": ["large_cap_us_stocks", "commodities"],
         "symbol": "RDNT-BNB",
-        "DEFAULT_APR": 0.4,
+        "DEFAULT_APR": 0.36,
         "tags": ["rdnt", "bnb"],
         "composition": {"bnb": 0.5, "rdnt": 0.5},
     },
@@ -401,16 +391,6 @@ DEBANK_ADDRESS = {
         "defillama-APY-pool-id": "3e5781f8-5240-4a55-955b-67abea1bcfeb",
         "tags": ["kava", "usdt"],
         "composition": {"kava": 0.5, "usdt": 0.5},
-    },
-    "0xf731202a3cf7efa9368c2d7bd613926f7a144db5:9:kava_sushiswap": {
-        "categories": ["non_us_developed_market_stocks", "intermediate_term_bond"],
-        "project": "sushiswap",
-        "symbol": "USDC-WKAVA",
-        "APR": fetch_kava_sushiswap_APR(
-            pool_addr="0xb379eb428a28a927a16ee7f95100ac6a5117aaa1"
-        ),
-        "tags": ["kava", "usdc"],
-        "composition": {"kava": 0.5, "usdc": 0.5},
     },
     "0x8329c9c93b63db8a56a3b9a0c44c2edabd6572a8:op_velodrome2": {
         "categories": ["long_term_bond", "small_cap_us_stocks"],
@@ -683,6 +663,32 @@ DEBANK_ADDRESS = {
         "defillama-APY-pool-id": "da5e182c-b440-4b80-ab54-c1bc94a4ffd4",
         "tags": ["avax"],
         "composition": {"avax": 1},
+    },
+    "0x0776c06907ce6ff3d9dbf84ba9b3422d7225942d:13:arb_magpiexyz": {
+        "categories": [
+            "large_cap_us_stocks",
+            "long_term_bond",
+            "intermediate_term_bond",
+            "gold",
+        ],
+        "symbol": "HLP",
+        "APR": fetch_equilibria_APR(
+            chain_id="42161",
+            category="poolInfos",
+            pool_token="0xbAa2B0aa1DEf4F278d7D6CD9f7C8483d6e256470",
+        ),
+        "tags": ["glp"],
+        "composition": {
+            "eth": 0.3,
+            "wbtc": 0.25,
+            "link": 0.01,
+            "uni": 0.01,
+            "usdc": 0.34,
+            "usdt": 0.02,
+            "dai": 0.05,
+            "frax": 0.02,
+            "mim": 0,
+        },
     },
 }
 

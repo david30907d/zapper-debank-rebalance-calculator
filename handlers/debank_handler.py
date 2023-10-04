@@ -9,6 +9,7 @@ from rebalance_server.portfolio_config import (
 
 def debank_handler(positions, result):
     for pool in positions["data"]["result"]["data"]:
+        protocol_logo_url = _get_protocol_logo_url(pool)
         for portfolio in pool["portfolio_item_list"]:
             net_usd_valud = portfolio["stats"]["net_usd_value"]
             if net_usd_valud < MIN_REBALANCE_POSITION_THRESHOLD:
@@ -37,6 +38,7 @@ def debank_handler(positions, result):
                 apr,
                 metadata,
                 tokens_metadata,
+                protocol_logo_url,
                 result,
             )
     return result
@@ -48,6 +50,10 @@ def _get_correct_addr(portfolio):
 
 def _get_project_id(portfolio):
     return portfolio["pool"]["project_id"]
+
+
+def _get_protocol_logo_url(pool):
+    return pool["logo_url"]
 
 
 def _get_token_metadata(portfolio: dict):

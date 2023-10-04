@@ -6,7 +6,9 @@ from rebalance_server.portfolio_config import (
     BLACKLIST_CHAINS,
     BLACKLIST_CHAINS_FOR_STABLE_COIN,
     BLACKLIST_PROTOCOL,
+    MILLION,
     STABLE_COIN_WHITELIST,
+    TVL_THRESHOLD_FOR_BETTER_POOL,
 )
 from rebalance_server.search_handlers import SearchBase
 from rebalance_server.search_handlers.jaccard_similarity_handler import (
@@ -15,10 +17,8 @@ from rebalance_server.search_handlers.jaccard_similarity_handler import (
 from rebalance_server.search_handlers.ngram_handler import NgramSimilarityHandler
 from rebalance_server.utils.position import skip_rebalance_if_position_too_small
 
-MILLION = 10**6
 
-
-def search_better_stable_coin_pools(categorized_positions: dict, topn_int: int = 5):
+def search_better_stable_coin_pools(categorized_positions: dict, topn_int: int = 10):
     with open("rebalance_server/yield-llama.json", "r") as f:
         defillama = json.load(f)
     max_apy = _get_current_stable_max_apy_in_your_portfolio(
@@ -27,7 +27,7 @@ def search_better_stable_coin_pools(categorized_positions: dict, topn_int: int =
     topn = _get_topn_apy_pool(defillama, max_apy)
     top_n_stable_coins = []
     for pool in sorted(topn, key=lambda x: x["apy"], reverse=True):
-        if pool["tvlUsd"] < MILLION / 10:
+        if pool["tvlUsd"] < TVL_THRESHOLD_FOR_BETTER_POOL:
             continue
         if pool["chain"] in BLACKLIST_CHAINS_FOR_STABLE_COIN:
             continue
@@ -109,7 +109,7 @@ def _get_topn_candidate_pool(
             > search_handler.similarity_threshold
             and pool_metadata["pool"] not in pool_ids_of_current_portfolio
             and current_apr < convert_apy_to_apr(get_apy(pool_metadata))
-            and pool_metadata["tvlUsd"] > MILLION * 0.7
+            and pool_metadata["tvlUsd"] > TVL_THRESHOLD_FOR_BETTER_POOL
         ):
             top_n.append(
                 {"pool_metadata": pool_metadata, "pool_similarity": pool_similarity}

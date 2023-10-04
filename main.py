@@ -57,6 +57,7 @@ def main(
     categorized_positions = _merge_categorized_positions(
         evm_categorized_positions, non_evm_categorized_positions_array
     )
+    aggregated_positions = _get_aggregated_positions(categorized_positions)
     net_worth = _get_networth(categorized_positions)
     suggestions = get_rebalancing_suggestions(
         categorized_positions, strategy_name, net_worth
@@ -109,6 +110,7 @@ def main(
         "top_n_lowest_apr_pools": top_n_lowest_apr_pools,
         "top_n_pool_consist_of_same_lp_token": top_n_with_metadata,
         "topn_stable_coins": topn_stable_coins,
+        "aggregated_positions": aggregated_positions,
     }
 
 
@@ -234,6 +236,16 @@ def _merge_categorized_positions(
                 **portfolio_metadata["portfolio"],
             }
     return result
+
+
+def _get_aggregated_positions(categorized_positions: dict) -> dict:
+    aggregated_positions = defaultdict(dict)
+    for positions in categorized_positions.values():
+        for key_of_position, metadata_of_position in positions["portfolio"].items():
+            worth = aggregated_positions[key_of_position].get("worth", 0)
+            metadata_of_position["worth"] += worth
+            aggregated_positions[key_of_position] = metadata_of_position
+    return aggregated_positions
 
 
 if __name__ == "__main__":

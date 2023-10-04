@@ -101,6 +101,8 @@ def get_APR_composition(portfolio_name: str):
         apr_composition["SushiSwap-MagicETH"] = _fetch_sushiswap_APR_composition(
             "0xb7e50106a5bd3cf21af210a755f9c8740890a8c9", ratio=0.08
         )
+        if apr_composition["SushiSwap-MagicETH"] == {}:
+            del apr_composition["SushiSwap-MagicETH"]
         apr_composition["RadiantArbitrum-DLP"] = _fetch_radiant_APR_composition(
             ratio=0.15
         )
@@ -184,7 +186,8 @@ def _fetch_sushiswap_APR_composition(pool_addr: str, ratio: float) -> float:
     result = defaultdict(lambda: defaultdict(float))
     pool_res = requests.get(f"https://pools.sushi.com/api/v0/42161/{pool_addr}")
     if pool_res.status_code != 200:
-        raise Exception("Failed to fetch kava sushiswap APR")
+        return {}
+        # raise Exception("Failed to fetch kava sushiswap APR")
     pool_json = pool_res.json()
     for incentive in pool_json["incentives"]:
         if incentive["apr"] > 0:
@@ -276,13 +279,13 @@ def _get_decimal_per_token(token_addr: str) -> int:
         "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
         "0x48a29e756cc1c097388f3b2f3b570ed270423b3d",
     ]:
-        return 10e6
+        return 1e6
     elif token_addr in [
         "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
         "0x727354712bdfcd8596a3852fd2065b3c34f4f770",
     ]:
-        return 10e8
-    return 10e18
+        return 1e8
+    return 1e18
 
 
 def _calculate_aggr_apr_composition(

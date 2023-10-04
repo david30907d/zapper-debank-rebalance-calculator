@@ -30,6 +30,7 @@ def _nansen_farm_handler(positions, result):
         apr = get_lowest_or_default_apr(project_symbol, addr)
         metadata = get_metadata_by_project_symbol(project_symbol)
         tokens_metadata = _get_token_metadata(farm)
+        protocol_logo_url = _get_protocol_logo_url(farm)
         result = place_value_into_categorized_portfolio_dict(
             categories,
             net_usd_value,
@@ -40,6 +41,7 @@ def _nansen_farm_handler(positions, result):
             apr,
             metadata,
             tokens_metadata,
+            protocol_logo_url,
             result,
         )
     return result
@@ -101,3 +103,7 @@ def _get_token_metadata(farm_obj: dict) -> list:
         }
         for token in farm_obj["tokens"]
     ]
+
+
+def _get_protocol_logo_url(farm_obj: dict):
+    return "https://icons.llamao.fi/icons/chains/rsz_filecoin?w=48&h=48"

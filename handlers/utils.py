@@ -8,6 +8,7 @@ def place_value_into_categorized_portfolio_dict(
     apr: float,
     metadata: dict,
     tokens_metadata: list,
+    protocol_logo_url: str,
     result: dict,
 ):
     for category in categories:
@@ -19,6 +20,9 @@ def place_value_into_categorized_portfolio_dict(
         ] += weighted_balanceUSD
         result[category]["portfolio"][f"{project}:{symbol}"]["address"] = unique_id
         result[category]["portfolio"][f"{project}:{symbol}"]["APR"] = apr
+        result[category]["portfolio"][f"{project}:{symbol}"][
+            "protocol_logo_url"
+        ] = protocol_logo_url
         result[category]["portfolio"][f"{project}:{symbol}"]["metadata"] = metadata
         result[category]["portfolio"][f"{project}:{symbol}"][
             "tokens_metadata"
