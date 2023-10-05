@@ -1,3 +1,4 @@
+import copy
 import json
 import os
 from collections import defaultdict
@@ -57,7 +58,9 @@ def main(
     categorized_positions = _merge_categorized_positions(
         evm_categorized_positions, non_evm_categorized_positions_array
     )
-    aggregated_positions = _get_aggregated_positions(categorized_positions)
+    aggregated_positions = _get_aggregated_positions(
+        copy.deepcopy(categorized_positions)
+    )
     net_worth = _get_networth(categorized_positions)
     suggestions = get_rebalancing_suggestions(
         categorized_positions, strategy_name, net_worth
