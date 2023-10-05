@@ -690,6 +690,30 @@ DEBANK_ADDRESS = {
             "mim": 0,
         },
     },
+    "0x00b01710c2098b883c4f93dd093be8cf605a7bde:vlp_staked:base_vela": {
+        "categories": ["intermediate_term_bond"],
+        "project": "base_vela",
+        "symbol": "VLP",
+        "defillama-APY-pool-id": "91f2fc8d-d289-429f-b844-1e58165766f2",
+        "tags": ["usdc"],
+        "composition": {"usdc": 1},
+    },
+    "0xe2e17b2cbbf48211fa7eb8a875360e5e39ba2602:strike": {
+        "categories": ["long_term_bond"],
+        "project": "strike",
+        "symbol": "ETH",
+        "defillama-APY-pool-id": "f15a6846-4828-48ae-9830-1cddd3f3901a",
+        "tags": ["eth"],
+        "composition": {"eth": 1},
+    },
+    "0x0a55882f4e1117adc54afbbac4a39079ad52fb89:uniswap3": {
+        "categories": ["long_term_bond", "non_us_emerging_market_stocks"],
+        "project": "uniswap3",
+        "symbol": "SSV-WETH",
+        "defillama-APY-pool-id": "78019537-31a3-49da-99b4-0a570b084c46",
+        "tags": ["eth", "ssv"],
+        "composition": {"eth": 0.5, "ssv": 0.5},
+    },
 }
 
 
