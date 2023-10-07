@@ -1,6 +1,7 @@
 import os
 
 import requests
+import sentry_sdk
 from flask import Flask, jsonify, request
 from flask_caching import Cache
 from flask_cors import CORS
@@ -12,6 +13,17 @@ from rebalance_server.routes import (
     get_debank_data,
 )
 
+sentry_sdk.init(
+    dsn="https://30b592025e9ae010869b0c2ed3429fc5@o4505922693562368.ingest.sentry.io/4506008026152960",
+    environment="development" if os.getenv("DEBUG") == "true" else "production",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
 config = {
     "DEBUG": True,  # some Flask specific configs
     "CACHE_TYPE": "SimpleCache",  # Flask-Caching related configs
