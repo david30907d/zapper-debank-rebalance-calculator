@@ -121,7 +121,7 @@ def get_metadata_by_project_symbol(project_symbol: str) -> dict:
     raise Exception(f"Cannot find {project_symbol} in your address mapping table")
 
 
-MIN_REBALANCE_POSITION_THRESHOLD = 2 if os.getenv("DEBUG") == "false" else 50
+MIN_REBALANCE_POSITION_THRESHOLD = 2 if os.getenv("DEBUG") == "false" else 500
 DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL = 50
 MILLION = 10**6
 TVL_THRESHOLD_FOR_BETTER_POOL = MILLION * 0.6
@@ -745,7 +745,7 @@ TOKEN_2_CATEGORIES = {
     "non_us_emerging_market_stocks": [],
 }
 
-ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
+DEBANK_SYMBOL_2_COINGECKO_MAPPING = {
     "EURS": "stasis-eurs",
     "OHM": "olympus",
     "gOHM": "governance-ohm",
@@ -800,6 +800,18 @@ ZAPPER_SYMBOL_2_COINGECKO_MAPPING = {
     "ePendle": None,
     "VARA": "equilibre",
     "rETH": "reth",
+    "rETH": "reth",
+    "PT-HLP-27JUN2024": "jones-glp",
+    # "OETH": "origin-ether",
+    "OETH": "wrapped-steth",
+    "PT-oETH-26DEC2024": "wrapped-steth",
+    "stETH": "wrapped-steth",
+    "SSV": "ssv-network",
+    "USDbC": "usd-coin",
+    "PT-Stargate USDT-27JUN2024": "tether",
+    "LYRA": "lyra-finance",
+    "FXS": "frax-share",
+    "EQB": "equilibria-finance",
 }
 
 LIQUIDITY_BOOK_PROTOCOL_APR_DISCOUNT_FACTOR = {

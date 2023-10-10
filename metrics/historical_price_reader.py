@@ -11,8 +11,8 @@ from rebalance_server.metrics.utils import (
     TODAY_UNIX_TIMESTAMP,
 )
 from rebalance_server.portfolio_config import (
+    DEBANK_SYMBOL_2_COINGECKO_MAPPING,
     DEFILLAMA_API_REQUEST_FREQUENCY_RECIPROCAL,
-    ZAPPER_SYMBOL_2_COINGECKO_MAPPING,
 )
 
 
@@ -56,9 +56,5 @@ class CoinGeckoHistoricalPriceReader:
         return pd.Series(price)
 
     @staticmethod
-    def convert_symbol_from_dashboard_to_api_version(
-        symbol: str, dashboard="zapper"
-    ) -> str:
-        if dashboard == "zapper":
-            return ZAPPER_SYMBOL_2_COINGECKO_MAPPING[symbol]
-        raise NotImplementedError(f"Dashboard {dashboard} is not supported yet.")
+    def convert_symbol_from_dashboard_to_api_version(symbol: str) -> str:
+        return DEBANK_SYMBOL_2_COINGECKO_MAPPING[symbol]
