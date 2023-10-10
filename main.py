@@ -19,7 +19,7 @@ from rebalance_server.apr_utils.apr_pool_optimizer import (
 )
 from rebalance_server.handlers import get_data_source_handler
 from rebalance_server.metrics.max_drawdown import calculate_max_drawdown
-from rebalance_server.metrics.sharpe_ratio import calculate_portfolio_sharpe_ratio
+from rebalance_server.metrics.sharpe_ratio import calculate_performance_related_metrics
 from rebalance_server.rebalance_strategies import (
     get_rebalancing_suggestions,
     print_rebalancing_suggestions,
@@ -81,7 +81,7 @@ def main(
     adapter = get_networh_to_balance_adapter(adapter="coingecko")
     categorized_positions_with_token_balance = adapter(categorized_positions)
 
-    sharpe_ratio = calculate_portfolio_sharpe_ratio(
+    performance_related_metrics = calculate_performance_related_metrics(
         categorized_positions_with_token_balance
     )
     if optimize_apr_mode:
@@ -97,7 +97,8 @@ def main(
         "suggestions": suggestions,
         "total_interest": total_interest,
         "portfolio_apr": portfolio_apr,
-        "sharpe_ratio": sharpe_ratio,
+        "sharpe_ratio": performance_related_metrics["sharpe_ratio"],
+        "ROI": performance_related_metrics["ROI"],
         "max_drawdown": calculate_max_drawdown(
             categorized_positions_with_token_balance
         ),
